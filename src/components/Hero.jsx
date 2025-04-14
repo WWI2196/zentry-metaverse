@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { GiClick } from "react-icons/gi";
 import { IoMdRefresh } from "react-icons/io";
+import { FaPlayCircle } from "react-icons/fa";
 import Button from './Button';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
@@ -291,7 +292,7 @@ const Hero = () => {
                     />
                     {/* Refresh Icon Overlay */}
                     <div className='absolute z-10 text-white/70 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
-                        <IoMdRefresh size={30} className='drop-shadow-md' />
+                        <FaPlayCircle size={40} className='drop-shadow-md' />
                     </div>
                 </div>
 
