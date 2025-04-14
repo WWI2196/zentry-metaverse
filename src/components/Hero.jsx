@@ -4,9 +4,6 @@ import { FaPlayCircle } from "react-icons/fa";
 import Button from './Button';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger'; // Import ScrollTrigger
-
-gsap.registerPlugin(ScrollTrigger); // Register ScrollTrigger plugin
 
 const Hero = () => {
     const [currentIndex, setCurrentIndex] = useState(1);
@@ -43,26 +40,24 @@ const Hero = () => {
     // Initial setup - run once on mount
     useEffect(() => {
         if (previewContainerRef.current) {
-            gsap.to(previewContainerRef.current, {
-                autoAlpha: 1,
-                scale: 1,
-                duration: 0.7,
-                ease: 'power2.out',
-                delay: 0.5
+            gsap.to(previewContainerRef.current, { 
+                autoAlpha: 1, 
+                scale: 1, 
+                duration: 0.7, 
+                ease: 'power2.out', 
+                delay: 0.5 
             });
         }
 
         if (previewVideoRef.current) {
             previewVideoRef.current.src = getVideoSrc(upcomingVideoIndex);
             previewVideoRef.current.load();
-            // Keep preview muted, but don't auto-play
-            previewVideoRef.current.muted = true;
         }
 
         if (mainVideoRef.current) {
             mainVideoRef.current.play().catch(e => console.error("Initial BG video play failed", e));
         }
-    }, []); // Removed getVideoSrc from dependencies as it's stable
+    }, []);
 
     // Animation timeline - ONLY runs when isAnimating is true (user clicked)
     useGSAP(() => {
@@ -80,59 +75,58 @@ const Hero = () => {
 
         nextVideoElement.src = getVideoSrc(targetIndex);
         nextVideoElement.load();
-
-        gsap.set(nextVideoElement, {
-            visibility: "visible",
-            scale: 1,
+        
+        gsap.set(nextVideoElement, { 
+            visibility: "visible", 
+            scale: 1, 
             opacity: 1
         });
 
         if (previewContainerRef.current) {
             gsap.to(previewContainerRef.current, { autoAlpha: 0, duration: 0.3 });
         }
-
+        
         nextVideoElement.play().catch(e => console.error("Transition video play failed:", e));
 
         const tl = gsap.timeline({
             onComplete: () => {
                 mainVideoElement.src = getVideoSrc(targetIndex);
                 mainVideoElement.load();
-
+                
                 const overlayDiv = document.createElement('div');
                 overlayDiv.className = 'absolute left-0 top-0 z-10 size-full bg-blue-75';
-
+                
                 if (nextVideoElement.parentNode) {
                     nextVideoElement.parentNode.appendChild(overlayDiv);
                 }
-
+                
                 gsap.set(mainVideoElement, { opacity: 0 });
-
+                
                 const canPlayHandler = () => {
                     try {
-                        // Removed currentTime setting, let video play from start
-                        // mainVideoElement.currentTime = 3.0;
-
+                        mainVideoElement.currentTime = 3.0;
+                        
                         gsap.to(mainVideoElement, { opacity: 1, duration: 0.8 });
                         gsap.to(nextVideoElement, { opacity: 0, duration: 0.8 });
-                        gsap.to(overlayDiv, {
-                            opacity: 0,
-                            duration: 1.0,
+                        gsap.to(overlayDiv, { 
+                            opacity: 0, 
+                            duration: 1.0, 
                             onComplete: () => {
                                 mainVideoElement.play().catch(e => console.error("Main video play failed:", e));
-
+                                
                                 if (overlayDiv.parentNode) {
                                     overlayDiv.remove();
                                 }
-
+                                
                                 setCurrentIndex(targetIndex);
-
+                                
                                 if (nextVideoRef.current) {
-                                    gsap.set(nextVideoRef.current, {
+                                    gsap.set(nextVideoRef.current, { 
                                         ...nextVideoInitialStyles,
-                                        visibility: 'hidden'
+                                        visibility: 'hidden' 
                                     });
                                 }
-
+                                
                                 setTimeout(() => {
                                     if (nextVideoRef.current) {
                                         nextVideoRef.current.pause();
@@ -140,16 +134,7 @@ const Hero = () => {
                                         nextVideoRef.current.load();
                                     }
                                     setIsAnimating(false);
-                                     // Restore preview container visibility after animation
-                                    if (previewContainerRef.current) {
-                                        gsap.to(previewContainerRef.current, {
-                                            autoAlpha: 1,
-                                            scale: 1,
-                                            duration: 0.5,
-                                            ease: 'power2.out'
-                                        });
-                                    }
-                                }, 150);
+                                }, 150); 
                             }
                         });
                     } catch (error) {
@@ -158,7 +143,7 @@ const Hero = () => {
                         setIsAnimating(false);
                     }
                 };
-
+                
                 mainVideoElement.addEventListener('canplay', canPlayHandler, { once: true });
             }
         });
@@ -174,54 +159,36 @@ const Hero = () => {
             ease: "power2.inOut",
         });
 
-    }, { dependencies: [isAnimating, upcomingVideoIndex] }); // Removed getVideoSrc dependency
+    }, { dependencies: [isAnimating] });
+
+
 
     // Update preview video source when currentIndex changes AND animation is NOT running
     useEffect(() => {
-        if (!previewVideoRef.current || isAnimating) return;
-
+        if (!previewVideoRef.current || isAnimating) return; 
+        
         const updateTimeout = setTimeout(() => {
-            if (isAnimating || !previewVideoRef.current) return;
-
+            if (isAnimating || !previewVideoRef.current) return; 
+            
             previewVideoRef.current.src = getVideoSrc(upcomingVideoIndex);
             previewVideoRef.current.load();
 
-            // Restore preview container visibility if needed (e.g., if animation was interrupted)
             if (previewContainerRef.current) {
-                gsap.to(previewContainerRef.current, {
-                    autoAlpha: 1,
-                    scale: 1,
-                    duration: 0.5,
+                gsap.to(previewContainerRef.current, { 
+                    autoAlpha: 1, 
+                    scale: 1, 
+                    duration: 0.5, 
                     ease: 'power2.out'
                 });
             }
-        }, 300);
+        }, 300); 
 
         return () => clearTimeout(updateTimeout);
-    }, [currentIndex, upcomingVideoIndex, isAnimating]); // Removed getVideoSrc dependency
-
-    // --- ADDED Scroll-based animation for the video frame shape ---
-    useGSAP(() => {
-        gsap.set("#video-frame", {
-          clipPath: "polygon(14% 0, 72% 0, 88% 90%, 0 95%)",
-          borderRadius: "0% 0% 40% 10%",
-        });
-        gsap.from("#video-frame", {
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-          borderRadius: "0% 0% 0% 0%",
-          ease: "power1.inOut",
-          scrollTrigger: {
-            trigger: "#video-frame",
-            start: "center center",
-            end: "bottom center",
-            scrub: true,
-          },
-        });
-      }, []); // Empty dependency array ensures this runs only once on mount
+    }, [currentIndex, upcomingVideoIndex, isAnimating]);
 
     return (
         <div className='relative h-dvh w-screen overflow-x-hidden'>
-            <div id='video-frame' className='relative z-10 h-dvh w-screen overflow-hidden bg-blue-75'> {/* Added rounded-lg back if needed */}
+            <div id='video-frame' className='relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75'>
                 {/* Main Background Video */}
                 <video
                     ref={mainVideoRef}
@@ -236,7 +203,7 @@ const Hero = () => {
                     onClick={handleMiniVdClick}
                     style={{ visibility: 'hidden', scale: 0.9, opacity: 0 }}
                     className='group absolute top-24 right-4 sm:right-6 z-50 flex items-center justify-center
-                               size-16 sm:size-20 md:size-24
+                               size-16 sm:size-20 md:size-24 
                                cursor-pointer overflow-hidden rounded-full bg-black/30 backdrop-blur-sm
                                shadow-lg transition-all duration-300 ease-out hover:shadow-xl hover:bg-black/50
                                hover:ring-2 hover:ring-yellow-300 hover:ring-opacity-80'
@@ -245,21 +212,17 @@ const Hero = () => {
                     <video
                         ref={previewVideoRef}
                         playsInline
-                        muted // Keep muted
-                        // Removed loop
-                        // Add poster if desired
-                        // poster={`path/to/poster-frame-${upcomingVideoIndex}.jpg`}
-                        className='absolute inset-0 size-full origin-center rounded-full object-cover object-center
+                        className='absolute inset-0 size-full origin-center rounded-full object-cover object-center 
                                  transition-transform duration-300 ease-out group-hover:scale-105'
                     />
-                    {/* --- ADJUSTED Play Icon Overlay (Always Visible) --- */}
+                    {/* --- ADJUSTED Play Icon Overlay --- */}
                     <div className='absolute z-10 text-white/90 transition-opacity duration-300'>
-                        <FaPlayCircle size={30} className='drop-shadow-md' />
+                        <FaPlayCircle size={30} className='drop-shadow-md' /> 
                     </div>
                 </div>
 
                 {/* Hidden Video Element for Transition Animation */}
-                <video
+                <video 
                     ref={nextVideoRef}
                     loop muted playsInline
                     className='absolute object-cover object-center'
@@ -267,16 +230,14 @@ const Hero = () => {
                 />
 
                 {/* Text & Button Overlays */}
-                 {/* Container for ORIGINAL colored text (Lower z-index) - z-30 */}
-                 <div className='absolute left-0 top-0 z-30 size-full pointer-events-none'>
-                    <h1 className='special-font hero-heading absolute bottom-5 right-5 text-blue-75'> {/* Original Gaming */}
-                        <b>Gaming</b>
-                    </h1>
+                <h1 className='special-font hero-heading absolute bottom-5 right-5 z-40 text-blue-75'>
+                    <b>Gaming</b>
+                </h1>
+                <div className='absolute left-0 top-0 z-40 size-full'>
                     <div className='mt-24 px-5 sm:px-10'>
-                        <h1 className='special-font hero-heading text-blue-100'> {/* Original Redifine */}
+                        <h1 className='special-font hero-heading text-blue-100'>
                             <b>redifine</b>
                         </h1>
-                        {/* Paragraph and Button remain here, but need pointer-events enabled on Button */}
                         <p className='mb-5 max-w-64 font-robert-regular text-blue-100'>
                             Enter the Metagame Layer <b />
                             <br />
@@ -286,23 +247,10 @@ const Hero = () => {
                             id='watch-trailer'
                             title='Watch Trailer'
                             leftIcon={<GiClick size={20} />}
-                            containerClass='!bg-yellow-300 flex items-center justify-center gap-2 px-10 py-4 text-sm pointer-events-auto' // Enable pointer events for button
+                            containerClass='!bg-yellow-300 flex items-center justify-center gap-2 px-10 py-4 text-sm'
                         />
                     </div>
                 </div>
-
-                {/* Container for BLACK overlay text (Higher z-index, will be clipped) - z-40 */}
-                {/* This needs to be added if you want the text color change effect */}
-                {/* <div id="black-text-overlay" className='absolute left-0 top-0 z-40 size-full overflow-hidden pointer-events-none'>
-                     <h1 className='special-font hero-heading absolute bottom-5 right-5 text-blue-200'>
-                        <b>Gaming</b>
-                    </h1>
-                    <div className='mt-24 px-5 sm:px-10'>
-                        <h1 className='special-font hero-heading text-blue-200'>
-                            <b>redifine</b>
-                        </h1>
-                    </div>
-                </div> */}
             </div>
         </div>
     );
