@@ -21,14 +21,12 @@ const About = () => {
         // Create the timeline for the About section
         const clipAnimation = gsap.timeline({
             scrollTrigger: {
-                trigger: '#about',
-                start: 'top bottom', // Start animation when top of section reaches bottom of viewport
-                end: 'center center', // End animation when center of section reaches center of viewport
-                scrub: 0.5,
+                trigger: '#clip',
+                start: 'top center', // Start animation when top of section reaches bottom of viewport
+                end: '+=800 center', // Changed: animation completes later in the scroll
+                scrub: 0.5, // Increased: creates smoother, more gradual animation
                 pin: false, // Don't pin during initial animation
                 pinSpacing: true,
-                markers: false,
-                id: aboutAnimationId // Set a unique ID
             },
         });
         
@@ -37,18 +35,17 @@ const About = () => {
             width: '100vw',
             height: '100vh',
             borderRadius: 0,
-            ease: 'power2.inOut'
+            ease: 'power2.inout' // Changed: less aggressive easing function
         });
         
         // Add pinning after the image is expanded
         gsap.timeline({
             scrollTrigger: {
                 trigger: '#clip',
-                start: 'top top', // Pin when the image reaches the top
-                end: '+=500', 
+                start: 'center center', // Pin when the image reaches the top
+                end: '+=800 center', // Pin for a longer duration
                 pin: true,
                 pinSpacing: true,
-                id: "about-pin-animation"
             }
         });
         
