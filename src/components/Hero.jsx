@@ -227,6 +227,11 @@ const Hero = () => {
                 </div>
             )}
             
+            {/* Black text that will be visible when outside the polygon clip-path */}
+            <h1 className='special-font hero-heading absolute bottom-5 right-5 z-5 text-black'>
+                <b>Gaming</b>
+            </h1>
+
             <div id='video-frame' className='relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75'>
                 {/* Main Background Video */}
                 <video
@@ -269,7 +274,7 @@ const Hero = () => {
                 />
 
                 {/* Text & Button Overlays */}
-                <h1 className='special-font hero-heading absolute bottom-5 right-5 z-40 text-blue-75'>
+                <h1 className='special-font hero-heading absolute bottom-5 right-5 z-40 text-white'>
                     <b>Gaming</b>
                 </h1>
                 <div className='absolute left-0 top-0 z-40 size-full'>
@@ -289,6 +294,15 @@ const Hero = () => {
                             containerClass='!bg-yellow-300 flex items-center justify-center gap-2 px-10 py-4 text-sm'
                         />
                     </div>
+                </div>
+            </div>
+            
+            {/* Black "redefine" text that will be visible when outside the polygon clip-path */}
+            <div className='absolute left-0 top-0 z-5 size-full pointer-events-none'>
+                <div className='mt-24 px-5 sm:px-10'>
+                    <h1 className='special-font hero-heading text-black'>
+                        <b>redifine</b>
+                    </h1>
                 </div>
             </div>
         </div>
