@@ -12,7 +12,8 @@ gsap.registerPlugin(ScrollTrigger);
 const Hero = () => {
     const [currentIndex, setCurrentIndex] = useState(1);
     const [isAnimating, setIsAnimating] = useState(false);
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(true);
+    const [loadedVideos, setLoadedVideos] = useState(0);
 
     const totalVideos = 4;
     const nextVideoRef = useRef(null);
@@ -63,6 +64,12 @@ const Hero = () => {
         if (isAnimating) return;
         setIsAnimating(true);
     };
+
+    useEffect(() => {
+        if(loadedVideos === totalVideos -1) {
+            setIsLoaded(false);
+        }
+    })
 
     // Initial setup - run once on mount
     useEffect(() => {
