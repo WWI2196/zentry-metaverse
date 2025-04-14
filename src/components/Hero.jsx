@@ -75,8 +75,11 @@ const Hero = () => {
 
         if (!nextVideoElement || !mainVideoElement) return;
 
+        // Store the current upcoming index value that we're animating to
+        const targetIndex = upcomingVideoIndex;
+
         // Set up transition video from the upcoming source
-        nextVideoElement.src = getVideoSrc(upcomingVideoIndex);
+        nextVideoElement.src = getVideoSrc(targetIndex);
         nextVideoElement.load();
         
         // Make it visible and start playing
@@ -85,14 +88,45 @@ const Hero = () => {
 
         const tl = gsap.timeline({
             onComplete: () => {
+                // Update the main video source to match what was just animated
+                mainVideoElement.src = getVideoSrc(targetIndex);
+                mainVideoElement.load();
+                mainVideoElement.play().catch(e => console.error("Main video play failed:", e));
+                
                 // After animation completes, update the current index
-                setCurrentIndex(upcomingVideoIndex);
+                setCurrentIndex(targetIndex);
                 
-                // Reset the transition video element
-                gsap.set(nextVideoElement, nextVideoInitialStyles);
+                // Reset the transition video element to initial state
+                gsap.set(nextVideoRef.current, { 
+                    top: '1.5rem',
+                    right: '1.5rem',
+                    width: '7rem',
+                    height: '7rem',
+                    borderRadius: '9999px',
+                    visibility: 'hidden',
+                    scale: 1,
+                    zIndex: 20,
+                });
                 
-                // End animation state
-                setIsAnimating(false);
+                // Clear video source AFTER setting styles
+                setTimeout(() => {
+                    if (nextVideoRef.current) {
+                        nextVideoRef.current.src = "";
+                    }
+                    
+                    // Make sure preview container is visible again
+                    if (previewContainerRef.current) {
+                        gsap.to(previewContainerRef.current, { 
+                            autoAlpha: 1, 
+                            scale: 1, 
+                            duration: 0.5,
+                            ease: 'power2.out'
+                        });
+                    }
+                    
+                    // End animation state
+                    setIsAnimating(false);
+                }, 100);
             }
         });
 
@@ -108,7 +142,7 @@ const Hero = () => {
             ease: "power2.inOut",
         });
 
-    }, { dependencies: [isAnimating] }); // Only depend on isAnimating
+    }, { dependencies: [isAnimating] });
 
     // Update preview video when currentIndex changes
     useEffect(() => {
