@@ -31,14 +31,13 @@ const Hero = () => {
         zIndex: 20,
     };
 
-    // Simplified click handler - just like in the reference code
+    // Click handler that only triggers animation when user clicks
     const handleMiniVdClick = () => {
         if (isAnimating) return;
         
+        console.log("Mini video clicked - starting animation");
         // Start the animation
         setIsAnimating(true);
-        
-        // The actual index update happens after animation completes in useGSAP
     };
 
     const handleVideoLoad = () => {
@@ -67,7 +66,7 @@ const Hero = () => {
         }
     }, []);
 
-    // Animation timeline
+    // Animation timeline - ONLY runs when isAnimating is true (user clicked)
     useGSAP(() => {
         if (!isAnimating) return;
 
@@ -109,7 +108,19 @@ const Hero = () => {
             ease: "power2.inOut",
         });
 
-    }, { dependencies: [isAnimating, currentIndex, upcomingVideoIndex] });
+    }, { dependencies: [isAnimating] }); // Only depend on isAnimating
+
+    // Update preview video when currentIndex changes
+    useEffect(() => {
+        if (!previewVideoRef.current) return;
+        
+        // Manually update the preview video source
+        previewVideoRef.current.src = getVideoSrc(upcomingVideoIndex);
+        previewVideoRef.current.load();
+        previewVideoRef.current.play()
+            .catch(e => console.error("Preview video play failed:", e));
+
+    }, [currentIndex, upcomingVideoIndex]);
 
     return (
         <div className='relative h-dvh w-screen overflow-x-hidden'>
@@ -125,7 +136,7 @@ const Hero = () => {
                     onLoadedData={handleVideoLoad}
                 />
 
-                {/* Preview Video Container - Fixed class syntax */}
+                {/* Preview Video Container */}
                 <div
                     ref={previewContainerRef}
                     onClick={handleMiniVdClick}
@@ -139,9 +150,8 @@ const Hero = () => {
                     {/* Preview Video Element */}
                     <video
                         ref={previewVideoRef}
-                        key={`preview-${currentIndex}-${upcomingVideoIndex}`}
                         src={getVideoSrc(upcomingVideoIndex)}
-                        autoPlay loop muted playsInline
+                        loop muted playsInline
                         className='absolute inset-0 size-full origin-center rounded-full object-cover object-center transition-transform duration-300 ease-out group-hover:scale-105'
                         onLoadedData={handleVideoLoad}
                     />
@@ -154,7 +164,6 @@ const Hero = () => {
                 {/* Hidden Video Element for Transition Animation */}
                 <video 
                     ref={nextVideoRef}
-                    key={`next-transition-${currentIndex}-${upcomingVideoIndex}`}
                     loop muted playsInline
                     className='absolute object-cover object-center'
                     style={nextVideoInitialStyles}
