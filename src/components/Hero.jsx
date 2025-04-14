@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { GiClick } from "react-icons/gi";
-import { IoMdRefresh } from "react-icons/io";
 import { FaPlayCircle } from "react-icons/fa";
 import Button from './Button';
 import { useGSAP } from '@gsap/react';
