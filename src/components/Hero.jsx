@@ -1,4 +1,7 @@
 import React, { use, useRef, useState } from 'react'
+import { GiClick } from "react-icons/gi";
+import Button from './Button';
+
 
 const Hero= () => {
 
@@ -27,15 +30,19 @@ const Hero= () => {
 return (
     // Main container for the hero section, taking full viewport height and width
     <div className='realtive h-dvh w-screen overflow-x-hidden'>
+
             {/* Video frame container with relative positioning and overflow hidden */}
             <div id='video-frame' className='relative z-10 h-dvh w-screen overflow-hidden rounnded-lg bg-blue-75'>
                     <div >
+
                             {/* Masked container for the small preview video, centered absolutely */}
                             <div className='mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg'>
+
                                     {/* Clickable area for the preview video, handles changing the main video */}
                                     <div onClick={handleMiniVdClick}
                                             // Styling for hover effect: scales up and becomes opaque on hover
                                             className='origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100'>
+
                                             {/* Small preview video element showing the next video */}
                                             <video
                                             ref={nextVideoRef} // Ref for potential future use
@@ -47,6 +54,7 @@ return (
                                             onLoadedData={handleVideoLoad}/> {/* Callback function when video data is loaded */}
                                     </div>
                             </div>
+
                             {/* Hidden video element, potentially for preloading or smoother transitions */}
                             <video ref={nextVideoRef} // Ref for potential future use
                             src={getVideoSrc(currentIndex)} // Source determined by the current video index
@@ -71,6 +79,7 @@ return (
                     <h1 className='special-font hero-heading absolute bottom-5 right-5 z-40 text-blue-75'>
                     <b>Gaming</b>
                     </h1>
+
                     {/* Overlay container for the top heading */}
                     <div className='absolute left-0 top-0 z-40 size-full'>
                             {/* Inner container for padding */}
@@ -79,11 +88,23 @@ return (
                                     <h1 className='special-font hero-heading text-blue-100'>
                                             <b>redifine</b>
                                     </h1>
+                                    <p className='mb-5 max-w-64 font-robert-regular text-blue-100'>
+                                        Enter the Metagame Layer <b />
+                                        <br /> {/* Added line break */}
+                                        Unleash the Play Economy
+                                    </p>
+
+                                    {/* Button container with specific styling */}
+                                    <Button id='watch-trailer' title='Watch Trailer' leftIcon={<GiClick />}
+                                    containerClass='!bg-yellow-300 flex items-center justify-center gap-1'/>
 
                             </div>
 
                     </div>
             </div>
+            <h1 className='special-font hero-heading absolute bottom-5 right-5 text-blue-75'>
+                    <b>Gaming</b>
+            </h1>
     </div>
 )
 }
