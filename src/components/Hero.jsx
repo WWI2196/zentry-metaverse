@@ -14,6 +14,7 @@ const Hero = () => {
     const nextVideoRef = useRef(null);
     const previewVideoRef = useRef(null);
     const previewContainerRef = useRef(null);
+    const mainVideoRef = useRef(null);
 
     const upcomingVideoIndex = (currentIndex % totalVideos) + 1;
     const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
@@ -26,12 +27,19 @@ const Hero = () => {
         borderRadius: '9999px',
         visibility: 'hidden',
         scale: 1,
+        zIndex: 20,
     };
 
     const handleMiniVdClick = () => {
-        if (isAnimating) {
+        if (isAnimating || !previewVideoRef.current || !nextVideoRef.current) {
             return;
         }
+
+        const currentTime = previewVideoRef.current.currentTime;
+        nextVideoRef.current.currentTime = currentTime;
+
+        nextVideoRef.current.play().catch(e => console.error("Next video play failed in handler:", e));
+
         setIsAnimating(true);
     }
 
@@ -41,14 +49,16 @@ const Hero = () => {
 
     useEffect(() => {
         if (previewContainerRef.current) {
+            // Fade in the preview container
             gsap.to(previewContainerRef.current, { autoAlpha: 1, scale: 1, duration: 0.7, ease: 'power2.out', delay: 0.5 });
         }
         if (previewVideoRef.current) {
+            // Load and explicitly play the initial preview video
             previewVideoRef.current.load();
+            previewVideoRef.current.play().catch(e => console.error("Initial preview video play failed:", e));
         }
-        const initialBgVideo = document.getElementById('initial-bg-video');
-        if (initialBgVideo) {
-            initialBgVideo.play().catch(e => console.error("Initial BG video play failed", e));
+        if (mainVideoRef.current) {
+            mainVideoRef.current.play().catch(e => console.error("Initial BG video play failed", e));
         }
     }, []);
 
@@ -56,24 +66,49 @@ const Hero = () => {
         if (!isAnimating) return;
 
         const nextVideoElement = nextVideoRef.current;
-        const previewContainerElement = previewContainerRef.current;
+        const previewContainerElement = previewContainerRef.current; // Keep ref, even if not animating it
+        const mainVideoElement = mainVideoRef.current;
 
-        if (!nextVideoElement || !previewContainerElement) return;
-
-        nextVideoElement.src = getVideoSrc(upcomingVideoIndex);
-        nextVideoElement.load();
+        if (!nextVideoElement || !previewContainerElement || !mainVideoElement) return;
 
         gsap.set(nextVideoElement, { visibility: "visible", scale: 1 });
 
         const tl = gsap.timeline({
             onComplete: () => {
-                setCurrentIndex(upcomingVideoIndex);
+                const newCurrentIndex = upcomingVideoIndex;
+                const newUpcomingIndex = (newCurrentIndex % totalVideos) + 1;
+                const newUpcomingVideoSrc = getVideoSrc(newUpcomingIndex);
+
+                // --- Handoff Logic ---
+                const finalTime = nextVideoElement.currentTime;
+                mainVideoElement.src = getVideoSrc(newCurrentIndex);
+                mainVideoElement.onloadeddata = () => {
+                    mainVideoElement.currentTime = finalTime;
+                    mainVideoElement.play().catch(e => console.error("New main video play failed post-transition:", e));
+                    mainVideoElement.onloadeddata = null;
+                };
+                mainVideoElement.load();
+
+                // --- Reset Transition Element ---
                 gsap.set(nextVideoElement, nextVideoInitialStyles);
+                nextVideoElement.src = newUpcomingVideoSrc;
+                nextVideoElement.pause();
+
+                // --- Update Preview Video ---
+                if (previewVideoRef.current) {
+                    previewVideoRef.current.src = newUpcomingVideoSrc;
+                    previewVideoRef.current.load(); // Load the new source
+                    previewVideoRef.current.play().catch(e => console.error("New preview video play failed:", e)); // Play the new source
+                }
+
+                // --- Update State ---
+                setCurrentIndex(newCurrentIndex);
                 setIsAnimating(false);
-                gsap.set(previewContainerElement, { display: 'flex', scale: 1, autoAlpha: 1 });
             }
         });
 
+        // --- Animation Definition ---
+        // Animate the next video expanding
         tl.to(nextVideoElement, {
             top: 0,
             right: 0,
@@ -83,32 +118,26 @@ const Hero = () => {
             borderRadius: 0,
             duration: 1.2,
             ease: "power2.inOut",
-            onStart: () => {
-                nextVideoElement.play().catch(error => console.error("Zooming video play failed:", error));
-            },
-        })
-        .to(previewContainerElement, {
-            scale: 0,
-            autoAlpha: 0,
-            duration: 0.8,
-            ease: "power1.in",
-        }, "<");
+        });
 
-    }, { dependencies: [isAnimating] });
+    }, { dependencies: [isAnimating, currentIndex] });
 
     return (
         <div className='relative h-dvh w-screen overflow-x-hidden'>
 
             <div id='video-frame' className='relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75'>
+
+                {/* Main Background Video */}
                 <video
+                    ref={mainVideoRef}
                     key={`bg-${currentIndex}`}
                     src={getVideoSrc(currentIndex)}
                     autoPlay loop muted playsInline
-                    id='initial-bg-video'
                     className='absolute left-0 top-0 z-0 size-full object-cover object-center'
                     onLoadedData={handleVideoLoad}
                 />
 
+                {/* Preview Video Container */}
                 <div
                     ref={previewContainerRef}
                     onClick={handleMiniVdClick}
@@ -116,33 +145,37 @@ const Hero = () => {
                                size-24 sm:size-28 md:size-32
                                cursor-pointer overflow-hidden rounded-full bg-black/30 backdrop-blur-sm
                                shadow-lg
-                               invisible scale-90
+                               invisible scale-90 {/* Use class for initial state, GSAP will handle visibility */}
                                transition-all duration-300 ease-out hover:shadow-xl hover:bg-black/50
                                hover:ring-2 hover:ring-yellow-300 hover:ring-opacity-80'
+                    // REMOVED style={{ visibility: 'hidden', opacity: 0 }}
                 >
+                    {/* Preview Video Element */}
                     <video
                         ref={previewVideoRef}
+                        key={`preview-${upcomingVideoIndex}`}
                         src={getVideoSrc(upcomingVideoIndex)}
-                        loop muted playsInline
-                        id='current-video'
+                        autoPlay loop muted playsInline // Keep attributes
                         className='absolute inset-0 size-full origin-center rounded-full object-cover object-center transition-transform duration-300 ease-out group-hover:scale-105'
                         onLoadedData={handleVideoLoad}
                     />
+                    {/* Refresh Icon Overlay */}
                     <div className='absolute z-10 text-white/70 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
                         <IoMdRefresh size={30} className='drop-shadow-md' />
                     </div>
                 </div>
 
+                {/* Hidden Video Element for Transition Animation */}
                 <video ref={nextVideoRef}
-                    key={`next-transition`}
-                    src={getVideoSrc(currentIndex)}
+                    key={`next-transition-${upcomingVideoIndex}`}
+                    src={getVideoSrc(upcomingVideoIndex)}
                     loop muted playsInline
-                    id='next-video'
-                    className='absolute top-6 right-6 invisible z-20
-                               size-24 sm:size-28 md:size-32
-                               origin-center rounded-full object-cover object-center'
-                    onLoadedData={handleVideoLoad} />
+                    className='absolute object-cover object-center'
+                    style={nextVideoInitialStyles}
+                    onLoadedData={handleVideoLoad}
+                />
 
+                {/* Text & Button Overlays */}
                 <h1 className='special-font hero-heading absolute bottom-5 right-5 z-40 text-blue-75'>
                     <b>Gaming</b>
                 </h1>
