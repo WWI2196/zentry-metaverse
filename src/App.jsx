@@ -1,14 +1,19 @@
-import Hero from './components/Hero'
+import React from 'react';
+import About from './components/About';
+import Hero from './components/Hero';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+// Register ScrollTrigger at the app level
+gsap.registerPlugin(ScrollTrigger);
 
 const App = () => {
   return (
     <main className="relative min-h-screen w-screen overflow-x-hidden">
       <Hero />
-      <section className='z-0 min-h-screen bg-blue-500'>
-
-      </section>
+      <About />
     </main>
-  )
-}
+  );
+};
 
-export default App
+export default App;
