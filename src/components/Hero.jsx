@@ -21,10 +21,10 @@ const Hero = () => {
 
     // --- ADJUSTED Initial Styles ---
     const nextVideoInitialStyles = {
-        top: '6rem',
+        top: '6rem', 
         right: '1.5rem',
-        width: '4rem',
-        height: '4rem',
+        width: '4rem',  
+        height: '4rem', 
         borderRadius: '9999px',
         visibility: 'hidden',
         scale: 1,
@@ -160,8 +160,6 @@ const Hero = () => {
         });
 
     }, { dependencies: [isAnimating] });
-
-
 
     // Update preview video source when currentIndex changes AND animation is NOT running
     useEffect(() => {
