@@ -73,64 +73,150 @@ const Hero = () => {
         const nextVideoElement = nextVideoRef.current;
         const mainVideoElement = mainVideoRef.current;
 
-        if (!nextVideoElement || !mainVideoElement) return;
+        if (!nextVideoElement || !mainVideoElement) {
+            console.error("Video refs not available for animation start!");
+            setIsAnimating(false); // Reset state if refs are missing
+            return;
+        }
 
         // Store the current upcoming index value that we're animating to
         const targetIndex = upcomingVideoIndex;
+        console.log(`[Animation Start] Target Index: ${targetIndex}`);
 
         // Set up transition video from the upcoming source
         nextVideoElement.src = getVideoSrc(targetIndex);
         nextVideoElement.load();
         
-        // Make it visible and start playing
-        gsap.set(nextVideoElement, { visibility: "visible", scale: 1 });
-        nextVideoElement.play().catch(e => console.error("Transition video play failed:", e));
+        // --- Make it visible AND reset opacity before starting ---
+        gsap.set(nextVideoElement, { 
+            visibility: "visible", 
+            scale: 1, 
+            opacity: 1 // Explicitly reset opacity to 1
+        });
+        console.log("[Animation Start] nextVideoElement visibility and opacity reset.");
+
+        // Hide the preview container immediately
+        if (previewContainerRef.current) {
+            gsap.to(previewContainerRef.current, { autoAlpha: 0, duration: 0.3 });
+        }
+        
+        const playPromise = nextVideoElement.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(e => console.error("Transition video play failed:", e));
+        } else {
+            console.warn("nextVideoElement.play() did not return a promise.");
+        }
 
         const tl = gsap.timeline({
             onComplete: () => {
+                console.log("[Animation Timeline] Zoom animation part complete.");
+                // Get the current time of the transition video to sync with main video later
+                const transitionVideoTime = nextVideoElement.currentTime;
+                console.log("[Animation Timeline] Transition video time:", transitionVideoTime);
+                
                 // Update the main video source to match what was just animated
                 mainVideoElement.src = getVideoSrc(targetIndex);
                 mainVideoElement.load();
-                mainVideoElement.play().catch(e => console.error("Main video play failed:", e));
                 
-                // After animation completes, update the current index
-                setCurrentIndex(targetIndex);
+                // Create an opacity overlay for smooth transition
+                const overlayDiv = document.createElement('div');
+                overlayDiv.className = 'absolute left-0 top-0 z-10 size-full bg-blue-75';
+                // Ensure parentNode exists before appending
+                if (nextVideoElement.parentNode) {
+                    nextVideoElement.parentNode.appendChild(overlayDiv);
+                } else {
+                    console.error("Cannot find parent node for overlayDiv!");
+                }
                 
-                // Reset the transition video element to initial state
-                gsap.set(nextVideoRef.current, { 
-                    top: '1.5rem',
-                    right: '1.5rem',
-                    width: '7rem',
-                    height: '7rem',
-                    borderRadius: '9999px',
-                    visibility: 'hidden',
-                    scale: 1,
-                    zIndex: 20,
-                });
+                // Make main video initially invisible
+                gsap.set(mainVideoElement, { opacity: 0 });
                 
-                // Clear video source AFTER setting styles
-                setTimeout(() => {
-                    if (nextVideoRef.current) {
-                        nextVideoRef.current.src = "";
-                    }
-                    
-                    // Make sure preview container is visible again
-                    if (previewContainerRef.current) {
-                        gsap.to(previewContainerRef.current, { 
-                            autoAlpha: 1, 
-                            scale: 1, 
-                            duration: 0.5,
-                            ease: 'power2.out'
+                // When main video can play
+                const canPlayHandler = () => {
+                    console.log("[Animation Timeline] Main video can play.");
+                    try {
+                        // Start at a specific time to avoid the "restart" feeling - use a higher value
+                        mainVideoElement.currentTime = 3.0; // Try 3 seconds in instead of 1
+                        
+                        // Cross-fade between videos with longer duration
+                        gsap.to(mainVideoElement, { 
+                            opacity: 1, 
+                            duration: 0.8,
+                            onStart: () => console.log("[Animation Timeline] Main video fade-in start.")
                         });
+                        gsap.to(nextVideoElement, { 
+                            opacity: 0, 
+                            duration: 0.8,
+                            onStart: () => console.log("[Animation Timeline] Transition video fade-out start.")
+                        });
+                        gsap.to(overlayDiv, { 
+                            opacity: 0, 
+                            duration: 1.0, 
+                            onComplete: () => {
+                                console.log("[Animation Timeline] Overlay fade complete.");
+                                // Play the main video
+                                mainVideoElement.play().catch(e => console.error("Main video play failed:", e));
+                                
+                                // Remove the overlay once fade is complete
+                                if (overlayDiv.parentNode) {
+                                    overlayDiv.remove();
+                                }
+                                
+                                // After animation completes, update the current index
+                                setCurrentIndex(targetIndex);
+                                console.log(`[Animation End] Index updated to: ${targetIndex}`);
+                                
+                                // Reset the transition video element to initial state
+                                // Ensure ref is still valid
+                                if (nextVideoRef.current) {
+                                    gsap.set(nextVideoRef.current, { 
+                                        ...nextVideoInitialStyles,
+                                        // Ensure visibility is hidden explicitly after fade out
+                                        visibility: 'hidden' 
+                                    });
+                                    console.log("[Animation End] Transition video reset to initial styles.");
+                                }
+                                
+                                // Clear video source AFTER setting styles and allow UI to update
+                                setTimeout(() => {
+                                    if (nextVideoRef.current) {
+                                        console.log("[Animation End] Clearing transition video src.");
+                                        nextVideoRef.current.pause(); // Stop playback
+                                        nextVideoRef.current.src = ""; // Clear src
+                                        nextVideoRef.current.load(); // Reset video state
+                                    }
+                                    
+                                    // Make preview container visible again
+                                    if (previewContainerRef.current) {
+                                        console.log("[Animation End] Making preview container visible.");
+                                        gsap.to(previewContainerRef.current, { 
+                                            autoAlpha: 1, 
+                                            scale: 1, 
+                                            duration: 0.5,
+                                            ease: 'power2.out'
+                                        });
+                                    }
+                                    
+                                    // End animation state
+                                    console.log("[Animation End] Setting isAnimating to false.");
+                                    setIsAnimating(false);
+                                }, 150); // Increased timeout slightly
+                            }
+                        });
+                    } catch (error) {
+                        console.error("Error in video transition:", error);
+                        // Simple fallback if the approach above fails
+                        mainVideoElement.play().catch(e => console.error("Fallback main video play failed:", e));
+                        setIsAnimating(false);
                     }
-                    
-                    // End animation state
-                    setIsAnimating(false);
-                }, 100);
+                };
+                
+                mainVideoElement.addEventListener('canplay', canPlayHandler, { once: true }); // Only run this handler once
             }
         });
 
         // Animation: expand the preview video to full screen
+        console.log("[Animation Start] Starting zoom animation tween.");
         tl.to(nextVideoElement, {
             top: 0,
             right: 0,
@@ -146,15 +232,27 @@ const Hero = () => {
 
     // Update preview video when currentIndex changes
     useEffect(() => {
-        if (!previewVideoRef.current) return;
+        // Only run if NOT animating and the ref exists
+        if (!previewVideoRef.current || isAnimating) return; 
         
-        // Manually update the preview video source
-        previewVideoRef.current.src = getVideoSrc(upcomingVideoIndex);
-        previewVideoRef.current.load();
-        previewVideoRef.current.play()
-            .catch(e => console.error("Preview video play failed:", e));
+        // Delay this update slightly to ensure the main animation cleanup has finished
+        const updateTimeout = setTimeout(() => {
+            // Double-check isAnimating flag inside timeout
+            if (isAnimating || !previewVideoRef.current) return; 
 
-    }, [currentIndex, upcomingVideoIndex]);
+            console.log(`[Preview Update] Updating preview to index: ${upcomingVideoIndex}`);
+            
+            // Manually update the preview video source
+            previewVideoRef.current.src = getVideoSrc(upcomingVideoIndex);
+            previewVideoRef.current.load();
+            previewVideoRef.current.play()
+                .catch(e => console.error("Preview video play failed:", e));
+        }, 300); // Delay update slightly
+
+        // Cleanup function for the timeout
+        return () => clearTimeout(updateTimeout);
+
+    }, [currentIndex, upcomingVideoIndex, isAnimating]); // Add isAnimating dependency
 
     return (
         <div className='relative h-dvh w-screen overflow-x-hidden'>
@@ -163,7 +261,7 @@ const Hero = () => {
                 {/* Main Background Video */}
                 <video
                     ref={mainVideoRef}
-                    key={`bg-${currentIndex}`}
+                    key={`bg-${currentIndex}`} // Key helps React replace the element if needed, but src update handles the video change
                     src={getVideoSrc(currentIndex)}
                     autoPlay loop muted playsInline
                     className='absolute left-0 top-0 z-0 size-full object-cover object-center'
@@ -174,17 +272,19 @@ const Hero = () => {
                 <div
                     ref={previewContainerRef}
                     onClick={handleMiniVdClick}
+                    // Apply initial styles directly for GSAP control
+                    style={{ visibility: 'hidden', scale: 0.9, opacity: 0 }} 
                     className='group absolute top-4 right-4 sm:top-6 sm:right-6 z-50 flex items-center justify-center
                                size-24 sm:size-28 md:size-32
                                cursor-pointer overflow-hidden rounded-full bg-black/30 backdrop-blur-sm
-                               shadow-lg invisible scale-90
+                               shadow-lg 
                                transition-all duration-300 ease-out hover:shadow-xl hover:bg-black/50
                                hover:ring-2 hover:ring-yellow-300 hover:ring-opacity-80'
                 >
                     {/* Preview Video Element */}
                     <video
                         ref={previewVideoRef}
-                        src={getVideoSrc(upcomingVideoIndex)}
+                        // No need for src here initially, it's set in useEffect
                         loop muted playsInline
                         className='absolute inset-0 size-full origin-center rounded-full object-cover object-center transition-transform duration-300 ease-out group-hover:scale-105'
                         onLoadedData={handleVideoLoad}
@@ -198,9 +298,9 @@ const Hero = () => {
                 {/* Hidden Video Element for Transition Animation */}
                 <video 
                     ref={nextVideoRef}
-                    loop muted playsInline
+                    loop muted playsInline // Loop might not be strictly necessary here but doesn't hurt
                     className='absolute object-cover object-center'
-                    style={nextVideoInitialStyles}
+                    style={nextVideoInitialStyles} // Apply initial styles
                     onLoadedData={handleVideoLoad}
                 />
 
