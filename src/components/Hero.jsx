@@ -8,6 +8,8 @@ import gsap from 'gsap';
 const Hero = () => {
     const [currentIndex, setCurrentIndex] = useState(1);
     const [isAnimating, setIsAnimating] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(true);
+    const [loadedVideos, setLoadedVideos] = useState(0);
 
     const totalVideos = 4;
     const nextVideoRef = useRef(null);
@@ -21,10 +23,10 @@ const Hero = () => {
 
     // --- ADJUSTED Initial Styles ---
     const nextVideoInitialStyles = {
-        top: '6rem', 
+        top: '6rem',
         right: '1.5rem',
-        width: '4rem',  
-        height: '4rem', 
+        width: '4rem',
+        height: '4rem',
         borderRadius: '9999px',
         visibility: 'hidden',
         scale: 1,
@@ -161,6 +163,26 @@ const Hero = () => {
 
     }, { dependencies: [isAnimating] });
 
+    useGSAP(() => {
+        gsap.set('#video-frame', {
+                clipPath: 'polygon(14% 0%, 72% 0%, 90% 90%, 0 100%)',
+                borderRadius: '0 0 40% 10%'
+        })
+
+        gsap.from('#video-frame', {
+            clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0 100%)',
+            borderRadius: '0 0 0 0',
+            ease: 'power1.out',
+            scrollTrigger: {
+                trigger: '#video-frame',
+                start: 'center center',
+                end: 'bottom center',
+                scrub: true,
+            },
+            
+        });
+    }, []);
+
     // Update preview video source when currentIndex changes AND animation is NOT running
     useEffect(() => {
         if (!previewVideoRef.current || isAnimating) return; 
@@ -186,6 +208,10 @@ const Hero = () => {
 
     return (
         <div className='relative h-dvh w-screen overflow-x-hidden'>
+                
+                
+
+
             <div id='video-frame' className='relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75'>
                 {/* Main Background Video */}
                 <video
