@@ -24,8 +24,8 @@ const Hero = () => {
     const nextVideoInitialStyles = {
         top: '1.5rem',
         right: '1.5rem',
-        width: '7rem',
-        height: '7rem',
+        width: '5rem', 
+        height: '5rem',
         borderRadius: '9999px',
         visibility: 'hidden',
         scale: 1,
@@ -275,8 +275,9 @@ const Hero = () => {
                     onClick={handleMiniVdClick}
                     // Apply initial styles directly for GSAP control
                     style={{ visibility: 'hidden', scale: 0.9, opacity: 0 }} 
+                    // Update the size classes here
                     className='group absolute top-4 right-4 sm:top-6 sm:right-6 z-50 flex items-center justify-center
-                               size-24 sm:size-28 md:size-32
+                               size-20 sm:size-24 md:size-28 
                                cursor-pointer overflow-hidden rounded-full bg-black/30 backdrop-blur-sm
                                shadow-lg 
                                transition-all duration-300 ease-out hover:shadow-xl hover:bg-black/50
