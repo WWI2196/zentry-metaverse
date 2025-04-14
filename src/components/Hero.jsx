@@ -16,6 +16,7 @@ const Hero = () => {
     const previewContainerRef = useRef(null);
     const mainVideoRef = useRef(null);
 
+    // Calculate upcoming video index
     const upcomingVideoIndex = (currentIndex % totalVideos) + 1;
     const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
 
@@ -30,85 +31,73 @@ const Hero = () => {
         zIndex: 20,
     };
 
+    // Simplified click handler - just like in the reference code
     const handleMiniVdClick = () => {
-        if (isAnimating || !previewVideoRef.current || !nextVideoRef.current) {
-            return;
-        }
-
-        const currentTime = previewVideoRef.current.currentTime;
-        nextVideoRef.current.currentTime = currentTime;
-
-        nextVideoRef.current.play().catch(e => console.error("Next video play failed in handler:", e));
-
+        if (isAnimating) return;
+        
+        // Start the animation
         setIsAnimating(true);
-    }
+        
+        // The actual index update happens after animation completes in useGSAP
+    };
 
     const handleVideoLoad = () => {
         setLoadedVideos((prevCount) => prevCount + 1);
-    }
+    };
 
+    // Initial setup
     useEffect(() => {
         if (previewContainerRef.current) {
-            // Fade in the preview container
-            gsap.to(previewContainerRef.current, { autoAlpha: 1, scale: 1, duration: 0.7, ease: 'power2.out', delay: 0.5 });
+            gsap.to(previewContainerRef.current, { 
+                autoAlpha: 1, 
+                scale: 1, 
+                duration: 0.7, 
+                ease: 'power2.out', 
+                delay: 0.5 
+            });
         }
+
         if (previewVideoRef.current) {
-            // Load and explicitly play the initial preview video
             previewVideoRef.current.load();
             previewVideoRef.current.play().catch(e => console.error("Initial preview video play failed:", e));
         }
+
         if (mainVideoRef.current) {
             mainVideoRef.current.play().catch(e => console.error("Initial BG video play failed", e));
         }
     }, []);
 
+    // Animation timeline
     useGSAP(() => {
         if (!isAnimating) return;
 
         const nextVideoElement = nextVideoRef.current;
-        const previewContainerElement = previewContainerRef.current; // Keep ref, even if not animating it
         const mainVideoElement = mainVideoRef.current;
 
-        if (!nextVideoElement || !previewContainerElement || !mainVideoElement) return;
+        if (!nextVideoElement || !mainVideoElement) return;
 
+        // Set up transition video from the upcoming source
+        nextVideoElement.src = getVideoSrc(upcomingVideoIndex);
+        nextVideoElement.load();
+        
+        // Make it visible and start playing
         gsap.set(nextVideoElement, { visibility: "visible", scale: 1 });
+        nextVideoElement.play().catch(e => console.error("Transition video play failed:", e));
 
         const tl = gsap.timeline({
             onComplete: () => {
-                const newCurrentIndex = upcomingVideoIndex;
-                const newUpcomingIndex = (newCurrentIndex % totalVideos) + 1;
-                const newUpcomingVideoSrc = getVideoSrc(newUpcomingIndex);
-
-                // --- Handoff Logic ---
-                const finalTime = nextVideoElement.currentTime;
-                mainVideoElement.src = getVideoSrc(newCurrentIndex);
-                mainVideoElement.onloadeddata = () => {
-                    mainVideoElement.currentTime = finalTime;
-                    mainVideoElement.play().catch(e => console.error("New main video play failed post-transition:", e));
-                    mainVideoElement.onloadeddata = null;
-                };
-                mainVideoElement.load();
-
-                // --- Reset Transition Element ---
+                // After animation completes, update the current index
+                setCurrentIndex(upcomingVideoIndex);
+                
+                // Reset the transition video element
                 gsap.set(nextVideoElement, nextVideoInitialStyles);
-                nextVideoElement.src = newUpcomingVideoSrc;
-                nextVideoElement.pause();
-
-                // --- Update Preview Video ---
-                if (previewVideoRef.current) {
-                    previewVideoRef.current.src = newUpcomingVideoSrc;
-                    previewVideoRef.current.load(); // Load the new source
-                    previewVideoRef.current.play().catch(e => console.error("New preview video play failed:", e)); // Play the new source
-                }
-
-                // --- Update State ---
-                setCurrentIndex(newCurrentIndex);
+                
+                // End animation state
                 setIsAnimating(false);
             }
         });
 
-        // --- Animation Definition ---
-        // Animate the next video expanding
+        // Animation: expand the preview video to full screen
         tl.to(nextVideoElement, {
             top: 0,
             right: 0,
@@ -120,11 +109,10 @@ const Hero = () => {
             ease: "power2.inOut",
         });
 
-    }, { dependencies: [isAnimating, currentIndex] });
+    }, { dependencies: [isAnimating, currentIndex, upcomingVideoIndex] });
 
     return (
         <div className='relative h-dvh w-screen overflow-x-hidden'>
-
             <div id='video-frame' className='relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75'>
 
                 {/* Main Background Video */}
@@ -137,25 +125,23 @@ const Hero = () => {
                     onLoadedData={handleVideoLoad}
                 />
 
-                {/* Preview Video Container */}
+                {/* Preview Video Container - Fixed class syntax */}
                 <div
                     ref={previewContainerRef}
                     onClick={handleMiniVdClick}
                     className='group absolute top-4 right-4 sm:top-6 sm:right-6 z-50 flex items-center justify-center
                                size-24 sm:size-28 md:size-32
                                cursor-pointer overflow-hidden rounded-full bg-black/30 backdrop-blur-sm
-                               shadow-lg
-                               invisible scale-90 {/* Use class for initial state, GSAP will handle visibility */}
+                               shadow-lg invisible scale-90
                                transition-all duration-300 ease-out hover:shadow-xl hover:bg-black/50
                                hover:ring-2 hover:ring-yellow-300 hover:ring-opacity-80'
-                    // REMOVED style={{ visibility: 'hidden', opacity: 0 }}
                 >
                     {/* Preview Video Element */}
                     <video
                         ref={previewVideoRef}
-                        key={`preview-${upcomingVideoIndex}`}
+                        key={`preview-${currentIndex}-${upcomingVideoIndex}`}
                         src={getVideoSrc(upcomingVideoIndex)}
-                        autoPlay loop muted playsInline // Keep attributes
+                        autoPlay loop muted playsInline
                         className='absolute inset-0 size-full origin-center rounded-full object-cover object-center transition-transform duration-300 ease-out group-hover:scale-105'
                         onLoadedData={handleVideoLoad}
                     />
@@ -166,9 +152,9 @@ const Hero = () => {
                 </div>
 
                 {/* Hidden Video Element for Transition Animation */}
-                <video ref={nextVideoRef}
-                    key={`next-transition-${upcomingVideoIndex}`}
-                    src={getVideoSrc(upcomingVideoIndex)}
+                <video 
+                    ref={nextVideoRef}
+                    key={`next-transition-${currentIndex}-${upcomingVideoIndex}`}
                     loop muted playsInline
                     className='absolute object-cover object-center'
                     style={nextVideoInitialStyles}
@@ -197,10 +183,9 @@ const Hero = () => {
                         />
                     </div>
                 </div>
-
             </div>
         </div>
     );
-}
+};
 
 export default Hero;
