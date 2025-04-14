@@ -71,35 +71,28 @@ const Hero = () => {
             return;
         }
 
-        // Store the current upcoming index value that we're animating to
         const targetIndex = upcomingVideoIndex;
 
-        // Set up transition video from the upcoming source
         nextVideoElement.src = getVideoSrc(targetIndex);
         nextVideoElement.load();
         
-        // Make it visible AND reset opacity before starting
         gsap.set(nextVideoElement, { 
             visibility: "visible", 
             scale: 1, 
             opacity: 1
         });
 
-        // Hide the preview container immediately
         if (previewContainerRef.current) {
             gsap.to(previewContainerRef.current, { autoAlpha: 0, duration: 0.3 });
         }
         
-        // Play the transition video
         nextVideoElement.play().catch(e => console.error("Transition video play failed:", e));
 
         const tl = gsap.timeline({
             onComplete: () => {
-                // Update the main video source to match what was just animated
                 mainVideoElement.src = getVideoSrc(targetIndex);
                 mainVideoElement.load();
                 
-                // Create an opacity overlay for smooth transition
                 const overlayDiv = document.createElement('div');
                 overlayDiv.className = 'absolute left-0 top-0 z-10 size-full bg-blue-75';
                 
@@ -107,34 +100,26 @@ const Hero = () => {
                     nextVideoElement.parentNode.appendChild(overlayDiv);
                 }
                 
-                // Make main video initially invisible
                 gsap.set(mainVideoElement, { opacity: 0 });
                 
-                // When main video can play
                 const canPlayHandler = () => {
                     try {
-                        // Start at a specific time to avoid the "restart" feeling
                         mainVideoElement.currentTime = 3.0;
                         
-                        // Cross-fade between videos
                         gsap.to(mainVideoElement, { opacity: 1, duration: 0.8 });
                         gsap.to(nextVideoElement, { opacity: 0, duration: 0.8 });
                         gsap.to(overlayDiv, { 
                             opacity: 0, 
                             duration: 1.0, 
                             onComplete: () => {
-                                // Play the main video
                                 mainVideoElement.play().catch(e => console.error("Main video play failed:", e));
                                 
-                                // Clean up overlay
                                 if (overlayDiv.parentNode) {
                                     overlayDiv.remove();
                                 }
                                 
-                                // Update index after animation completes
                                 setCurrentIndex(targetIndex);
                                 
-                                // Reset the transition video element
                                 if (nextVideoRef.current) {
                                     gsap.set(nextVideoRef.current, { 
                                         ...nextVideoInitialStyles,
@@ -142,7 +127,7 @@ const Hero = () => {
                                     });
                                 }
                                 
-                                // Clean up and restore UI state
+                                // Clean up transition video state, but DO NOT make preview visible here
                                 setTimeout(() => {
                                     if (nextVideoRef.current) {
                                         nextVideoRef.current.pause();
@@ -150,18 +135,8 @@ const Hero = () => {
                                         nextVideoRef.current.load();
                                     }
                                     
-                                    // Make preview container visible again
-                                    if (previewContainerRef.current) {
-                                        gsap.to(previewContainerRef.current, { 
-                                            autoAlpha: 1, 
-                                            scale: 1, 
-                                            duration: 0.5,
-                                            ease: 'power2.out'
-                                        });
-                                    }
-                                    
                                     setIsAnimating(false);
-                                }, 150);
+                                }, 150); // Keep a short delay for cleanup
                             }
                         });
                     } catch (error) {
@@ -175,7 +150,6 @@ const Hero = () => {
             }
         });
 
-        // Animation: expand the preview video to full screen
         tl.to(nextVideoElement, {
             top: 0,
             right: 0,
@@ -189,11 +163,11 @@ const Hero = () => {
 
     }, { dependencies: [isAnimating] });
 
-    // Update preview video when currentIndex changes
     useEffect(() => {
         if (!previewVideoRef.current || isAnimating) return; 
         
         const updateTimeout = setTimeout(() => {
+            // Double check conditions inside timeout
             if (isAnimating || !previewVideoRef.current) return; 
             
             // Update the preview video source
@@ -201,7 +175,17 @@ const Hero = () => {
             previewVideoRef.current.load();
             previewVideoRef.current.play()
                 .catch(e => console.error("Preview video play failed:", e));
-        }, 300);
+
+            // Make preview container visible AFTER updating the source
+            if (previewContainerRef.current) {
+                gsap.to(previewContainerRef.current, { 
+                    autoAlpha: 1, 
+                    scale: 1, 
+                    duration: 0.5, // Can adjust duration as needed
+                    ease: 'power2.out'
+                });
+            }
+        }, 300); // Keep the delay or adjust as needed
 
         return () => clearTimeout(updateTimeout);
     }, [currentIndex, upcomingVideoIndex, isAnimating]);
