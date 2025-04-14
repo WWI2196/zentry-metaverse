@@ -4,12 +4,15 @@ import { FaPlayCircle } from "react-icons/fa";
 import Button from './Button';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+// Register the ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
     const [currentIndex, setCurrentIndex] = useState(1);
     const [isAnimating, setIsAnimating] = useState(false);
-    const [isLoaded, setIsLoaded] = useState(true);
-    const [loadedVideos, setLoadedVideos] = useState(0);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     const totalVideos = 4;
     const nextVideoRef = useRef(null);
@@ -32,6 +35,28 @@ const Hero = () => {
         scale: 1,
         zIndex: 20,
     };
+
+    // Clip path animation with ScrollTrigger
+    useGSAP(() => {
+        gsap.set('#video-frame', {
+            clipPath: 'polygon(14% 0%, 72% 0%, 90% 90%, 0 100%)',
+            borderRadius: '0 0 40% 10%'
+        });
+
+        gsap.from('#video-frame', {
+            clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0 100%)',
+            borderRadius: '0 0 0 0',
+            ease: 'power1.out',
+            scrollTrigger: {
+                trigger: '#video-frame',
+                start: 'top top',
+                end: 'bottom center',
+                scrub: true,
+                markers: false, // Set to true during development to see trigger points
+                toggleActions: 'play none none reverse',
+            },
+        });
+    }, []);
 
     // Click handler that only triggers animation when user clicks
     const handleMiniVdClick = () => {
@@ -57,6 +82,9 @@ const Hero = () => {
         }
 
         if (mainVideoRef.current) {
+            mainVideoRef.current.addEventListener('loadeddata', () => {
+                setIsLoaded(true);
+            });
             mainVideoRef.current.play().catch(e => console.error("Initial BG video play failed", e));
         }
     }, []);
@@ -163,26 +191,6 @@ const Hero = () => {
 
     }, { dependencies: [isAnimating] });
 
-    useGSAP(() => {
-        gsap.set('#video-frame', {
-                clipPath: 'polygon(14% 0%, 72% 0%, 90% 90%, 0 100%)',
-                borderRadius: '0 0 40% 10%'
-        })
-
-        gsap.from('#video-frame', {
-            clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0 100%)',
-            borderRadius: '0 0 0 0',
-            ease: 'power1.out',
-            scrollTrigger: {
-                trigger: '#video-frame',
-                start: 'center center',
-                end: 'bottom center',
-                scrub: true,
-            },
-            
-        });
-    }, []);
-
     // Update preview video source when currentIndex changes AND animation is NOT running
     useEffect(() => {
         if (!previewVideoRef.current || isAnimating) return; 
@@ -208,10 +216,17 @@ const Hero = () => {
 
     return (
         <div className='relative h-dvh w-screen overflow-x-hidden'>
-                
-                
-
-
+            {!isLoaded && (
+                <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-violet-50">
+                    {/* https://uiverse.io/G4b413l/tidy-walrus-92 */}
+                    <div className="three-body">
+                        <div className="three-body__dot"></div>
+                        <div className="three-body__dot"></div>
+                        <div className="three-body__dot"></div>
+                    </div>
+                </div>
+            )}
+            
             <div id='video-frame' className='relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75'>
                 {/* Main Background Video */}
                 <video
