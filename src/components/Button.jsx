@@ -19,8 +19,8 @@ const Button = ({ title, id, rightIcon, leftIcon, containerClass }) => {
             {/* Render the left icon if provided */}
             {leftIcon}
 
-            {/* Container for the button text */}
-            <span className='relative inline-flex overflow-hidden font-general text-xs uppercase'>
+            {/* Container for the button text - REMOVED text-xs */}
+            <span className='relative inline-flex overflow-hidden font-general uppercase'>
                 <div>
                     {/* Display the button title */}
                     {title}

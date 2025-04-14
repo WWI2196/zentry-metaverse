@@ -95,8 +95,12 @@ return (
                                     </p>
 
                                     {/* Button container with specific styling */}
-                                    <Button id='watch-trailer' title='Watch Trailer' leftIcon={<GiClick />}
-                                    containerClass='!bg-yellow-300 flex items-center justify-center gap-1'/>
+                                    <Button
+                                        id='watch-trailer'
+                                        title='Watch Trailer'
+                                        leftIcon={<GiClick size={20} />} // Added size prop to icon
+                                        containerClass='!bg-yellow-300 flex items-center justify-center gap-2 px-10 py-4 text-sm' // Added text-sm and adjusted gap
+                                    />
 
                             </div>
 
