@@ -1,7 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react'
 import Button from './Button';
 import { TiLocationArrow } from 'react-icons/ti';
-import { FaVolumeUp, FaVolumeMute } from 'react-icons/fa';
+import { FaVolumeMute } from 'react-icons/fa';
+import { useWindowScroll } from 'react-use';
+import gsap from 'gsap';
 
 const navItems = ['Nexus', 'Vaukt', 'Services', 'About', 'Contact'];
 
@@ -9,9 +11,38 @@ const Navbar = () => {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isIndicatorActive, setIsIndicatorActive] = useState(false);
   const [audioError, setAudioError] = useState(false);
+  const [lastScrollY, setlastScrollY] = useState(0);
+  const [isNavVisible, setIsNavVisible] = useState(true);
 
   const navContainerRef = useRef(null);
   const audioElementRef = useRef(null);
+
+  const {y: currentScrollY} = useWindowScroll();
+
+  useEffect(() => {
+    if ((currentScrollY === 0)) {
+      setIsNavVisible(true); // Toggle navbar visibility
+      navContainerRef.current.classList.remove('floating-nav');
+    }
+    else if (currentScrollY > lastScrollY) {
+      setIsNavVisible(false); // Hide navbar on scroll down
+      navContainerRef.current.classList.add('floating-nav');
+    }
+    else if (currentScrollY < lastScrollY) {
+      setIsNavVisible(true); // Show navbar on scroll up
+      navContainerRef.current.classList.add('floating-nav');
+    }
+
+    setlastScrollY(currentScrollY); // Update last scroll position
+  }, [currentScrollY, lastScrollY]);
+
+  useEffect(() => {
+    gsap.to(navContainerRef.current, {
+      y: isNavVisible ? 0 : -100,
+      opacity: isNavVisible ? 1 : 0,
+      ease: 'power2.out',
+    });
+  }, [isNavVisible]);
 
   const toggleAudioIndicator = () => {
     if (audioError) {
