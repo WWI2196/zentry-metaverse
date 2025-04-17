@@ -329,18 +329,16 @@ const Navbar = () => {
         aria-modal="true"
         role="dialog"
       >
-        {/* Close button */}
-        <div className="sticky top-4 right-4 z-10 flex justify-end px-4">
-          <button
-            onClick={() => setMobileOpen(false)}
-            className="p-3 rounded-full bg-yellow-300/80 text-black hover:bg-yellow-300 transition-all duration-300"
-            aria-label="Close mobile menu"
-          >
-            <FaTimes size={24} />
-          </button>
-        </div>
+        {/* Corner-positioned close button */}
+        <button
+          onClick={() => setMobileOpen(false)}
+          className="absolute top-6 right-6 p-3 rounded-full bg-yellow-300/80 text-black hover:bg-yellow-300 shadow-lg transition-all duration-300 hover:scale-105 z-50"
+          aria-label="Close mobile menu"
+        >
+          <FaTimes size={24} />
+        </button>
         
-        {/* Menu items container - now with proper padding and overflow handling */}
+        {/* Menu items container */}
         <div 
           ref={menuItemsRef}
           className="flex min-h-[100dvh] w-full flex-col items-center justify-center px-6 py-16"
