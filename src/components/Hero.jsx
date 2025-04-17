@@ -297,8 +297,8 @@ const Hero = () => {
                         <Button
                             id='watch-trailer'
                             title='Watch Trailer'
-                            leftIcon={<GiClick size={20} />}
-                            containerClass='!bg-yellow-300 flex items-center justify-center gap-2 px-10 py-4 text-sm'
+                            rightIcon={<GiClick className="transition-transform duration-300 group-hover:translate-x-1" />}
+                            containerClass='!bg-yellow-300 flex items-center justify-center gap-1 hover:!bg-yellow-300/90 hover:text-black/90 text-black transition-colors duration-300'
                         />
                     </div>
                 </div>
