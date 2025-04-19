@@ -63,7 +63,19 @@ const Features = () => {
                             M<b>o</b>re co<b>m</b>ing s<b>o</b>on.
                         </h1>
 
-                        <TiLocationArrow className="m-5 scale-[5] self-end" />
+                        <div className="self-end">
+                            <button 
+                                className="group bg-transparent border-none p-0 cursor-pointer m-5"
+                                onClick={() => {
+                                    // This will be connected to the project link in the future
+                                    // Navigate to project details or registration page
+                                }}
+                            >
+                                <TiLocationArrow 
+                                    className="scale-[5] transition-all duration-300 text-black group-hover:text-yellow-300 group-hover:translate-x-1 group-hover:translate-y-1" 
+                                />
+                            </button>
+                        </div>
                     </div>
                 </div>
                 {/* Video card - on left */}
