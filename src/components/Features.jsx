@@ -57,7 +57,7 @@ const Features = () => {
             {/* Second row in a separate grid */}
             <div className='grid grid-cols-1 md:grid-cols-2 gap-7 px-3 md:px-6 mt-7'>
                 {/* More coming soon - on right */}
-                <div className='bento-tilt_2 hover:scale-[1.02] transition-transform duration-300 h-64 md:h-80'>
+                <div className='bento-tilt_2 hover:scale-[1.02] transition-transform duration-300 h-64 md:h-80 rounded-2xl overflow-hidden'>
                     <div className='flex size-full flex-col justify-between bg-violet-300 p-5'>
                         <h1 className="bento-title special-font max-w-64 text-black">
                             M<b>o</b>re co<b>m</b>ing s<b>o</b>on.
@@ -67,7 +67,7 @@ const Features = () => {
                     </div>
                 </div>
                 {/* Video card - on left */}
-                <div className='bento-tilt_2 hover:scale-[1.02] transition-transform duration-300 h-64 md:h-80'>
+                <div className='bento-tilt_2 hover:scale-[1.02] transition-transform duration-300 h-64 md:h-80 rounded-2xl overflow-hidden'>
                     <video
                         src="videos/feature-5.mp4"
                         loop
