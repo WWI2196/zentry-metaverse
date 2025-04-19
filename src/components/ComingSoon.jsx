@@ -239,10 +239,10 @@ const ComingSoon = () => {
             const width = canvas.width / (window.devicePixelRatio || 1);
             const height = canvas.height / (window.devicePixelRatio || 1);
             
-            // Create ship in the middle of the visible area to ensure it's visible
+            // Create ship at the bottom of the screen but with enough visible margin
             shipRef.current = {
                 x: width / 2,
-                y: height / 2, // Position in middle of screen instead of bottom
+                y: height - 100, // Position at bottom with 60px margin so it's clearly visible
                 width: 40,
                 height: 40,
                 speed: 5,
@@ -709,12 +709,22 @@ const ComingSoon = () => {
             height: 20
         };
         
-        // Sound effect for laser
-        if (Math.random() > 0.5) {
-            // Only play sound for 50% of lasers (to avoid too many sounds)
-            const laserSound = new Audio('/audio/laser.mp3');
-            laserSound.volume = 0.2;
-            laserSound.play().catch(e => console.log("Couldn't play sound - user may not have interacted yet"));
+        // Always play the laser sound (no random chance)
+        const laserSound = new Audio('/audio/laser.mp3');
+        laserSound.volume = 0.2;
+        
+        // Preload and play immediately
+        try {
+            laserSound.load();
+            const playPromise = laserSound.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Audio play prevented by browser:", error);
+                });
+            }
+        } catch (err) {
+            console.error("Error playing laser sound:", err);
         }
         
         // Animate laser beam
@@ -833,24 +843,29 @@ const ComingSoon = () => {
         };
     }, []);
     
-    // Handle back navigation
+    // Handle back navigation with proper route handling
     const handleBack = () => {
+        // Ask for confirmation only if game is in progress
         if (gameState === GAME_STATE.PLAYING && 
             !window.confirm('Game in progress. Are you sure you want to leave?')) {
             return;
         }
         
-        // Clean up game
+        // Clean up game resources
         if (gameState === GAME_STATE.PLAYING || gameState === GAME_STATE.PAUSED) {
             if (timerRef.current) clearInterval(timerRef.current);
             if (gameLoopRef.current) cancelAnimationFrame(gameLoopRef.current);
         }
         
+        // Animate out and navigate back to home
         gsap.to(containerRef.current, {
             opacity: 0,
             y: 50,
             duration: 0.4,
-            onComplete: () => navigate('/')
+            onComplete: () => {
+                // Ensure we're navigating to home route
+                navigate('/', { replace: true });
+            }
         });
     };
     
@@ -957,10 +972,10 @@ const ComingSoon = () => {
                                 <h3 className="font-zentry text-xl text-yellow-300">METAVERSE VOYAGER</h3>
                             </div>
                             
-                            {/* High Score */}
+                            {/* High Score - Updated with proper display */}
                             <div className="flex items-center gap-2 px-3 py-1 bg-black/30 rounded-lg">
                                 <FaTrophy className="text-yellow-300" />
-                                <span className="font-robert-medium text-sm text-white/90">{highScore}</span>
+                                <span className="font-robert-medium text-sm text-white/90" data-testid="high-score-value">{highScore}</span>
                             </div>
                         </div>
                         
@@ -1065,8 +1080,8 @@ const ComingSoon = () => {
                                     <Button
                                         id="play-again"
                                         title="Play Again"
-                                        rightIcon={<FaRedo className="ml-1" />}
-                                        containerClass="!bg-yellow-300/90 hover:!bg-yellow-300 hover:text-black text-black transition-colors duration-300"
+                                        rightIcon={<FaRedo className="ml-2" />}
+                                        containerClass="!bg-yellow-300/90 hover:!bg-yellow-300 hover:text-black text-black transition-colors duration-300 flex items-center justify-center"
                                         onClick={startGame}
                                     />
                                 </div>
