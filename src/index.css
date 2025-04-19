@@ -48,6 +48,18 @@ body {
         @apply border border-white/20;
     }
 
+    .border-modern {
+        @apply border border-white/40 bg-gradient-to-br from-white/10 to-white/5;
+    }
+
+    .shadow-glow {
+        @apply shadow-lg shadow-blue-900/10;
+    }
+    
+    .shadow-ios {
+        @apply shadow-xl shadow-blue-900/20 ring-1 ring-white/50 ring-offset-0;
+    }
+
     .nav-hover-btn {
         @apply relative ms-10 font-general text-xs uppercase text-blue-50 after:absolute after:-bottom-0.5 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-neutral-800 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] hover:after:origin-bottom-left hover:after:scale-x-100 dark:after:bg-white cursor-pointer;
     }
@@ -145,6 +157,23 @@ body {
 
       .contact-clip-path-2 {
         clip-path: polygon(29% 15%, 85% 30%, 50% 100%, 10% 64%);
+      }
+
+      .bento-card-interactive {
+        @apply transition-all duration-300 cursor-pointer;
+        will-change: transform;
+      }
+      
+      .bento-card-container {
+        @apply transition-all duration-500;
+      }
+      
+      .bento-card-container:hover {
+        @apply shadow-xl shadow-blue-900/20; 
+      }
+
+      .animate-fade-in {
+        animation: fadeIn 0.5s ease forwards;
       }
 }
 
@@ -275,6 +304,15 @@ body {
   }
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes line-appear {
+  from { width: 0; }
+  to { width: 100%; }
+}
 
 @theme {
     --font-circular-web: circular-web, sans-serif;
