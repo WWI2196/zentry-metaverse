@@ -1,8 +1,16 @@
 import React from 'react'
 import BentoCard from './BentoCard'; // Import BentoCard
 import { TiLocationArrow } from "react-icons/ti";
+import { useNavigate } from 'react-router-dom';
 
 const Features = () => {
+  const navigate = useNavigate();
+  
+  // Navigation function to Coming Soon page with state to prevent double loading
+  const handleNavigateToComingSoon = () => {
+    navigate('/coming-soon', { state: { from: 'features' } });
+  };
+  
   return (
     <section className='bg-black pb-52 w-full'>
         <div className='w-full px-5 md:px-10'>
@@ -66,10 +74,8 @@ const Features = () => {
                         <div className="self-end">
                             <button 
                                 className="group bg-transparent border-none p-0 cursor-pointer m-5"
-                                onClick={() => {
-                                    // This will be connected to the project link in the future
-                                    // Navigate to project details or registration page
-                                }}
+                                onClick={handleNavigateToComingSoon}
+                                aria-label="View more coming soon details"
                             >
                                 <TiLocationArrow 
                                     className="scale-[5] transition-all duration-300 text-black group-hover:text-yellow-300 group-hover:translate-x-1 group-hover:translate-y-1" 
