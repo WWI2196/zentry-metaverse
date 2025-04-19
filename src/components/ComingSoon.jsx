@@ -38,10 +38,29 @@ const ComingSoon = () => {
     const loaderRef = useRef(null);
     const navigate = useNavigate();
     
+    // Check if device is mobile/small screen
+    const [isMobileDevice, setIsMobileDevice] = useState(false);
+    
     // Page loading state
     const [isLoading, setIsLoading] = useState(true);
     const [loadingProgress, setLoadingProgress] = useState(0);
     const [loadingComplete, setLoadingComplete] = useState(false);
+    
+    // Detect mobile devices on component mount
+    useEffect(() => {
+        const checkMobileDevice = () => {
+            // Check if viewport width is less than 768px (typical mobile breakpoint)
+            setIsMobileDevice(window.innerWidth < 768);
+        };
+        
+        // Check initially
+        checkMobileDevice();
+        
+        // Listen for resize events to update
+        window.addEventListener('resize', checkMobileDevice);
+        
+        return () => window.removeEventListener('resize', checkMobileDevice);
+    }, []);
     
     // Game state
     const [gameState, setGameState] = useState(GAME_STATE.READY);
@@ -471,6 +490,23 @@ const ComingSoon = () => {
         
         ctx.restore();
     };
+    
+    // Render ship in READY state
+    useEffect(() => {
+        if (gameState === GAME_STATE.READY) {
+            const canvas = gameCanvasRef.current;
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw stars
+            updateStars(ctx);
+            
+            // Draw ship
+            updateShip(ctx);
+        }
+    }, [gameState]);
     
     // Spawn a new asteroid with improved randomization
     const spawnAsteroid = () => {
@@ -957,208 +993,207 @@ const ComingSoon = () => {
                             Thank you for your curiosity! We're working hard to bring more exciting features to the metaverse.
                         </p>
                         <p className="font-circular-web text-lg text-blue-50/70">
-                            While you wait, try our Metaverse Voyager game below. Pilot a ship through asteroid fields!
+                            {isMobileDevice 
+                                ? "Check back on a larger device to play our Metaverse Voyager game!"
+                                : "While you wait, try our Metaverse Voyager game below. Pilot a ship through asteroid fields!"}
                         </p>
                     </div>
                     
-                    {/* Mini-game */}
-                    <div 
-                        ref={gameContainerRef}
-                        className="reveal-item border-modern mb-10 w-full max-w-xl rounded-2xl p-6 shadow-glow backdrop-blur-sm relative overflow-hidden"
-                    >
-                        <div className="flex justify-between items-center mb-3">
-                            <div className="flex items-center">
-                                <GiShipWheel className="text-yellow-300 mr-2" size={20} />
-                                <h3 className="font-zentry text-xl text-yellow-300">METAVERSE VOYAGER</h3>
+                    {/* Mobile view - simplified content */}
+                    {isMobileDevice && (
+                        <div className="reveal-item border-modern mb-10 w-full max-w-xl rounded-2xl p-6 shadow-glow backdrop-blur-sm relative overflow-hidden">
+                            <div className="flex justify-center items-center mb-6">
+                                <div className="flex items-center">
+                                    <GiShipWheel className="text-yellow-300 mr-2" size={24} />
+                                    <h3 className="font-zentry text-xl text-yellow-300">METAVERSE VOYAGER</h3>
+                                </div>
                             </div>
                             
-                            {/* High Score - Updated with proper display */}
-                            <div className="flex items-center gap-2 px-3 py-1 bg-black/30 rounded-lg">
-                                <FaTrophy className="text-yellow-300" />
-                                <span className="font-robert-medium text-sm text-white/90" data-testid="high-score-value">{highScore}</span>
-                            </div>
-                        </div>
-                        
-                        {/* Instructions that hide during gameplay */}
-                        {gameState === GAME_STATE.READY && (
-                            <p className="font-robert-regular text-sm text-blue-50 mb-4">
-                                Navigate with arrow keys. Space to shoot. Destroy asteroids and avoid collisions!
-                            </p>
-                        )}
-                        
-                        {/* Game controls and stats - Only show during active gameplay */}
-                        {(gameState === GAME_STATE.PLAYING || gameState === GAME_STATE.PAUSED) && (
-                            <div className="flex justify-between items-center mb-3">
-                                {/* Score */}
-                                <div className="px-4 py-1 bg-black/40 rounded-lg backdrop-blur-sm">
-                                    <span className="font-robert-medium text-sm text-white/90">Score:</span>
-                                    <span className="ml-1 font-zentry text-lg text-yellow-300">{score}</span>
-                                </div>
-                                
-                                {/* Ship Shield */}
-                                <div className="px-4 py-1 bg-black/40 rounded-lg backdrop-blur-sm flex items-center gap-2">
-                                    <span className="font-robert-medium text-sm text-white/90">Shield:</span>
-                                    <div className="w-20 h-3 bg-white/20 rounded-full overflow-hidden">
-                                        <div 
-                                            className={`h-full ${shipRef.current?.shield > 50 ? 'bg-cyan-400' : 'bg-red-500'}`}
-                                            style={{ width: `${shipRef.current?.shield || 0}%` }}
-                                        />
-                                    </div>
-                                </div>
-                                
-                                {/* Timer */}
-                                <div className={`px-4 py-1 rounded-lg backdrop-blur-sm ${timeLeft <= 10 ? 'bg-red-500/40 animate-pulse' : 'bg-black/40'}`}>
-                                    <span className="font-robert-medium text-sm text-white/90">Time:</span>
-                                    <span className="ml-1 font-zentry text-lg text-white">{timeLeft}</span>
-                                </div>
-                                
-                                {/* Pause button */}
-                                <button
-                                    onClick={togglePause}
-                                    className={`flex items-center justify-center p-2 rounded-full ${gameState === GAME_STATE.PAUSED ? 'bg-yellow-300 text-black' : 'bg-black/40 text-white'} transition-colors`}
-                                    aria-label={gameState === GAME_STATE.PAUSED ? "Resume game" : "Pause game"}
-                                >
-                                    {gameState === GAME_STATE.PAUSED ? <FaPlay size={14} /> : <FaPause size={14} />}
-                                </button>
-                            </div>
-                        )}
-                        
-                        {/* Game canvas */}
-                        <div className="relative aspect-video w-full bg-black/80 rounded-lg overflow-hidden"
-                             style={{ border: '1px solid rgba(255,255,255,0.15)' }}>
-                            <canvas
-                                ref={gameCanvasRef}
-                                className="absolute inset-0 w-full h-full"
-                            />
-                            
-                            {/* Game state overlays */}
-                            {gameState === GAME_STATE.READY && (
-                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm z-10">
-                                    <h4 className="font-zentry text-2xl text-yellow-300 mb-3">READY TO PLAY?</h4>
-                                    <p className="text-blue-50 mb-6 text-center max-w-md text-sm">
-                                        Navigate your starship through asteroid fields with <b>arrow keys</b>. <br/>
-                                        Press <b>space</b> to fire lasers and destroy asteroids!
-                                    </p>
-                                    
-                                    {/* Ship customization */}
-                                    <div className="mb-6 p-4 bg-black/40 rounded-lg">
-                                        <h5 className="text-center text-white/80 text-sm mb-2">Choose Your Ship Color</h5>
-                                        <div className="flex justify-center gap-3">
-                                            {SHIP_COLORS.map((color, index) => (
-                                                <button
-                                                    key={index}
-                                                    className={`w-10 h-10 rounded-full transition-all ${color === shipColor ? 'ring-2 ring-white scale-110' : 'ring-1 ring-white/30'}`}
-                                                    style={{ backgroundColor: color }}
-                                                    onClick={() => setShipColor(color)}
-                                                    aria-label={`Select ${color} ship`}
-                                                />
-                                            ))}
+                            <div className="flex flex-col items-center justify-center gap-6 py-8">
+                                <div className="animate-pulse">
+                                    <div className="relative size-32 rounded-full border-2 border-yellow-300/50 flex items-center justify-center">
+                                        <div className="absolute size-full rounded-full border-t-2 border-yellow-300 animate-spin"></div>
+                                        <div className="text-yellow-300 font-zentry text-center">
+                                            <p className="text-lg">Game</p>
+                                            <p className="text-xl">Available</p>
+                                            <p className="text-lg">On Desktop</p>
                                         </div>
                                     </div>
-                                    
-                                    <Button
-                                        id="start-game"
-                                        title="Launch Ship"
-                                        containerClass="!bg-yellow-300/90 hover:!bg-yellow-300 hover:text-black text-black transition-colors duration-300"
-                                        onClick={startGame}
-                                    />
                                 </div>
-                            )}
-                            
-                            {gameState === GAME_STATE.GAME_OVER && (
-                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm z-10">
-                                    <h4 className="font-zentry text-xl text-white mb-3">MISSION COMPLETE</h4>
-                                    <p className="font-robert-regular text-lg text-yellow-300 mb-6">
-                                        Your Score: <span className="font-zentry">{score}</span>
-                                    </p>
-                                    {score >= highScore && score > 0 && (
-                                        <div className="py-2 px-4 bg-yellow-300/20 rounded-lg mb-6 flex items-center">
-                                            <FaTrophy className="text-yellow-300 mr-2" />
-                                            <p className="font-robert-medium text-white">New High Score!</p>
-                                        </div>
-                                    )}
-                                    <Button
-                                        id="play-again"
-                                        title="Play Again"
-                                        rightIcon={<FaRedo className="ml-2" />}
-                                        containerClass="!bg-yellow-300/90 hover:!bg-yellow-300 hover:text-black text-black transition-colors duration-300 flex items-center justify-center"
-                                        onClick={startGame}
-                                    />
-                                </div>
-                            )}
-                            
-                            {gameState === GAME_STATE.PAUSED && (
-                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm z-10">
-                                    <h4 className="font-zentry text-2xl text-white mb-6">PAUSED</h4>
-                                    <div className="flex gap-4">
-                                        <Button
-                                            id="change-ship-color"
-                                            title="Change Ship"
-                                            containerClass="!bg-violet-300/90 hover:!bg-violet-300 text-black transition-colors duration-300"
-                                            onClick={changeShipColor}
-                                        />
-                                        <Button
-                                            id="resume-game"
-                                            title="Resume"
-                                            containerClass="!bg-yellow-300/90 hover:!bg-yellow-300 hover:text-black text-black transition-colors duration-300"
-                                            onClick={togglePause}
-                                        />
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                        
-                        {/* Mobile controls (for touch devices) */}
-                        <div className="mt-4 grid grid-cols-3 gap-2 md:hidden">
-                            <div className="flex justify-start">
-                                <button 
-                                    className="bg-black/40 p-3 rounded-lg text-white/90 active:bg-yellow-300/30"
-                                    onTouchStart={() => keysRef.current.ArrowLeft = true}
-                                    onTouchEnd={() => keysRef.current.ArrowLeft = false}
-                                    disabled={gameState !== GAME_STATE.PLAYING}
-                                >
-                                    ← Left
-                                </button>
-                            </div>
-                            
-                            <div className="flex justify-center">
-                                <button 
-                                    className="bg-black/40 p-3 rounded-lg text-white/90 active:bg-yellow-300/30"
-                                    onTouchStart={() => keysRef.current[' '] = true}
-                                    onTouchEnd={() => {
-                                        keysRef.current[' '] = false;
-                                        if (gameState === GAME_STATE.PLAYING) {
-                                            fireLaser();
-                                        }
-                                    }}
-                                    disabled={gameState !== GAME_STATE.PLAYING}
-                                >
-                                    Fire!
-                                </button>
-                            </div>
-                            
-                            <div className="flex justify-end">
-                                <button 
-                                    className="bg-black/40 p-3 rounded-lg text-white/90 active:bg-yellow-300/30"
-                                    onTouchStart={() => keysRef.current.ArrowRight = true}
-                                    onTouchEnd={() => keysRef.current.ArrowRight = false}
-                                    disabled={gameState !== GAME_STATE.PLAYING}
-                                >
-                                    Right →
-                                </button>
-                            </div>
-                        </div>
-                        
-                        {/* Game instructions (only show during ready state) */}
-                        {gameState === GAME_STATE.READY && (
-                            <div className="mt-4 flex justify-center">
-                                <p className="font-robert-regular text-xs text-blue-50/60 text-center max-w-lg">
-                                    Use arrow keys to navigate your ship through space. Press the spacebar to fire laser beams.
-                                    Destroy asteroids to earn points, but be careful - collisions will damage your shield!
+                                
+                                <p className="text-center text-blue-50/80 text-sm max-w-xs">
+                                    Our game requires a larger screen for the best experience. 
+                                    Please visit us from a desktop device to play the full game!
                                 </p>
+                                
+                                <div className="mt-4 px-5 py-3 bg-black/30 rounded-lg">
+                                    <p className="text-white/70 text-sm text-center">
+                                        <span className="text-yellow-300">Coming soon:</span> Mobile-optimized version with touch controls!
+                                    </p>
+                                </div>
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    )}
+                    
+                    {/* Game container - only render on non-mobile */}
+                    {!isMobileDevice && (
+                        <div 
+                            ref={gameContainerRef}
+                            className="reveal-item border-modern mb-10 w-full max-w-xl rounded-2xl p-6 shadow-glow backdrop-blur-sm relative overflow-hidden"
+                        >
+                            <div className="flex justify-between items-center mb-3">
+                                <div className="flex items-center">
+                                    <GiShipWheel className="text-yellow-300 mr-2" size={20} />
+                                    <h3 className="font-zentry text-xl text-yellow-300">METAVERSE VOYAGER</h3>
+                                </div>
+                                
+                                {/* High Score - Updated with proper display */}
+                                <div className="flex items-center gap-2 px-3 py-1 bg-black/30 rounded-lg">
+                                    <FaTrophy className="text-yellow-300" />
+                                    <span className="font-robert-medium text-sm text-white/90" data-testid="high-score-value">{highScore}</span>
+                                </div>
+                            </div>
+                            
+                            {/* Instructions that hide during gameplay */}
+                            {gameState === GAME_STATE.READY && (
+                                <p className="font-robert-regular text-sm text-blue-50 mb-4">
+                                    Navigate with arrow keys. Space to shoot. Destroy asteroids and avoid collisions!
+                                </p>
+                            )}
+                            
+                            {/* Game controls and stats - Only show during active gameplay */}
+                            {(gameState === GAME_STATE.PLAYING || gameState === GAME_STATE.PAUSED) && (
+                                <div className="flex justify-between items-center mb-3">
+                                    {/* Score */}
+                                    <div className="px-4 py-1 bg-black/40 rounded-lg backdrop-blur-sm">
+                                        <span className="font-robert-medium text-sm text-white/90">Score:</span>
+                                        <span className="ml-1 font-zentry text-lg text-yellow-300">{score}</span>
+                                    </div>
+                                    
+                                    {/* Ship Shield */}
+                                    <div className="px-4 py-1 bg-black/40 rounded-lg backdrop-blur-sm flex items-center gap-2">
+                                        <span className="font-robert-medium text-sm text-white/90">Shield:</span>
+                                        <div className="w-20 h-3 bg-white/20 rounded-full overflow-hidden">
+                                            <div 
+                                                className={`h-full ${shipRef.current?.shield > 50 ? 'bg-cyan-400' : 'bg-red-500'}`}
+                                                style={{ width: `${shipRef.current?.shield || 0}%` }}
+                                            />
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Timer */}
+                                    <div className={`px-4 py-1 rounded-lg backdrop-blur-sm ${timeLeft <= 10 ? 'bg-red-500/40 animate-pulse' : 'bg-black/40'}`}>
+                                        <span className="font-robert-medium text-sm text-white/90">Time:</span>
+                                        <span className="ml-1 font-zentry text-lg text-white">{timeLeft}</span>
+                                    </div>
+                                    
+                                    {/* Pause button */}
+                                    <button
+                                        onClick={togglePause}
+                                        className={`flex items-center justify-center p-2 rounded-full ${gameState === GAME_STATE.PAUSED ? 'bg-yellow-300 text-black' : 'bg-black/40 text-white'} transition-colors`}
+                                        aria-label={gameState === GAME_STATE.PAUSED ? "Resume game" : "Pause game"}
+                                    >
+                                        {gameState === GAME_STATE.PAUSED ? <FaPlay size={14} /> : <FaPause size={14} />}
+                                    </button>
+                                </div>
+                            )}
+                            
+                            {/* Game canvas */}
+                            <div className="relative aspect-video w-full bg-black/80 rounded-lg overflow-hidden"
+                                 style={{ border: '1px solid rgba(255,255,255,0.15)' }}>
+                                <canvas
+                                    ref={gameCanvasRef}
+                                    className="absolute inset-0 w-full h-full"
+                                />
+                                
+                                {/* Game state overlays */}
+                                {gameState === GAME_STATE.READY && (
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm z-10">
+                                        <h4 className="font-zentry text-2xl text-yellow-300 mb-3">READY TO PLAY?</h4>
+                                        <p className="text-blue-50 mb-6 text-center max-w-md text-sm">
+                                            Navigate your starship through asteroid fields with <b>arrow keys</b>. <br/>
+                                            Press <b>space</b> to fire lasers and destroy asteroids!
+                                        </p>
+                                        
+                                        {/* Ship customization */}
+                                        <div className="mb-6 p-4 bg-black/40 rounded-lg">
+                                            <h5 className="text-center text-white/80 text-sm mb-2">Choose Your Ship Color</h5>
+                                            <div className="flex justify-center gap-3">
+                                                {SHIP_COLORS.map((color, index) => (
+                                                    <button
+                                                        key={index}
+                                                        className={`w-10 h-10 rounded-full transition-all ${color === shipColor ? 'ring-2 ring-white scale-110' : 'ring-1 ring-white/30'}`}
+                                                        style={{ backgroundColor: color }}
+                                                        onClick={() => setShipColor(color)}
+                                                        aria-label={`Select ${color} ship`}
+                                                    />
+                                                ))}
+                                            </div>
+                                        </div>
+                                        
+                                        <Button
+                                            id="start-game"
+                                            title="Launch Ship"
+                                            containerClass="!bg-yellow-300/90 hover:!bg-yellow-300 hover:text-black text-black transition-colors duration-300"
+                                            onClick={startGame}
+                                        />
+                                    </div>
+                                )}
+                                
+                                {gameState === GAME_STATE.GAME_OVER && (
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm z-10">
+                                        <h4 className="font-zentry text-xl text-white mb-3">MISSION COMPLETE</h4>
+                                        <p className="font-robert-regular text-lg text-yellow-300 mb-6">
+                                            Your Score: <span className="font-zentry">{score}</span>
+                                        </p>
+                                        {score >= highScore && score > 0 && (
+                                            <div className="py-2 px-4 bg-yellow-300/20 rounded-lg mb-6 flex items-center">
+                                                <FaTrophy className="text-yellow-300 mr-2" />
+                                                <p className="font-robert-medium text-white">New High Score!</p>
+                                            </div>
+                                        )}
+                                        <Button
+                                            id="play-again"
+                                            title="Play Again"
+                                            rightIcon={<FaRedo className="ml-2" />}
+                                            containerClass="!bg-yellow-300/90 hover:!bg-yellow-300 hover:text-black text-black transition-colors duration-300 flex items-center justify-center"
+                                            onClick={startGame}
+                                        />
+                                    </div>
+                                )}
+                                
+                                {gameState === GAME_STATE.PAUSED && (
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm z-10">
+                                        <h4 className="font-zentry text-2xl text-white mb-6">PAUSED</h4>
+                                        <div className="flex gap-4">
+                                            <Button
+                                                id="change-ship-color"
+                                                title="Change Ship"
+                                                containerClass="!bg-violet-300/90 hover:!bg-violet-300 text-black transition-colors duration-300"
+                                                onClick={changeShipColor}
+                                            />
+                                            <Button
+                                                id="resume-game"
+                                                title="Resume"
+                                                containerClass="!bg-yellow-300/90 hover:!bg-yellow-300 hover:text-black text-black transition-colors duration-300"
+                                                onClick={togglePause}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {/* Game instructions (only show during ready state) */}
+                            {gameState === GAME_STATE.READY && (
+                                <div className="mt-4 flex justify-center">
+                                    <p className="font-robert-regular text-xs text-blue-50/60 text-center max-w-lg">
+                                        Use arrow keys to navigate your ship through space. Press the spacebar to fire laser beams.
+                                        Destroy asteroids to earn points, but be careful - collisions will damage your shield!
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    )}
                     
                     {/* Back button */}
                     <Button
