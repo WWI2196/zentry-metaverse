@@ -24,14 +24,14 @@ const Features = () => {
             </div>
 
             <div className='grid grid-cols-1 md:grid-cols-2 gap-7 px-3 md:px-6'>
-                <div className='border-modern relative overflow-hidden rounded-2xl backdrop-blur-sm shadow-glow bento-card-container h-64 md:h-80 hover:scale-[1.02] transition-transform duration-300'>
+                <div className='border-modern relative overflow-hidden rounded-2xl backdrop-blur-sm shadow-glow bento-card-container h-100 md:h-[40rem] hover:scale-[1.02] transition-transform duration-300'>
                     <BentoCard
                     src='videos/feature-2.mp4'
                     title={<>zig<b>m</b>a</>}
                     description='An anime and gaming-inspired NFT collection - the IP primed for expansion.'/>
                 </div>
 
-                <div className='border-modern relative overflow-hidden rounded-2xl backdrop-blur-sm shadow-glow bento-card-container h-64 md:h-80 hover:scale-[1.02] transition-transform duration-300'>
+                <div className='border-modern relative overflow-hidden rounded-2xl backdrop-blur-sm shadow-glow bento-card-container h-100 md:h-[40rem] hover:scale-[1.02] transition-transform duration-300'>
                     <BentoCard
                     src='videos/feature-3.mp4'
                     title={<>n<b>e</b>xus</>}
