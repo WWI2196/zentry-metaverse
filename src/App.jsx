@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from './components/Navbar';
+import Features from './components/Features';
 
 // Register ScrollTrigger at the app level
 gsap.registerPlugin(ScrollTrigger);
@@ -14,6 +15,7 @@ const App = () => {
       <Navbar />
       <Hero />
       <About />
+      <Features />
     </main>
   );
 };
