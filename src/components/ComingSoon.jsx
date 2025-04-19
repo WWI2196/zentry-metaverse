@@ -80,12 +80,10 @@ const ComingSoon = () => {
     
     // Simulate loading the page assets
     useEffect(() => {
-        // Prevent duplicate loading animation if coming from features
+        // Skip loading animation entirely if coming from features
         if (location.state?.from === 'features') {
-            setTimeout(() => {
-                setIsLoading(false);
-                setLoadingComplete(true);
-            }, 1000);
+            setIsLoading(false);
+            setLoadingComplete(true);
             return;
         }
         
@@ -107,6 +105,16 @@ const ComingSoon = () => {
                 return next;
             });
         }, 100);
+        
+        // When loading reaches 100%
+        const checkProgress = () => {
+            if (loadingProgress >= 99) {
+                clearInterval(interval);
+                // Ensure we end at exactly 100%
+                setLoadingProgress(100);
+                loadingTl.play();
+            }
+        };
         
         const handleLoadingComplete = () => {
             if (loaderRef.current) {
@@ -149,16 +157,6 @@ const ComingSoon = () => {
             }
         };
         
-        // When loading reaches 100%
-        const checkProgress = () => {
-            if (loadingProgress >= 99) {
-                clearInterval(interval);
-                // Ensure we end at exactly 100%
-                setLoadingProgress(100);
-                loadingTl.play();
-            }
-        };
-        
         const progressCheck = setInterval(checkProgress, 200);
         
         return () => {
@@ -166,7 +164,7 @@ const ComingSoon = () => {
             clearInterval(progressCheck);
             loadingTl.kill();
         };
-    }, [location.state]);
+    }, [location.state, loadingProgress]);
     
     // Load high score from localStorage
     useEffect(() => {
@@ -241,10 +239,10 @@ const ComingSoon = () => {
             const width = canvas.width / (window.devicePixelRatio || 1);
             const height = canvas.height / (window.devicePixelRatio || 1);
             
-            // Create ship in the middle-bottom of the screen
+            // Create ship in the middle of the visible area to ensure it's visible
             shipRef.current = {
                 x: width / 2,
-                y: height - 100,
+                y: height / 2, // Position in middle of screen instead of bottom
                 width: 40,
                 height: 40,
                 speed: 5,
@@ -812,11 +810,15 @@ const ComingSoon = () => {
             cancelAnimationFrame(gameLoopRef.current);
         }
         
-        // Update high score
+        // Update high score with improved comparison and storage
         if (score > highScore) {
+            // Update state immediately
             setHighScore(score);
+            
+            // Store in localStorage with robust error handling
             try {
                 localStorage.setItem('metaverseVoyagerScore', score.toString());
+                console.log("New high score saved:", score);
             } catch (e) {
                 console.error("Error saving high score:", e);
             }
