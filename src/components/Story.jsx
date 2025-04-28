@@ -120,16 +120,16 @@ const Story = () => {
 
             </div>
 
-            {/* Modernized Button Section with glass morphism card */}
-            <div className="mt-0 w-full px-4 md:-mt-28 md:me-16 md:justify-end md:px-0">
-              <div className="mx-auto md:ms-auto md:me-0 max-w-sm bg-black/30 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg transform transition-all hover:shadow-xl">
+            {/* Modernized Button Section - adjusted positioning */}
+            <div className="-mt-96 sm:-mt-80 w-full px-4 md:-mt-72 lg:-mt-80 md:me-16 md:justify-end md:px-0">
+              <div className="mx-auto md:ms-auto md:me-0 max-w-sm md:max-w-md bg-black/30 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-white/10 shadow-lg transform transition-all hover:shadow-xl">
                 {/* Animated gradient tag */}
                 <div className="inline-block mb-3 px-3 py-1 bg-gradient-to-r from-purple-500/80 to-blue-500/80 rounded-full text-xs font-bold text-white uppercase tracking-wider animate-fade-in">
                   Exclusive Content
                 </div>
                 
                 {/* Modernized typography with gradient text */}
-                <p className="mb-5 font-circular-web text-base leading-relaxed text-white/90 md:text-start">
+                <p className="mb-5 font-circular-web text-base md:text-lg leading-relaxed text-white/90 md:text-start">
                   Where realms <span className="font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-purple-300">converge</span>, lies Zentry and the boundless pillar.
                   <span className="block mt-2">Discover its secrets and shape your fate amidst infinite possibilities.</span>
                 </p>
@@ -147,7 +147,7 @@ const Story = () => {
                       <TiLocationArrow className="relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
                     </div>
                   }
-                  containerClass="w-full !bg-yellow-300/95 hover:!bg-yellow-300 text-black flex items-center justify-center gap-1 mt-2 px-8 py-3 shadow-md hover:shadow-lg transition-all duration-300 font-medium"
+                  containerClass="w-full !bg-yellow-300/95 hover:!bg-yellow-300 text-black flex items-center justify-center gap-1 mt-2 px-8 py-3 md:py-4 shadow-md hover:shadow-lg transition-all duration-300 font-medium text-sm md:text-base"
                   onClick={handleDiscoverClick}
                 />
               </div>
