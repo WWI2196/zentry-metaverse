@@ -7,6 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from './components/Navbar';
 import Features from './components/Features';
 import ComingSoon from './components/ComingSoon';
+import Story from './components/Story';
 
 // Register ScrollTrigger at the app level
 gsap.registerPlugin(ScrollTrigger);
@@ -19,6 +20,7 @@ const HomePage = () => {
       <Hero />
       <About />
       <Features />
+      <Story />
     </>
   );
 };
