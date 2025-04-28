@@ -2,9 +2,12 @@ import React, { useRef, useEffect, useState } from 'react';
 import AnimatedTitle from './AnimatedTitle';
 import { gsap } from 'gsap';
 import RoundedCorners from './RoundedConers';
-import BentoTilt from './BentoTilt'; // Import BentoTilt
+import BentoTilt from './BentoTilt'; 
+import Button from './Button';
+import { TiLocationArrow } from "react-icons/ti"; // Import the icon
 
 const Story = () => {
+    // ...existing state and useEffect...
     const [isLoaded, setIsLoaded] = useState(false);
     const frameRef = useRef(null);
     const containerRef = useRef(null);
@@ -56,9 +59,16 @@ const Story = () => {
         });
       };
 
+    // Click handler for the button
+    const handleDiscoverClick = () => {
+        console.log("Navigate to prologue page (from Story component)...");
+        // Later: window.location.href = '/prologue'; or use react-router navigate
+    };
+
   return (
     <section id='story' className="min-h-dvh w-screen bg-black text-blue-50 overflow-hidden">
         <div className='flex size-full flex-col items-center py-16 pb-24'> 
+            {/* ... existing paragraph, title, image container ... */}
             <p className='font-general text-sm uppercase tracking-wider animate-fade-up' style={{ animationDelay: '0.2s' }}>The multiverse ip world</p>
 
             <div className='relative size-full mt-8'> 
@@ -74,6 +84,7 @@ const Story = () => {
                     className={`story-img-container transition-opacity duration-1000 ease-out ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
                     style={{ filter: "url('#FLT_TAG')", animationDelay: '0.6s' }}
                  >
+                    {/* ... existing image mask and BentoTilt ... */}
                     <div className="story-img-mask glass-effect shadow-ios rounded-[2rem]"> 
                         <BentoTilt
                             className="story-img-content relative overflow-hidden rounded-[1.8rem] neo-border"
@@ -111,6 +122,26 @@ const Story = () => {
 
                  </div>
 
+            </div>
+
+            {/* Updated Button Section */}
+            <div className="-mt-80 flex w-full justify-center md:-mt-64 md:me-44 md:justify-end">
+              <div className="flex h-full w-fit flex-col items-center md:items-start">
+                <p className="mt-3 max-w-sm text-center font-circular-web text-violet-50 md:text-start">
+                  Where realms converge, lies Zentry and the boundless pillar.
+                  Discover its secrets and shape your fate amidst infinite
+                  opportunities.
+                </p>
+
+                {/* Apply styles, icon, and onClick handler to this Button */}
+                <Button
+                  id="realm-btn"
+                  title="discover prologue"
+                  rightIcon={<TiLocationArrow className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />} // Added icon with animation
+                  containerClass="!bg-yellow-300/90 hover:!bg-yellow-300 text-black flex items-center mt-5" // Added styles
+                  onClick={handleDiscoverClick} // Added click handler
+                />
+              </div>
             </div>
 
         </div>
