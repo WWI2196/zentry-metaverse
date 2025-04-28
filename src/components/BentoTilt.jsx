@@ -1,27 +1,27 @@
-import React from 'react'
+import React from 'react';
+import Tilt from 'react-parallax-tilt';
 
-const BentoTilt = ({children, className=''}) => {
-
-  const [transaformStyle, setTransformStyle] = useState('');
-  const itemRef = useRef(null);
-  
-  const handleMouseMove = (e) => {
-    const { clientX, clientY } = e;
-    const { left, top, width, height } = itemRef.current.getBoundingClientRect();
-    const x = ((clientX - left) / width) * 2 - 1;
-    const y = ((clientY - top) / height) * 2 - 1;
-    setTransformStyle(`rotateY(${x * 10}deg) rotateX(${y * -10}deg)`);
-  };
-
-  const handleMouseLeave = () => {
-    setTransformStyle('rotateY(0deg) rotateX(0deg)');
-  }
-
+// Reduce default tilt angles
+const BentoTilt = ({ children, className = '', tiltMaxAngleX = 5, tiltMaxAngleY = 5, ...props }) => {
   return (
-    <div className={className} ref={itemRef} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
-       
-    </div>
-  )
-}
+    <Tilt
+      className={`parallax-effect-glare-scale ${className}`}
+      tiltMaxAngleX={tiltMaxAngleX}
+      tiltMaxAngleY={tiltMaxAngleY}
+      perspective={800}
+      transitionSpeed={1500}
+      scale={1.02} // Matches the hover scale effect
+      gyroscope={true}
+      glareEnable={true}
+      glareMaxOpacity={0.45}
+      glareColor="#ffffff"
+      glarePosition="all"
+      glareBorderRadius="1rem" // Matches the rounded-2xl class
+      {...props} // Pass any other props down to Tilt
+    >
+      {children}
+    </Tilt>
+  );
+};
 
-export default BentoCard
+export default BentoTilt;
