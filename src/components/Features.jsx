@@ -28,7 +28,7 @@ const Features = () => {
             {/* Add margin bottom mb-10 */}
             <BentoTilt 
                 className='border-modern relative mb-10 mx-3 md:mx-6 h-96 w-auto overflow-hidden rounded-2xl md:h-[65vh] backdrop-blur-sm shadow-glow bento-card-container transition-transform duration-300'
-                glareEnable={false} // Disable glare for this card
+                glareEnable={true} // Disable glare for this card
                 tiltMaxAngleX={2}   // Reduce tilt angle further
                 tiltMaxAngleY={2}   // Reduce tilt angle further
             >
