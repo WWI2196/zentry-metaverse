@@ -2,7 +2,6 @@ import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
 const AnimatedTitle = ({title, containerClass}) => {
@@ -13,15 +12,17 @@ const AnimatedTitle = ({title, containerClass}) => {
             const titleAnimation = gsap.timeline({
                 scrollTrigger: {
                     trigger: containerRef.current,
-                    start: '100 bottom',
-                    end: 'center bottom',
+                    start: 'top bottom-=50px',
+                    // Further adjust end point: reverse animation when bottom hits 150px below the top of viewport
+                    end: 'bottom top+=150px', 
                     toggleActions: 'play none none reverse',
+                    // markers: true, // Uncomment for debugging trigger points
                 },
             });
 
             titleAnimation.to('.animated-word', {
                 opacity: 1,
-                transform: 'translate3d(0,0,0) rotateY(0deg) rotateX(0deg)', // Fixed syntax error here
+                transform: 'translate3d(0,0,0) rotateY(0deg) rotateX(0deg)',
                 ease: 'power2.inOut',
                 stagger: 0.02
             });
