@@ -26,7 +26,7 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(''); // No section active initially
   const [menuItemsVisible, setMenuItemsVisible] = useState(false);
-  const [audioPosition, setAudioPosition] = useState(0); // Store the last audio position
+  const [audioPosition, setAudioPosition] = useState(0); // Store the last audio position - Initialized to 0
 
   const navContainerRef = useRef(null);
   const audioElementRef = useRef(null);
@@ -182,6 +182,7 @@ const Navbar = () => {
 
     // Set up timeupdate event to store current position
     const handleTimeUpdate = () => {
+      // Only update state, don't save to localStorage
       setAudioPosition(audioEl.currentTime);
     };
     audioEl.addEventListener("timeupdate", handleTimeUpdate);
@@ -189,9 +190,8 @@ const Navbar = () => {
     if (isAudioPlaying) {
       try {
         // Set the current time to the stored position before playing
-        if (audioPosition > 0) {
-          audioEl.currentTime = audioPosition;
-        }
+        // If audioPosition is 0 (initial state or after refresh), it starts from beginning
+        audioEl.currentTime = audioPosition;
         audioEl.play().catch(e => {
           console.error("Failed to play audio:", e);
           setAudioError(true);
@@ -206,7 +206,7 @@ const Navbar = () => {
       }
     } else if (audioEl) {
       try {
-        // Store the current position before pausing
+        // Store the current position in state before pausing
         setAudioPosition(audioEl.currentTime);
         audioEl.pause();
       } catch (e) {
@@ -219,34 +219,7 @@ const Navbar = () => {
         audioEl.removeEventListener("timeupdate", handleTimeUpdate);
       }
     };
-  }, [isAudioPlaying]);
-
-  // Store audio position in localStorage to persist between page refreshes
-  useEffect(() => {
-    // Save position to localStorage when component unmounts or when audio is paused
-    if (!isAudioPlaying && audioPosition > 0) {
-      try {
-        localStorage.setItem('audioPosition', audioPosition.toString());
-      } catch (e) {
-        console.error("Failed to save audio position:", e);
-      }
-    }
-  }, [isAudioPlaying, audioPosition]);
-
-  // Load saved position from localStorage on component mount
-  useEffect(() => {
-    try {
-      const savedPosition = localStorage.getItem('audioPosition');
-      if (savedPosition) {
-        const position = parseFloat(savedPosition);
-        if (!isNaN(position)) {
-          setAudioPosition(position);
-        }
-      }
-    } catch (e) {
-      console.error("Failed to load saved audio position:", e);
-    }
-  }, []);
+  }, [isAudioPlaying]); // Removed audioPosition dependency as it's handled internally
 
   return (
     <>
