@@ -4,21 +4,82 @@ import { gsap } from 'gsap';
 import RoundedCorners from './RoundedConers';
 import BentoTilt from './BentoTilt'; 
 import Button from './Button';
-import { FaArrowCircleRight } from "react-icons/fa"; // Changed to a more suitable icon
+import { FaArrowCircleRight } from "react-icons/fa";
 
 const Story = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const frameRef = useRef(null);
     const containerRef = useRef(null);
-    const buttonIconRef = useRef(null);
+    const contentRef = useRef(null);
+    const leftCardRef = useRef(null);
+    const rightCardRef = useRef(null);
+    const featuresRef = useRef([]);
 
     useEffect(() => {
         // Add a small delay for image load/animation timing
         const timer = setTimeout(() => {
             setIsLoaded(true);
-        }, 300); // Shorter delay
+        }, 300);
         return () => clearTimeout(timer);
     }, []);
+
+    // Initialize GSAP animations for content elements when loaded
+    useEffect(() => {
+        if (isLoaded && contentRef.current) {
+            // Create staggered entrance animation for cards
+            gsap.fromTo(
+                [leftCardRef.current, rightCardRef.current],
+                { 
+                    y: 40, 
+                    opacity: 0
+                },
+                { 
+                    y: 0, 
+                    opacity: 1, 
+                    duration: 0.9, 
+                    stagger: 0.2,
+                    ease: "power3.out",
+                    clearProps: "all"
+                }
+            );
+            
+            // Animate feature items with staggered delay
+            gsap.fromTo(
+                featuresRef.current,
+                { 
+                    scale: 0.9, 
+                    opacity: 0,
+                    y: 15
+                },
+                { 
+                    scale: 1, 
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.5, 
+                    stagger: 0.15,
+                    delay: 0.5,
+                    ease: "back.out(1.7)",
+                    clearProps: "all"
+                }
+            );
+            
+            // Animate the gradient divider
+            gsap.fromTo(
+                ".gradient-divider",
+                { 
+                    width: "0%", 
+                    opacity: 0
+                },
+                { 
+                    width: "100%", 
+                    opacity: 1, 
+                    duration: 1.2, 
+                    delay: 1.1,
+                    ease: "power2.inOut"
+                }
+            );
+        }
+    }, [isLoaded]);
 
     const handleMouseLeave = () => {
         const element = frameRef.current;
@@ -46,20 +107,60 @@ const Story = () => {
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
     
-        const rotateX = ((yPos - centerY) / centerY) * -8; // Reduced rotation
-        const rotateY = ((xPos - centerX) / centerX) * 8; // Reduced rotation
+        const rotateX = ((yPos - centerY) / centerY) * -8;
+        const rotateY = ((xPos - centerX) / centerX) * 8;
     
         gsap.to(element, {
           duration: 0.3,
           rotateX,
           rotateY,
-          transformPerspective: 600, // Increased perspective
-          ease: "power1.out", // Smoother ease
+          transformPerspective: 600,
+          ease: "power1.out",
         });
+    };
+
+    // Button hover animation with GSAP
+    const handleButtonHover = (isHovering) => {
+        const iconSelector = "#prologue-btn-icon";
+        
+        if (isHovering) {
+            gsap.to(iconSelector, {
+                x: 5,
+                scale: 1.15,
+                duration: 0.3,
+                ease: "power2.out",
+                color: "#000"
+            });
+        } else {
+            gsap.to(iconSelector, {
+                x: 0,
+                scale: 1,
+                duration: 0.3,
+                ease: "power2.out"
+            });
+        }
     };
 
     const handleDiscoverClick = () => {
         console.log("Navigate to prologue page (from Story component)...");
+        
+        // Add click animation
+        const iconSelector = "#prologue-btn-icon";
+        gsap.timeline()
+            .to(iconSelector, {
+                scale: 0.8,
+                duration: 0.1
+            })
+            .to(iconSelector, {
+                scale: 1.2,
+                duration: 0.2,
+                ease: "back.out(1.7)"
+            })
+            .to(iconSelector, {
+                scale: 1,
+                duration: 0.2
+            });
+            
         // Later: window.location.href = '/prologue'; or use react-router navigate
     };
 
@@ -118,12 +219,18 @@ const Story = () => {
                 </div>
             </div>
 
-            {/* COMPLETELY REDESIGNED: Modern content layout with cards and spacious design */}
-            <div className="w-full px-4 md:px-8 lg:px-16 -mt-72 sm:-mt-64 md:-mt-60 lg:-mt-80">
+            {/* LOWERED POSITION: Reduced negative margins to move content down */}
+            <div 
+                ref={contentRef}
+                className="w-full px-4 md:px-8 lg:px-16 -mt-60 sm:-mt-52 md:-mt-48 lg:-mt-64"
+            >
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8">
                     
                     {/* Left content card - Taking more space on desktop */}
-                    <div className="md:col-span-7 lg:col-span-8">
+                    <div 
+                        ref={leftCardRef}
+                        className="md:col-span-7 lg:col-span-8"
+                    >
                         <div className="bg-black/30 backdrop-blur-xl rounded-3xl p-6 md:p-8 lg:p-10
                             shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative overflow-hidden group
                             hover:shadow-[0_10px_40px_rgb(76,29,149,0.15)] transition-all duration-500
@@ -153,24 +260,34 @@ const Story = () => {
                             </p>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                                <div className="bg-white/5 rounded-2xl p-4 backdrop-blur-sm">
+                                {/* Features with individual refs for staggered animation */}
+                                <div 
+                                    ref={el => featuresRef.current[0] = el}
+                                    className="bg-white/5 rounded-2xl p-4 backdrop-blur-sm"
+                                >
                                     <h3 className="text-lg font-zentry text-yellow-300 mb-2">Ancient Secrets</h3>
                                     <p className="text-white/80">Uncover hidden knowledge and forgotten technologies across the boundless pillar.</p>
                                 </div>
                                 
-                                <div className="bg-white/5 rounded-2xl p-4 backdrop-blur-sm">
+                                <div 
+                                    ref={el => featuresRef.current[1] = el}
+                                    className="bg-white/5 rounded-2xl p-4 backdrop-blur-sm"
+                                >
                                     <h3 className="text-lg font-zentry text-yellow-300 mb-2">Infinite Realms</h3>
                                     <p className="text-white/80">Shape your destiny across countless dimensions, each with unique rules and opportunities.</p>
                                 </div>
                             </div>
                             
-                            {/* Dynamic divider */}
-                            <div className="h-px w-full mb-6 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                            {/* Dynamic divider with GSAP animation */}
+                            <div className="h-px w-full mb-6 bg-gradient-to-r from-transparent via-white/20 to-transparent gradient-divider"></div>
                         </div>
                     </div>
                     
                     {/* Right content card with button - Taking less space on desktop */}
-                    <div className="md:col-span-5 lg:col-span-4 md:self-end">
+                    <div 
+                        ref={rightCardRef}
+                        className="md:col-span-5 lg:col-span-4 md:self-end"
+                    >
                         <div className="bg-black/40 backdrop-blur-xl rounded-3xl p-6 md:p-8
                             shadow-[0_8px_30px_rgb(0,0,0,0.15)] relative overflow-hidden group
                             hover:shadow-[0_10px_40px_rgb(237,255,102,0.15)] transition-all duration-500
@@ -187,28 +304,22 @@ const Story = () => {
                                 Discover secrets and shape your fate among countless possibilities.
                             </p>
                             
-                            {/* Custom button with proper hover animation */}
-                            <button 
+                            {/* Using the Button component with GSAP-powered animation */}
+                            <Button
+                                id="prologue-btn"
+                                title="discover prologue"
+                                rightIcon={
+                                    <span id="prologue-btn-icon">
+                                        <FaArrowCircleRight size={24} />
+                                    </span>
+                                }
+                                containerClass="w-full !bg-yellow-300/95 hover:!bg-yellow-300 text-black flex items-center 
+                                             justify-center gap-3 px-8 py-5 shadow-md hover:shadow-lg transition-all duration-300 font-medium text-base 
+                                             hover:shadow-[0_5px_15px_rgba(250,204,21,0.4)]"
                                 onClick={handleDiscoverClick}
-                                className="group w-full bg-yellow-300/95 hover:bg-yellow-300 text-black flex 
-                                    items-center justify-center gap-3 px-8 py-5 rounded-full
-                                    shadow-md transition-all duration-300 font-medium text-base
-                                    hover:shadow-[0_5px_15px_rgba(250,204,21,0.4)] relative overflow-hidden"
-                            >
-                                <span className="uppercase font-general tracking-wider z-10">Discover Prologue</span>
-                                
-                                {/* Icon with hover animation that works correctly */}
-                                <span className="flex items-center justify-center relative z-10">
-                                    <FaArrowCircleRight 
-                                        size={24} 
-                                        className="transform transition-all duration-300 ease-out group-hover:translate-x-1 group-hover:scale-110" 
-                                    />
-                                </span>
-                                
-                                {/* Background hover effect */}
-                                <span className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-200 
-                                    opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                            </button>
+                                onMouseEnter={() => handleButtonHover(true)}
+                                onMouseLeave={() => handleButtonHover(false)}
+                            />
                         </div>
                     </div>
                 </div>
