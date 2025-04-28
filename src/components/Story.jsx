@@ -120,23 +120,34 @@ const Story = () => {
 
             </div>
 
-            {/* Adjusted Button Section Margins & Styles */}
-            {/* Changed mt-4 to mt-0 for small screens, kept md:-mt-48 for medium+ */}
-            <div className="mt-0 flex w-full justify-center px-4 md:-mt-48 md:me-44 md:justify-end md:px-0">
-              <div className="flex h-full w-fit flex-col items-center md:items-start">
-                {/* Increased text size and adjusted color */}
-                <p className="mt-3 max-w-sm text-center font-circular-web text-base text-gray-300 md:text-start">
-                  Where realms converge, lies Zentry and the boundless pillar.
-                  Discover its secrets and shape your fate amidst infinite
-                  opportunities.
+            {/* Modernized Button Section with glass morphism card */}
+            <div className="mt-0 w-full px-4 md:-mt-28 md:me-16 md:justify-end md:px-0">
+              <div className="mx-auto md:ms-auto md:me-0 max-w-sm bg-black/30 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg transform transition-all hover:shadow-xl">
+                {/* Animated gradient tag */}
+                <div className="inline-block mb-3 px-3 py-1 bg-gradient-to-r from-purple-500/80 to-blue-500/80 rounded-full text-xs font-bold text-white uppercase tracking-wider animate-fade-in">
+                  Exclusive Content
+                </div>
+                
+                {/* Modernized typography with gradient text */}
+                <p className="mb-5 font-circular-web text-base leading-relaxed text-white/90 md:text-start">
+                  Where realms <span className="font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-purple-300">converge</span>, lies Zentry and the boundless pillar.
+                  <span className="block mt-2">Discover its secrets and shape your fate amidst infinite possibilities.</span>
                 </p>
 
-                {/* Increased button padding via containerClass */}
+                {/* Animated divider */}
+                <div className="h-px w-full mb-5 bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+
+                {/* Enhanced button with animation and hover effects */}
                 <Button
                   id="realm-btn"
                   title="discover prologue"
-                  rightIcon={<TiLocationArrow className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />}
-                  containerClass="!bg-yellow-300/90 hover:!bg-yellow-300 text-black flex items-center mt-5 px-8 py-3" // Added px-8 py-3
+                  rightIcon={
+                    <div className="relative ml-2 p-1">
+                      <div className="absolute inset-0 rounded-full bg-black/10 group-hover:bg-black/0 transition-colors"></div>
+                      <TiLocationArrow className="relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
+                    </div>
+                  }
+                  containerClass="w-full !bg-yellow-300/95 hover:!bg-yellow-300 text-black flex items-center justify-center gap-1 mt-2 px-8 py-3 shadow-md hover:shadow-lg transition-all duration-300 font-medium"
                   onClick={handleDiscoverClick}
                 />
               </div>
