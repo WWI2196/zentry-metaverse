@@ -13,11 +13,8 @@ const AnimatedTitle = ({title, containerClass}) => {
                 scrollTrigger: {
                     trigger: containerRef.current,
                     start: 'top bottom-=50px',
-                    // Further adjust end point: reverse animation when bottom hits 150px below the top of viewport
                     end: 'bottom top+=150px', 
-                    toggleActions: 'play none none reverse',
-                    // markers: true, // Uncomment for debugging trigger points
-                },
+                    toggleActions: 'play none none reverse',                },
             });
 
             titleAnimation.to('.animated-word', {
