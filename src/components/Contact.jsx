@@ -1,5 +1,8 @@
 import AnimatedTitle from "./AnimatedTitle";
 import Button from "./Button";
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { FaArrowRight } from "react-icons/fa";
 
 const ImageClipBox = ({ src, clipClass }) => (
   <div className={clipClass}>
@@ -8,17 +11,43 @@ const ImageClipBox = ({ src, clipClass }) => (
 );
 
 const Contact = () => {
+  const swordmanRef = useRef(null);
+
+  // Add animations for the swordman image
+  useEffect(() => {
+    if (swordmanRef.current) {
+      // Create a subtle floating animation
+      gsap.to(swordmanRef.current, {
+        y: -10,
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+    }
+  }, []);
+
   return (
     <div id="contact" className="relative my-20 min-h-96 w-screen px-10">
-      {/* Swordman Image - Adjusted vertical positioning for small screens */}
-      <div className="absolute -top-16 left-1/2 z-30 w-60 -translate-x-1/2 sm:left-auto sm:right-10 sm:top-[-10rem] sm:translate-x-0 md:right-10 lg:-top-24 lg:right-20 lg:w-80">
+      {/* Swordman Image - Enhanced with modern animations and larger size */}
+      <div 
+        ref={swordmanRef}
+        className="absolute -top-32 left-1/2 z-30 w-64 -translate-x-1/2 transition-all duration-500 
+                 sm:left-auto sm:right-10 sm:top-[-12rem] sm:translate-x-0 
+                 md:right-10 lg:-top-28 lg:right-20 lg:w-96
+                 hover:drop-shadow-[0_0_30px_rgba(237,255,102,0.3)]"
+      >
+        {/* Glow effect that appears on hover */}
+        <div className="absolute inset-0 rounded-full bg-yellow-300/0 blur-xl transition-opacity duration-500
+                      opacity-0 lg:group-hover:opacity-30 pointer-events-none"></div>
+        
         <ImageClipBox
           src="/img/swordman-partial.webp"
           clipClass="absolute md:scale-125" // Keep partial image absolute within this container
         />
         <ImageClipBox
           src="/img/swordman.webp"
-          clipClass="sword-man-clip-path md:scale-125"
+          clipClass="sword-man-clip-path md:scale-150 transition-transform duration-500 lg:hover:scale-[1.55]"
         />
       </div>
 
@@ -37,20 +66,21 @@ const Contact = () => {
 
         {/* Content - Centering remains consistent */}
         <div className="flex flex-col items-center text-center">
-          <p className="mb-10 font-general text-[10px] uppercase">
+          <p className="mb-10 font-general text-[10px] uppercase tracking-wider animate-fade-up">
             Join Zentry
           </p>
 
-          {/* Reverted back to <br/> for AnimatedTitle component compatibility */}
+          {/* Animated title with more dramatic animation */}
           <AnimatedTitle
             title="let's b<b>u</b>ild the <br/> new era of <br/> g<b>a</b>ming t<b>o</b>gether."
             className="special-font !md:text-[6.2rem] w-full font-zentry !text-5xl !font-black !leading-[.9]"
           />
 
+          {/* Button - Using the greenish color with modern hover animations consistent with other sections */}
           <Button 
             title="contact us" 
-            containerClass="mt-10 cursor-pointer !bg-yellow-300 flex items-center justify-center gap-1 hover:!bg-yellow-300/90 hover:text-black/90 text-black transition-colors duration-300 group"
-            rightIcon={<span className="ml-1 transition-transform duration-300 group-hover:translate-x-1">→</span>} // Example icon with hover effect
+            containerClass="mt-10 cursor-pointer !bg-yellow-300 flex items-center justify-center gap-2 hover:!bg-yellow-300/90 hover:text-black/90 text-black transition-all duration-300 group shadow-lg hover:shadow-yellow-300/20"
+            rightIcon={<FaArrowRight className="transition-transform duration-300 group-hover:translate-x-1"/>}
           />
         </div>
       </div>
