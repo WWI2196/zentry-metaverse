@@ -3,9 +3,6 @@ html { /*to make the scrolling smooth*/
 }
 
 @import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 
 body {
@@ -64,7 +61,6 @@ body {
     }
 
     .nav-hover-btn {
-        /* Use direct font-family instead of @apply */
         font-family: 'general', sans-serif; 
         @apply relative ms-10 text-xs uppercase text-blue-50 after:absolute after:-bottom-0.5 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-neutral-800 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] hover:after:origin-bottom-left hover:after:scale-x-100 dark:after:bg-white cursor-pointer;
     }
@@ -86,18 +82,16 @@ body {
       }
     
       .special-font b {
-        font-family: 'zentry', sans-serif; /* Use direct font-family */
+        font-family: 'zentry', sans-serif; 
         font-feature-settings: "ss01" on;
       }
 
       .hero-heading {
-        /* Use direct font-family instead of @apply */
         font-family: 'zentry', sans-serif;
         @apply uppercase font-black text-5xl sm:right-10 sm:text-7xl md:text-9xl lg:text-[12rem];
       }
     
       .about-subtext {
-        /* Use direct font-family instead of @apply */
         font-family: 'circular-web', sans-serif;
         @apply absolute bottom-[-80dvh] left-1/2 w-full max-w-96 -translate-x-1/2 text-center text-lg md:max-w-[34rem];
       }
@@ -111,7 +105,6 @@ body {
       }
 
       .animated-word {
-        /* Use direct font-family instead of @apply */
         font-family: 'zentry', sans-serif;
         @apply font-black opacity-0;
         transform: translate3d(10px, 51px, -60px) rotateY(60deg) rotateX(-40deg);
@@ -128,7 +121,6 @@ body {
       }
 
       .bento-title {
-        /* Use direct font-family instead of @apply */
         font-family: 'zentry', sans-serif;
         @apply uppercase md:text-6xl text-4xl font-black;
       }
