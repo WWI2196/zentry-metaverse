@@ -5,7 +5,7 @@ import RoundedCorners from './RoundedConers';
 import BentoTilt from './BentoTilt'; 
 import Button from './Button';
 import { FaArrowRight, FaCompass } from "react-icons/fa";
-import { BsShieldCheck } from "react-icons/bs";
+import { BsShieldCheck, BsStars, BsInfinity } from "react-icons/bs"; // Import new icons
 
 const Story = () => {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -80,46 +80,80 @@ const Story = () => {
             // Initialize floating particles
             initParticles();
             
-            // Create hover effect for feature cards
+            // Create hover effect for feature cards - ENHANCED
             featuresRef.current.forEach((card, i) => {
+                const iconWrapper = card.querySelector('.feature-icon-wrapper');
+                const icon = card.querySelector('.feature-icon');
+                const cardTitle = card.querySelector('.feature-title');
+
                 card.addEventListener('mouseenter', () => {
-                    // iOS-style springy animation
                     gsap.to(card, {
-                        y: -5,
-                        boxShadow: '0 15px 30px rgba(237, 255, 102, 0.2)',
-                        backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                        duration: 0.3,
-                        ease: 'back.out(1.7)'
+                        y: -6, // Slightly more lift
+                        scale: 1.02, // Subtle scale
+                        boxShadow: '0 18px 35px rgba(237, 255, 102, 0.25)', // Enhanced shadow
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)', // Brighter background
+                        duration: 0.4,
+                        ease: 'back.out(2)' // More spring
                     });
-                    
-                    // Highlight card title
-                    const cardTitle = card.querySelector('.feature-title');
+                    if (iconWrapper) {
+                        gsap.to(iconWrapper, {
+                            scale: 1.15, // Icon scales up
+                            rotate: -5, // Slight rotation
+                            boxShadow: '0 6px 15px rgba(237, 255, 102, 0.2)',
+                            duration: 0.4,
+                            ease: 'back.out(2)'
+                        });
+                    }
+                     if (icon) { // Animate the icon itself
+                        gsap.to(icon, {
+                            scale: 1.1,
+                            rotate: 10,
+                            duration: 0.3,
+                            ease: 'power2.out'
+                        });
+                    }
                     if (cardTitle) {
                         gsap.to(cardTitle, {
                             scale: 1.05,
-                            color: '#edff66',
-                            duration: 0.3
+                            color: '#f0ff8f', // Brighter yellow
+                            duration: 0.3,
+                            ease: 'power2.out'
                         });
                     }
                 });
-                
+
                 card.addEventListener('mouseleave', () => {
-                    // iOS-style spring return
                     gsap.to(card, {
                         y: 0,
-                        boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
+                        scale: 1,
+                        boxShadow: '0 8px 20px rgba(0, 0, 0, 0.12)', // Adjusted base shadow
                         backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                        duration: 0.3,
-                        ease: 'back.out(1.7)'
+                        duration: 0.4,
+                        ease: 'back.out(1.5)'
                     });
-                    
-                    // Reset card title
-                    const cardTitle = card.querySelector('.feature-title');
+                     if (iconWrapper) {
+                        gsap.to(iconWrapper, {
+                            scale: 1,
+                            rotate: 0,
+                            boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+                            duration: 0.4,
+                            ease: 'back.out(1.5)'
+                        });
+                    }
+                    if (icon) { // Reset icon animation
+                        gsap.to(icon, {
+                            scale: 1,
+                            rotate: 0,
+                            duration: 0.3,
+                            ease: 'power2.out'
+                        });
+                    }
                     if (cardTitle) {
                         gsap.to(cardTitle, {
                             scale: 1,
-                            color: '#edff66',
-                            duration: 0.3
+                            color: '#edff66', // Original yellow
+                            duration: 0.3,
+                            ease: 'power2.out'
                         });
                     }
                 });
@@ -243,39 +277,43 @@ const Story = () => {
         });
     };
 
-    // Set up button animation hooks - This is crucial for proper hover effect
+    // Set up button animation hooks - ADJUSTED HOVER EFFECT
     useEffect(() => {
         if (!buttonWrapperRef.current) return;
-        
-        // Create button hover animation - iOS style with spring effect
+
         const buttonWrapper = buttonWrapperRef.current;
-        
+        const gradientOverlay = buttonWrapper.querySelector('.button-gradient-overlay'); // Target the overlay
+
         const onMouseEnter = () => {
             if (buttonIconRef.current) {
                 gsap.to(buttonIconRef.current, {
                     x: 5,
                     scale: 1.2,
                     duration: 0.3,
-                    ease: "back.out(1.7)", // iOS spring-like effect
+                    ease: "back.out(1.7)",
                     color: "#000"
                 });
             }
             gsap.to(buttonWrapper, {
-                backgroundColor: "rgba(237, 255, 102, 1)", // Full yellow color on hover
+                backgroundColor: "rgba(237, 255, 102, 1)",
                 scale: 1.02,
                 duration: 0.3,
-                ease: "back.out(1.2)", // iOS spring-like effect
+                ease: "back.out(1.2)",
                 boxShadow: "0 8px 20px rgba(237, 255, 102, 0.3)"
             });
+            // Make gradient overlay slightly less opaque on hover to avoid darkening
+            if (gradientOverlay) {
+                gsap.to(gradientOverlay, { opacity: 0.85, duration: 0.3 });
+            }
         };
-        
+
         const onMouseLeave = () => {
             if (buttonIconRef.current) {
                 gsap.to(buttonIconRef.current, {
                     x: 0,
                     scale: 1,
                     duration: 0.3,
-                    ease: "back.out(1)", // iOS spring-like effect
+                    ease: "back.out(1)",
                     color: "#000"
                 });
             }
@@ -283,16 +321,18 @@ const Story = () => {
                 backgroundColor: "rgba(237, 255, 102, 0.95)",
                 scale: 1,
                 duration: 0.3,
-                ease: "back.out(1)", // iOS spring-like effect
+                ease: "back.out(1)",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)"
             });
+             // Reset gradient overlay opacity
+            if (gradientOverlay) {
+                gsap.to(gradientOverlay, { opacity: 0, duration: 0.3 });
+            }
         };
-        
-        // Add event listeners
+
         buttonWrapper.addEventListener("mouseenter", onMouseEnter);
         buttonWrapper.addEventListener("mouseleave", onMouseLeave);
-        
-        // Cleanup
+
         return () => {
             buttonWrapper.removeEventListener("mouseenter", onMouseEnter);
             buttonWrapper.removeEventListener("mouseleave", onMouseLeave);
@@ -495,109 +535,115 @@ const Story = () => {
                                                     animate-width-expand"></div>
                                     </div>
                                     
-                                    {/* iOS SF Symbols style tag */}
-                                    <div className="ios-tag inline-flex px-3 py-1.5 bg-gradient-to-r from-indigo-600/90 to-purple-600/90 
+                                    {/* iOS SF Symbols style tag - ENHANCED SHINE */}
+                                    <div className="ios-tag inline-flex px-3 py-1.5 bg-gradient-to-r from-indigo-600/90 to-purple-600/90
                                         rounded-full text-xs font-bold text-white uppercase tracking-wider
                                         shadow-[0_2px_10px_rgba(120,80,220,0.3)] backdrop-blur-sm
-                                        relative overflow-hidden">
+                                        relative overflow-hidden group/tag"> {/* Added group/tag */}
                                         <div className="absolute inset-0 bg-gradient-to-r from-indigo-400/5 to-purple-400/5 opacity-0
-                                                    group-hover:opacity-100 transition-opacity duration-700"></div>
+                                                    group-hover/tag:opacity-100 transition-opacity duration-700"></div>
                                         <span className="mix-blend-plus-lighter relative z-10 flex items-center">
                                             <BsShieldCheck className="mr-1.5" />
                                             <span>Exclusive Universe</span>
                                         </span>
-                                        
-                                        {/* iOS-style shine effect */}
-                                        <div className="absolute top-0 -left-3/4 w-1/2 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent
-                                                      animate-shine-slow pointer-events-none"></div>
+
+                                        {/* iOS-style shine effect - ENHANCED */}
+                                        <div className="absolute top-0 -left-full w-1/2 h-full bg-gradient-to-r from-transparent via-white/40 to-transparent
+                                                      animate-shine-fast group-hover/tag:animate-shine-fast-hover pointer-events-none"></div> {/* Adjusted animation */}
                                     </div>
                                 </div>
                                 
-                                {/* iOS-style messaging - Main content with animated gradient text */}
+                                {/* iOS-style messaging - ADDED GLARE TO CONVERGE */}
                                 <div className="ios-message perspective-1000 my-6 relative z-10">
                                     <p className="text-lg md:text-xl leading-relaxed text-white/90 transform transition-all duration-300
                                                 group-hover:scale-[1.02] group-hover:text-white">
-                                        Where dimensions <span className="font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-purple-400 to-purple-300
+                                        Where dimensions <span className="relative inline-block font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-purple-400 to-purple-300
                                                              animate-gradient-x">
-                                        converge</span>, explorers discover Zentry—a nexus of boundless realms and infinite possibility.
+                                            converge
+                                            {/* Subtle Glare Effect for Converge */}
+                                            <span className="absolute -inset-1 block bg-gradient-to-r from-transparent via-white/20 to-transparent
+                                                         opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm
+                                                         animate-shine-subtle pointer-events-none"></span>
+                                        </span>, explorers discover Zentry—a nexus of boundless realms and infinite possibility.
                                     </p>
                                 </div>
                                 
-                                {/* iOS-style feature cards with SF Pro design language */}
+                                {/* iOS-style feature cards - UPDATED ICONS & STRUCTURE */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 relative z-10">
-                                    {/* Features with individual refs for staggered animation and enhanced hover effects */}
-                                    <div 
+                                    {/* Feature 1: Ancient Secrets */}
+                                    <div
                                         ref={el => featuresRef.current[0] = el}
                                         className="ios-feature-card bg-white/5 rounded-2xl p-5 backdrop-blur-sm transform transition-all duration-300
-                                                 border border-white/5 hover:border-white/10 shadow-lg"
+                                                 border border-white/5 hover:border-white/10 shadow-lg relative overflow-hidden" // Added relative overflow-hidden
                                     >
-                                        <div className="flex items-center mb-3">
-                                            <div className="mr-3 w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-300/30 to-amber-500/20 flex items-center justify-center
-                                                        shadow-sm transition-transform duration-500 group-hover:scale-110">
-                                                <div className="w-2 h-2 bg-yellow-300 rounded-full animate-ping-slow"></div>
+                                        <div className="flex items-start mb-3"> {/* Changed to items-start */}
+                                            <div className="feature-icon-wrapper mr-4 flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-300/30 to-amber-500/20 flex items-center justify-center
+                                                        shadow-md transition-all duration-500 group-hover:scale-110 group-hover:shadow-yellow-300/20"> {/* Adjusted shadow */}
+                                                <BsStars className="feature-icon text-yellow-300 text-xl transition-transform duration-300" /> {/* Modern Icon */}
                                             </div>
-                                            <h3 className="feature-title text-lg font-medium text-yellow-300">Ancient Secrets</h3>
+                                            <div> {/* Added div wrapper for text */}
+                                                <h3 className="feature-title text-lg font-medium text-yellow-300 mb-1">Ancient Secrets</h3> {/* Added mb-1 */}
+                                                <p className="text-white/80 text-sm">Uncover hidden knowledge and forgotten technologies across the boundless pillar.</p> {/* Adjusted text size */}
+                                            </div>
                                         </div>
-                                        
-                                        <p className="text-white/80 ml-[3.25rem]">Uncover hidden knowledge and forgotten technologies across the boundless pillar.</p>
-                                        
                                         {/* iOS-style corner decoration */}
-                                        <div className="absolute -bottom-1 -right-1 w-10 h-10 opacity-20">
-                                            <div className="absolute bottom-0 right-0 w-4 h-4 border-r border-b border-yellow-300/50 rounded-br"></div>
+                                        <div className="absolute -bottom-1 -right-1 w-10 h-10 opacity-20 group-hover:opacity-40 transition-opacity">
+                                            <div className="absolute bottom-0 right-0 w-4 h-4 border-r border-b border-yellow-300/50 rounded-br group-hover:border-yellow-300/80 transition-colors"></div>
                                         </div>
                                     </div>
-                                    
-                                    <div 
+
+                                    {/* Feature 2: Infinite Realms */}
+                                    <div
                                         ref={el => featuresRef.current[1] = el}
                                         className="ios-feature-card bg-white/5 rounded-2xl p-5 backdrop-blur-sm transform transition-all duration-300
-                                                 border border-white/5 hover:border-white/10 shadow-lg"
+                                                 border border-white/5 hover:border-white/10 shadow-lg relative overflow-hidden" // Added relative overflow-hidden
                                     >
-                                        <div className="flex items-center mb-3">
-                                            <div className="mr-3 w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-300/30 to-amber-500/20 flex items-center justify-center
-                                                        shadow-sm transition-transform duration-500 group-hover:scale-110">
-                                                <div className="w-2 h-2 bg-yellow-300 rounded-full animate-ping-slow delay-1000"></div>
+                                        <div className="flex items-start mb-3"> {/* Changed to items-start */}
+                                             <div className="feature-icon-wrapper mr-4 flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-300/30 to-amber-500/20 flex items-center justify-center
+                                                        shadow-md transition-all duration-500 group-hover:scale-110 group-hover:shadow-yellow-300/20"> {/* Adjusted shadow */}
+                                                <BsInfinity className="feature-icon text-yellow-300 text-xl transition-transform duration-300" /> {/* Modern Icon */}
                                             </div>
-                                            <h3 className="feature-title text-lg font-medium text-yellow-300">Infinite Realms</h3>
+                                             <div> {/* Added div wrapper for text */}
+                                                <h3 className="feature-title text-lg font-medium text-yellow-300 mb-1">Infinite Realms</h3> {/* Added mb-1 */}
+                                                <p className="text-white/80 text-sm">Shape your destiny across countless dimensions, each with unique rules and opportunities.</p> {/* Adjusted text size */}
+                                            </div>
                                         </div>
-                                        
-                                        <p className="text-white/80 ml-[3.25rem]">Shape your destiny across countless dimensions, each with unique rules and opportunities.</p>
-                                        
                                         {/* iOS-style corner decoration */}
-                                        <div className="absolute -bottom-1 -right-1 w-10 h-10 opacity-20">
-                                            <div className="absolute bottom-0 right-0 w-4 h-4 border-r border-b border-yellow-300/50 rounded-br"></div>
+                                        <div className="absolute -bottom-1 -right-1 w-10 h-10 opacity-20 group-hover:opacity-40 transition-opacity">
+                                            <div className="absolute bottom-0 right-0 w-4 h-4 border-r border-b border-yellow-300/50 rounded-br group-hover:border-yellow-300/80 transition-colors"></div>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                {/* iOS-style stats counter section with SF Pro inspired metrics */}
+                                {/* iOS-style stats counter section - ADDED HOVER CLASSES */}
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6 relative z-10">
-                                    <div className="ios-stat-card p-3 bg-white/5 rounded-xl backdrop-blur-sm">
-                                        <p className="text-white/60 text-xs uppercase tracking-wider font-medium">Worlds</p>
+                                    <div className="ios-stat-card p-3 bg-white/5 rounded-xl backdrop-blur-sm transition-all duration-300 group/stat"> {/* Added group/stat */}
+                                        <p className="text-white/60 text-xs uppercase tracking-wider font-medium mb-1">Worlds</p> {/* Added mb-1 */}
                                         <div className="flex items-baseline">
-                                            <h4 className="text-xl md:text-2xl font-zentry text-white/90">
+                                            <h4 className="text-xl md:text-2xl font-zentry text-white/90 transition-colors duration-300 group-hover/stat:text-white">
                                                 <span className="counter" data-count="104">104</span>
                                             </h4>
-                                            <span className="text-yellow-300 text-sm ml-1">+</span>
+                                            <span className="text-yellow-300 text-sm ml-1 transition-transform duration-300 group-hover/stat:scale-110">+</span>
                                         </div>
                                     </div>
                                     
-                                    <div className="ios-stat-card p-3 bg-white/5 rounded-xl backdrop-blur-sm">
-                                        <p className="text-white/60 text-xs uppercase tracking-wider font-medium">Explorers</p>
+                                    <div className="ios-stat-card p-3 bg-white/5 rounded-xl backdrop-blur-sm transition-all duration-300 group/stat"> {/* Added group/stat */}
+                                        <p className="text-white/60 text-xs uppercase tracking-wider font-medium mb-1">Explorers</p> {/* Added mb-1 */}
                                         <div className="flex items-baseline">
-                                            <h4 className="text-xl md:text-2xl font-zentry text-white/90">
+                                            <h4 className="text-xl md:text-2xl font-zentry text-white/90 transition-colors duration-300 group-hover/stat:text-white">
                                                 <span className="counter" data-count="25">25</span>
                                             </h4>
-                                            <span className="text-yellow-300 text-sm ml-1">K+</span>
+                                            <span className="text-yellow-300 text-sm ml-1 transition-transform duration-300 group-hover/stat:scale-110">K+</span>
                                         </div>
                                     </div>
                                     
-                                    <div className="hidden md:block ios-stat-card p-3 bg-white/5 rounded-xl backdrop-blur-sm">
-                                        <p className="text-white/60 text-xs uppercase tracking-wider font-medium">Artifacts</p>
+                                    <div className="hidden md:block ios-stat-card p-3 bg-white/5 rounded-xl backdrop-blur-sm transition-all duration-300 group/stat"> {/* Added group/stat */}
+                                        <p className="text-white/60 text-xs uppercase tracking-wider font-medium mb-1">Artifacts</p> {/* Added mb-1 */}
                                         <div className="flex items-baseline">
-                                            <h4 className="text-xl md:text-2xl font-zentry text-white/90">
+                                            <h4 className="text-xl md:text-2xl font-zentry text-white/90 transition-colors duration-300 group-hover/stat:text-white">
                                                 <span className="counter" data-count="376">376</span>
                                             </h4>
-                                            <span className="text-yellow-300 text-sm ml-1">+</span>
+                                            <span className="text-yellow-300 text-sm ml-1 transition-transform duration-300 group-hover/stat:scale-110">+</span>
                                         </div>
                                     </div>
                                 </div>
@@ -738,10 +784,10 @@ const Story = () => {
                                                   transition-all duration-1000 ease-out"></div>
                                                   
 
-                                    {/* iOS-style gradient overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-300/90 via-yellow-100 to-yellow-300/90 
-                                         opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                                    
+                                    {/* iOS-style gradient overlay - ADJUSTED */}
+                                    <div className="button-gradient-overlay absolute inset-0 bg-gradient-to-r from-yellow-300/80 via-yellow-100/90 to-yellow-300/80
+                                         opacity-0 transition-opacity duration-300 pointer-events-none"></div> {/* Added class, adjusted gradient/opacity, pointer-events */}
+
                                     {/* iOS-style inner button highlight */}
                                     <div className="absolute inset-x-0 top-0 h-[1px] bg-white/30"></div>
                                     
@@ -759,7 +805,7 @@ const Story = () => {
                                             </span>
                                         }
                                         containerClass="w-full !bg-transparent font-bold text-black flex items-center 
-                                                     justify-center gap-3 px-8 py-4 font-medium text-sm md:text-base"
+                                                     justify-center gap-3 px-8 py-4 font-medium text-sm md:text-base relative z-10" // Added relative z-10
                                         onClick={handleDiscoverClick}
                                     />
                                     
