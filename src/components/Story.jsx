@@ -609,11 +609,11 @@ const Story = () => {
                                     </div>
                                 </div>
                                 
-                                {/* ENHANCED: iOS-style messaging - Character-by-character glare for "converge" */}
+                                {/* ENHANCED: iOS-style messaging - Restore original converge styling without character glare */}
                                 <div className="ios-message perspective-1000 my-6 relative z-10">
                                     <p className="text-lg md:text-xl leading-relaxed text-white/90 transform transition-all duration-300
                                                 group-hover:scale-[1.02] group-hover:text-white">
-                                        Where dimensions <span className="converge-word relative inline-block font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-purple-400 to-purple-300
+                                        Where dimensions <span className="relative inline-block font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-purple-400 to-purple-300
                                                              animate-gradient-x">
                                             converge
                                         </span>, explorers discover Zentry—a nexus of boundless realms and infinite possibility.
@@ -887,26 +887,6 @@ const Story = () => {
 
             </div>
 
-            {/* Add global styles for the character-by-character glare effect */}
-            <style jsx global>{`
-                .converge-char {
-                    display: inline-block;
-                    background-size: 200% auto;
-                    background-clip: text;
-                    -webkit-background-clip: text;
-                    background-position: 0% center;
-                    color: transparent; 
-                }
-                
-                @keyframes shine-through {
-                    from {
-                        background-position: -100% center;
-                    }
-                    to {
-                        background-position: 200% center;
-                    }
-                }
-            `}</style>
         </section>
     );
 };
