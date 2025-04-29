@@ -29,12 +29,12 @@ const Contact = () => {
 
   return (
     <div id="contact" className="relative my-20 min-h-96 w-screen px-10">
-      {/* Swordman Image - Enhanced with modern animations and larger size */}
+      {/* Swordman Image - Now positioned lower */}
       <div 
         ref={swordmanRef}
-        className="absolute -top-32 left-1/2 z-30 w-64 -translate-x-1/2 transition-all duration-500 
-                 sm:left-auto sm:right-10 sm:top-[-12rem] sm:translate-x-0 
-                 md:right-10 lg:-top-28 lg:right-20 lg:w-96
+        className="absolute -top-20 left-1/2 z-30 w-64 -translate-x-1/2 transition-all duration-500 
+                 sm:left-auto sm:right-10 sm:top-[-8rem] sm:translate-x-0 
+                 md:right-10 lg:-top-16 lg:right-20 lg:w-96
                  hover:drop-shadow-[0_0_30px_rgba(237,255,102,0.3)]"
       >
         {/* Glow effect that appears on hover */}
@@ -76,10 +76,10 @@ const Contact = () => {
             className="special-font !md:text-[6.2rem] w-full font-zentry !text-5xl !font-black !leading-[.9]"
           />
 
-          {/* Button - Using the greenish color with modern hover animations consistent with other sections */}
+          {/* Button - Using the exact greenish-yellow color (#edff66) from Hero.jsx and Navbar.jsx */}
           <Button 
             title="contact us" 
-            containerClass="mt-10 cursor-pointer !bg-yellow-300 flex items-center justify-center gap-2 hover:!bg-yellow-300/90 hover:text-black/90 text-black transition-all duration-300 group shadow-lg hover:shadow-yellow-300/20"
+            containerClass="mt-10 cursor-pointer !bg-[#edff66] flex items-center justify-center gap-2 hover:!bg-[#edff66]/90 hover:text-black/90 text-black transition-all duration-300 group shadow-lg hover:shadow-[0_8px_20px_rgba(237,255,102,0.3)]"
             rightIcon={<FaArrowRight className="transition-transform duration-300 group-hover:translate-x-1"/>}
           />
         </div>
