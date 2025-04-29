@@ -10,7 +10,8 @@ const ImageClipBox = ({ src, clipClass }) => (
 const Contact = () => {
   return (
     <div id="contact" className="relative my-20 min-h-96 w-screen px-10">
-      <div className="absolute -top-40 left-1/2 z-30 w-60 -translate-x-1/2 sm:left-auto sm:right-10 sm:top-[-10rem] sm:translate-x-0 md:right-10 lg:-top-24 lg:right-20 lg:w-80">
+      {/* Swordman Image - Adjusted vertical positioning for small screens */}
+      <div className="absolute -top-16 left-1/2 z-30 w-60 -translate-x-1/2 sm:left-auto sm:right-10 sm:top-[-10rem] sm:translate-x-0 md:right-10 lg:-top-24 lg:right-20 lg:w-80">
         <ImageClipBox
           src="/img/swordman-partial.webp"
           clipClass="absolute md:scale-125" // Keep partial image absolute within this container
@@ -22,7 +23,7 @@ const Contact = () => {
       </div>
 
       <div className="relative overflow-visible rounded-lg bg-black py-24 text-blue-50">
-        {/* Left side images */}
+        {/* Left side images - Hidden on small screens */}
         <div className="absolute -left-20 top-0 hidden h-full w-72 overflow-hidden sm:block lg:left-20 lg:w-96">
           <ImageClipBox
             src="/img/contact-1.webp"
@@ -34,7 +35,7 @@ const Contact = () => {
           />
         </div>
 
-        {/* Content - Ensure consistent centering */}
+        {/* Content - Centering remains consistent */}
         <div className="flex flex-col items-center text-center">
           <p className="mb-10 font-general text-[10px] uppercase">
             Join Zentry
