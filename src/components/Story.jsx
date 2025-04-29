@@ -4,7 +4,7 @@ import { gsap } from 'gsap';
 import RoundedCorners from './RoundedConers';
 import BentoTilt from './BentoTilt'; 
 import Button from './Button';
-import { FaArrowCircleRight } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa"; // Changed to simpler arrow for better animation
 
 const Story = () => {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -14,6 +14,8 @@ const Story = () => {
     const leftCardRef = useRef(null);
     const rightCardRef = useRef(null);
     const featuresRef = useRef([]);
+    const buttonWrapperRef = useRef(null);
+    const buttonIconRef = useRef(null);
 
     useEffect(() => {
         // Add a small delay for image load/animation timing
@@ -81,6 +83,62 @@ const Story = () => {
         }
     }, [isLoaded]);
 
+    // Set up button animation hooks - This is crucial for proper hover effect
+    useEffect(() => {
+        if (!buttonWrapperRef.current) return;
+        
+        // Create button hover animation
+        const buttonWrapper = buttonWrapperRef.current;
+        
+        const onMouseEnter = () => {
+            if (buttonIconRef.current) {
+                gsap.to(buttonIconRef.current, {
+                    x: 5,
+                    scale: 1.2,
+                    duration: 0.3,
+                    ease: "back.out(1.7)",
+                    color: "#000"
+                });
+            }
+            gsap.to(buttonWrapper, {
+                backgroundColor: "rgba(237, 255, 102, 1)", // Full yellow color on hover
+                scale: 1.02,
+                duration: 0.3,
+                ease: "power2.out",
+                boxShadow: "0 8px 20px rgba(237, 255, 102, 0.3)"
+            });
+        };
+        
+        const onMouseLeave = () => {
+            if (buttonIconRef.current) {
+                gsap.to(buttonIconRef.current, {
+                    x: 0,
+                    scale: 1,
+                    duration: 0.3,
+                    ease: "power2.out",
+                    color: "#000"
+                });
+            }
+            gsap.to(buttonWrapper, {
+                backgroundColor: "rgba(237, 255, 102, 0.95)",
+                scale: 1,
+                duration: 0.3,
+                ease: "power2.out",
+                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)"
+            });
+        };
+        
+        // Add event listeners
+        buttonWrapper.addEventListener("mouseenter", onMouseEnter);
+        buttonWrapper.addEventListener("mouseleave", onMouseLeave);
+        
+        // Cleanup
+        return () => {
+            buttonWrapper.removeEventListener("mouseenter", onMouseEnter);
+            buttonWrapper.removeEventListener("mouseleave", onMouseLeave);
+        };
+    }, [isLoaded]);
+
     const handleMouseLeave = () => {
         const element = frameRef.current;
     
@@ -119,48 +177,51 @@ const Story = () => {
         });
     };
 
-    // Button hover animation with GSAP
-    const handleButtonHover = (isHovering) => {
-        const iconSelector = "#prologue-btn-icon";
-        
-        if (isHovering) {
-            gsap.to(iconSelector, {
-                x: 5,
-                scale: 1.15,
-                duration: 0.3,
-                ease: "power2.out",
-                color: "#000"
-            });
-        } else {
-            gsap.to(iconSelector, {
-                x: 0,
-                scale: 1,
-                duration: 0.3,
-                ease: "power2.out"
-            });
-        }
-    };
-
     const handleDiscoverClick = () => {
-        console.log("Navigate to prologue page (from Story component)...");
+        // Click animation effect
+        if (buttonIconRef.current) {
+            gsap.timeline()
+                .to(buttonIconRef.current, {
+                    x: 5, 
+                    scale: 0.8,
+                    duration: 0.1,
+                    ease: "power2.in"
+                })
+                .to(buttonIconRef.current, {
+                    x: 15,
+                    scale: 1.2, 
+                    duration: 0.3,
+                    ease: "back.out(1.7)"
+                })
+                .to(buttonIconRef.current, {
+                    x: 5,
+                    scale: 1,
+                    duration: 0.2,
+                    delay: 0.1,
+                    ease: "power1.out"
+                });
+        }
         
-        // Add click animation
-        const iconSelector = "#prologue-btn-icon";
-        gsap.timeline()
-            .to(iconSelector, {
-                scale: 0.8,
-                duration: 0.1
-            })
-            .to(iconSelector, {
-                scale: 1.2,
-                duration: 0.2,
-                ease: "back.out(1.7)"
-            })
-            .to(iconSelector, {
-                scale: 1,
-                duration: 0.2
-            });
-            
+        if (buttonWrapperRef.current) {
+            gsap.timeline()
+                .to(buttonWrapperRef.current, {
+                    scale: 0.97,
+                    duration: 0.1,
+                    ease: "power2.in"
+                })
+                .to(buttonWrapperRef.current, {
+                    scale: 1.03,
+                    duration: 0.2,
+                    ease: "back.out"
+                })
+                .to(buttonWrapperRef.current, {
+                    scale: 1,
+                    duration: 0.2,
+                    ease: "power1.out"
+                });
+        }
+        
+        console.log("Navigate to prologue page (from Story component)...");
         // Later: window.location.href = '/prologue'; or use react-router navigate
     };
 
@@ -304,22 +365,42 @@ const Story = () => {
                                 Discover secrets and shape your fate among countless possibilities.
                             </p>
                             
-                            {/* Using the Button component with GSAP-powered animation */}
-                            <Button
-                                id="prologue-btn"
-                                title="discover prologue"
-                                rightIcon={
-                                    <span id="prologue-btn-icon">
-                                        <FaArrowCircleRight size={24} />
-                                    </span>
-                                }
-                                containerClass="w-full !bg-yellow-300/95 hover:!bg-yellow-300 text-black flex items-center 
-                                             justify-center gap-3 px-8 py-5 shadow-md hover:shadow-lg transition-all duration-300 font-medium text-base 
-                                             hover:shadow-[0_5px_15px_rgba(250,204,21,0.4)]"
-                                onClick={handleDiscoverClick}
-                                onMouseEnter={() => handleButtonHover(true)}
-                                onMouseLeave={() => handleButtonHover(false)}
-                            />
+                            {/* Custom button wrapper to work with Button component but add custom GSAP animations */}
+                            <div 
+                                ref={buttonWrapperRef} 
+                                className="relative rounded-full overflow-hidden shadow-md"
+                                style={{
+                                    backgroundColor: "rgba(237, 255, 102, 0.95)",
+                                    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)"
+                                }}
+                            >
+                                {/* Background glow effect */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-yellow-300/80 via-yellow-300 to-yellow-300/80 
+                                     opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                                
+                                {/* Using the Button component with custom styling for proper animation */}
+                                <Button
+                                    id="prologue-btn"
+                                    title="discover prologue"
+                                    rightIcon={
+                                        <span ref={buttonIconRef} className="relative flex items-center justify-center">
+                                            <FaArrowRight size={18} style={{ position: 'relative', zIndex: 10 }} />
+                                        </span>
+                                    }
+                                    containerClass="w-full !bg-transparent text-black flex items-center 
+                                                 justify-center gap-3 px-8 py-4 font-medium text-sm md:text-base"
+                                    onClick={handleDiscoverClick}
+                                />
+                                
+                                {/* Pulsing dot indicator */}
+                                <div className="absolute right-7 top-1/2 w-1.5 h-1.5 rounded-full bg-black/50 
+                                               transform -translate-y-1/2 animate-pulse"></div>
+                            </div>
+                            
+                            {/* Subtle info text */}
+                            <p className="text-white/50 text-xs text-center mt-3">
+                                Experience the full story in the prologue chapter
+                            </p>
                         </div>
                     </div>
                 </div>
