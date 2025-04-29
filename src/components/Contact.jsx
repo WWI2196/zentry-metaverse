@@ -1,7 +1,8 @@
 import AnimatedTitle from "./AnimatedTitle";
 import Button from "./Button";
 import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import gsap from 'gsap'; // Import gsap
+import { ScrollTrigger } from 'gsap/ScrollTrigger'; // Import ScrollTrigger
 import { FaArrowRight } from "react-icons/fa";
 
 const ImageClipBox = ({ src, clipClass }) => (
@@ -27,16 +28,27 @@ const Contact = () => {
     }
   }, []);
 
+  // Add useEffect to refresh ScrollTrigger specifically for this component
+  useEffect(() => {
+    // Delay refresh slightly to ensure layout is stable
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+      console.log("ScrollTrigger refreshed from Contact.jsx"); // Optional: for debugging
+    }, 150); // Slightly longer delay than App.jsx
+
+    return () => clearTimeout(timer); // Cleanup timer on unmount
+  }, []); // Empty dependency array ensures this runs once on mount
+
   return (
     <div id="contact" className="relative my-20 min-h-96 w-screen px-10">
       {/* Swordman Image */}
-      <div 
+      <div
         ref={swordmanRef}
-        className="absolute -top-60 z-30 w-64 transition-all duration-500 
-                 sm:top-[-8rem] 
+        className="absolute -top-60 z-30 w-64 transition-all duration-500
+                 sm:top-[-8rem]
                  md:right-10 lg:-top-16 lg:right-20 lg:w-96
                  hover:drop-shadow-[0_0_30px_rgba(237,255,102,0.3)]"
-        style={{ right: '0.5rem' }} // Move further to the right
+        style={{ right: '0.5rem' }} // Keep the right positioning
       >
         {/* Glow effect that appears on hover */}
         <div className="absolute inset-0 rounded-full bg-yellow-300/0 blur-xl transition-opacity duration-500
@@ -71,15 +83,15 @@ const Contact = () => {
             Join Zentry
           </p>
 
-          {/* Animated title - Further reduced base font size */}
+          {/* Animated title */}
           <AnimatedTitle
             title="let's b<b>u</b>ild the <br/> new era of <br/> g<b>a</b>ming t<b>o</b>gether."
             className="special-font !md:text-[6.2rem] w-full font-zentry !text-3xl !font-black !leading-[.9]"
           />
 
-          {/* Button - Using the exact greenish-yellow color (#edff66) from Hero.jsx and Navbar.jsx */}
-          <Button 
-            title="contact us" 
+          {/* Button */}
+          <Button
+            title="contact us"
             containerClass="mt-10 cursor-pointer !bg-[#edff66] flex items-center justify-center gap-2 hover:!bg-[#edff66]/90 hover:text-black/90 text-black transition-all duration-300 group shadow-lg hover:shadow-[0_8px_20px_rgba(237,255,102,0.3)]"
             rightIcon={<FaArrowRight className="transition-transform duration-300 group-hover:translate-x-1"/>}
           />
