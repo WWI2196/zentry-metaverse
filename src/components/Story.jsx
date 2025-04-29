@@ -4,7 +4,7 @@ import { gsap } from 'gsap';
 import RoundedCorners from './RoundedConers';
 import BentoTilt from './BentoTilt'; 
 import Button from './Button';
-import { FaArrowRight } from "react-icons/fa"; // Changed to simpler arrow for better animation
+import { FaArrowRight } from "react-icons/fa";
 
 const Story = () => {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -45,25 +45,79 @@ const Story = () => {
                 }
             );
             
-            // Animate feature items with staggered delay
-            gsap.fromTo(
-                featuresRef.current,
-                { 
-                    scale: 0.9, 
-                    opacity: 0,
-                    y: 15
-                },
-                { 
-                    scale: 1, 
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.5, 
-                    stagger: 0.15,
-                    delay: 0.5,
-                    ease: "back.out(1.7)",
-                    clearProps: "all"
-                }
-            );
+            // Animate heading elements with split text effect
+            const headingElements = document.querySelectorAll('.animated-heading');
+            headingElements.forEach(heading => {
+                const text = heading.textContent;
+                heading.textContent = '';
+                
+                // Create spans for each character
+                [...text].forEach((char, i) => {
+                    const span = document.createElement('span');
+                    span.textContent = char;
+                    span.style.opacity = '0';
+                    span.style.display = 'inline-block';
+                    span.style.transform = 'translateY(20px) rotateX(45deg)';
+                    span.style.transformOrigin = 'center bottom';
+                    heading.appendChild(span);
+                    
+                    // Animate each character
+                    gsap.to(span, {
+                        y: 0,
+                        opacity: 1,
+                        rotateX: 0,
+                        duration: 0.5,
+                        delay: 0.8 + (i * 0.03),
+                        ease: "back.out(1.7)"
+                    });
+                });
+            });
+            
+            // Initialize floating particles
+            initParticles();
+            
+            // Create hover effect for feature cards
+            featuresRef.current.forEach((card, i) => {
+                card.addEventListener('mouseenter', () => {
+                    gsap.to(card, {
+                        y: -5,
+                        boxShadow: '0 15px 30px rgba(237, 255, 102, 0.2)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                        duration: 0.3,
+                        ease: 'power2.out'
+                    });
+                    
+                    // Highlight card title
+                    const cardTitle = card.querySelector('.feature-title');
+                    if (cardTitle) {
+                        gsap.to(cardTitle, {
+                            scale: 1.05,
+                            color: '#edff66',
+                            duration: 0.3
+                        });
+                    }
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        y: 0,
+                        boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                        duration: 0.3,
+                        ease: 'power2.out'
+                    });
+                    
+                    // Reset card title
+                    const cardTitle = card.querySelector('.feature-title');
+                    if (cardTitle) {
+                        gsap.to(cardTitle, {
+                            scale: 1,
+                            color: '#edff66',
+                            duration: 0.3
+                        });
+                    }
+                });
+            });
             
             // Animate the gradient divider
             gsap.fromTo(
@@ -80,8 +134,89 @@ const Story = () => {
                     ease: "power2.inOut"
                 }
             );
+            
+            // Animate the glow orbs with continuous motion
+            gsap.to('.glow-orb-1', {
+                x: '10%',
+                y: '15%',
+                duration: 8,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut'
+            });
+            
+            gsap.to('.glow-orb-2', {
+                x: '-15%',
+                y: '-10%',
+                duration: 9,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut',
+                delay: 0.5
+            });
+            
+            // Start the background animation
+            animateCardBackground();
         }
     }, [isLoaded]);
+    
+    // Initialize floating particles for the card background
+    const initParticles = () => {
+        if (!leftCardRef.current) return;
+        
+        const particlesContainer = document.querySelector('.particles-container');
+        if (!particlesContainer) return;
+        
+        // Clear any existing particles
+        particlesContainer.innerHTML = '';
+        
+        // Create particles
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'absolute rounded-full bg-white/20 pointer-events-none';
+            
+            // Random size
+            const size = Math.random() * 4 + 2;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Random initial position
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            particle.style.left = `${x}%`;
+            particle.style.top = `${y}%`;
+            
+            // Append to container
+            particlesContainer.appendChild(particle);
+            
+            // Animate each particle
+            gsap.to(particle, {
+                x: (Math.random() - 0.5) * 50,
+                y: (Math.random() - 0.5) * 50,
+                opacity: Math.random() * 0.5 + 0.3,
+                duration: Math.random() * 15 + 10,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut',
+                delay: Math.random() * 5
+            });
+        }
+    };
+    
+    // Animate the background pattern
+    const animateCardBackground = () => {
+        if (!leftCardRef.current) return;
+        
+        const backgroundPattern = document.querySelector('.background-pattern');
+        if (!backgroundPattern) return;
+        
+        gsap.to(backgroundPattern, {
+            backgroundPosition: '100% 100%',
+            duration: 30,
+            ease: 'none',
+            repeat: -1
+        });
+    };
 
     // Set up button animation hooks - This is crucial for proper hover effect
     useEffect(() => {
@@ -287,7 +422,7 @@ const Story = () => {
             >
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8">
                     
-                    {/* Left content card - Taking more space on desktop */}
+                    {/* Left content card - Taking more space on desktop - MODERNIZED */}
                     <div 
                         ref={leftCardRef}
                         className="md:col-span-7 lg:col-span-8"
@@ -295,56 +430,139 @@ const Story = () => {
                         <div className="bg-black/30 backdrop-blur-xl rounded-3xl p-6 md:p-8 lg:p-10
                             shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative overflow-hidden group
                             hover:shadow-[0_10px_40px_rgb(76,29,149,0.15)] transition-all duration-500
-                            border border-white/5">
+                            border border-white/5 perspective-1000">
                             
-                            {/* Corner ambient glows */}
-                            <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/20 blur-3xl rounded-full opacity-70"></div>
-                            <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/20 blur-3xl rounded-full opacity-70"></div>
+                            {/* Corner ambient glows with animation */}
+                            <div className="glow-orb-1 absolute -top-20 -right-20 w-60 h-60 bg-blue-500/20 blur-3xl rounded-full opacity-70"></div>
+                            <div className="glow-orb-2 absolute -bottom-20 -left-20 w-60 h-60 bg-purple-500/20 blur-3xl rounded-full opacity-70"></div>
                             
-                            {/* Section header */}
-                            <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-2xl md:text-3xl lg:text-4xl font-black font-zentry text-white">
-                                    Zen<span className="text-yellow-300">try</span> <span className="font-medium text-white/60">World</span>
+                            {/* Animated background pattern */}
+                            <div className="background-pattern absolute inset-0 opacity-5 mix-blend-overlay pointer-events-none"
+                                 style={{
+                                    backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM36 4V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+                                    backgroundSize: '180px 180px'
+                                 }}></div>
+                            
+                            {/* Floating particles container */}
+                            <div className="particles-container absolute inset-0 overflow-hidden pointer-events-none"></div>
+                            
+                            {/* Subtle edge glow effect */}
+                            <div className="absolute inset-0 rounded-3xl opacity-50 pointer-events-none"
+                                 style={{
+                                     boxShadow: 'inset 0 0 30px rgba(120, 80, 220, 0.3)'
+                                 }}></div>
+                            
+                            {/* Section header with 3D animated text */}
+                            <div className="flex items-center justify-between mb-6 relative z-10">
+                                <h2 className="animated-heading text-2xl md:text-3xl lg:text-4xl font-black font-zentry text-white">
+                                    Zentry<span className="text-yellow-300">World</span>
                                 </h2>
                                 
                                 <div className="inline-flex px-3 py-1 bg-gradient-to-r from-indigo-600/90 to-purple-600/90 
                                     rounded-full text-xs font-bold text-white uppercase tracking-wider
-                                    shadow-[0_2px_10px_rgba(120,80,220,0.3)] backdrop-blur-sm">
-                                    <span className="mix-blend-plus-lighter">Exclusive Universe</span>
+                                    shadow-[0_2px_10px_rgba(120,80,220,0.3)] backdrop-blur-sm
+                                    animate-pulse-slow relative overflow-hidden">
+                                    <span className="mix-blend-plus-lighter relative z-10">Exclusive Universe</span>
+                                    
+                                    {/* Moving light effect */}
+                                    <div className="absolute top-0 -left-3/4 w-1/2 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent
+                                                  animate-shine-slow pointer-events-none"></div>
                                 </div>
                             </div>
                             
-                            {/* Main content */}
-                            <p className="text-lg md:text-xl leading-relaxed text-white/90 mb-6">
-                                Where dimensions <span className="font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-purple-300">
-                                converge</span>, explorers discover Zentry—a nexus of boundless realms and infinite possibility.
-                            </p>
+                            {/* Main content with animated gradient text */}
+                            <div className="perspective-1000 my-6 relative z-10">
+                                <p className="text-lg md:text-xl leading-relaxed text-white/90 transform transition-all duration-300
+                                            group-hover:scale-[1.02] group-hover:text-white">
+                                    Where dimensions <span className="font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-purple-400 to-purple-300
+                                                         animate-gradient-x">
+                                    converge</span>, explorers discover Zentry—a nexus of boundless realms and infinite possibility.
+                                </p>
+                            </div>
                             
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                                {/* Features with individual refs for staggered animation */}
+                            {/* 3D hovering feature cards */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 relative z-10">
+                                {/* Features with individual refs for staggered animation and enhanced hover effects */}
                                 <div 
                                     ref={el => featuresRef.current[0] = el}
-                                    className="bg-white/5 rounded-2xl p-4 backdrop-blur-sm"
+                                    className="bg-white/5 rounded-2xl p-5 backdrop-blur-sm transform transition-all duration-300
+                                             border border-white/5 hover:border-white/10 shadow-lg"
                                 >
-                                    <h3 className="text-lg font-zentry text-yellow-300 mb-2">Ancient Secrets</h3>
-                                    <p className="text-white/80">Uncover hidden knowledge and forgotten technologies across the boundless pillar.</p>
+                                    <div className="flex items-center mb-2">
+                                        <div className="w-8 h-8 rounded-full bg-yellow-300/20 flex items-center justify-center mr-3">
+                                            <div className="w-2 h-2 bg-yellow-300 rounded-full animate-ping-slow"></div>
+                                        </div>
+                                        <h3 className="feature-title text-lg font-zentry text-yellow-300">Ancient Secrets</h3>
+                                    </div>
+                                    
+                                    <p className="text-white/80 pl-11">Uncover hidden knowledge and forgotten technologies across the boundless pillar.</p>
+                                    
+                                    {/* Corner decoration */}
+                                    <div className="absolute -bottom-2 -right-2 w-16 h-16 opacity-20">
+                                        <div className="absolute bottom-0 right-0 w-4 h-8 border-r-2 border-b-2 border-yellow-300/50 rounded-br-lg"></div>
+                                    </div>
                                 </div>
                                 
                                 <div 
                                     ref={el => featuresRef.current[1] = el}
-                                    className="bg-white/5 rounded-2xl p-4 backdrop-blur-sm"
+                                    className="bg-white/5 rounded-2xl p-5 backdrop-blur-sm transform transition-all duration-300
+                                             border border-white/5 hover:border-white/10 shadow-lg"
                                 >
-                                    <h3 className="text-lg font-zentry text-yellow-300 mb-2">Infinite Realms</h3>
-                                    <p className="text-white/80">Shape your destiny across countless dimensions, each with unique rules and opportunities.</p>
+                                    <div className="flex items-center mb-2">
+                                        <div className="w-8 h-8 rounded-full bg-yellow-300/20 flex items-center justify-center mr-3">
+                                            <div className="w-2 h-2 bg-yellow-300 rounded-full animate-ping-slow delay-1000"></div>
+                                        </div>
+                                        <h3 className="feature-title text-lg font-zentry text-yellow-300">Infinite Realms</h3>
+                                    </div>
+                                    
+                                    <p className="text-white/80 pl-11">Shape your destiny across countless dimensions, each with unique rules and opportunities.</p>
+                                    
+                                    {/* Corner decoration */}
+                                    <div className="absolute -bottom-2 -right-2 w-16 h-16 opacity-20">
+                                        <div className="absolute bottom-0 right-0 w-4 h-8 border-r-2 border-b-2 border-yellow-300/50 rounded-br-lg"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {/* Animated stats counter section */}
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6 relative z-10">
+                                <div className="p-3 bg-white/5 rounded-xl backdrop-blur-sm">
+                                    <p className="text-white/60 text-xs uppercase tracking-wider">Worlds</p>
+                                    <h4 className="text-xl md:text-2xl font-zentry text-white/90 flex items-baseline">
+                                        <span className="counter" data-count="104">104</span>
+                                        <span className="text-yellow-300 text-sm ml-1">+</span>
+                                    </h4>
+                                </div>
+                                
+                                <div className="p-3 bg-white/5 rounded-xl backdrop-blur-sm">
+                                    <p className="text-white/60 text-xs uppercase tracking-wider">Explorers</p>
+                                    <h4 className="text-xl md:text-2xl font-zentry text-white/90 flex items-baseline">
+                                        <span className="counter" data-count="25">25</span>
+                                        <span className="text-yellow-300 text-sm ml-1">K+</span>
+                                    </h4>
+                                </div>
+                                
+                                <div className="hidden md:block p-3 bg-white/5 rounded-xl backdrop-blur-sm">
+                                    <p className="text-white/60 text-xs uppercase tracking-wider">Artifacts</p>
+                                    <h4 className="text-xl md:text-2xl font-zentry text-white/90 flex items-baseline">
+                                        <span className="counter" data-count="376">376</span>
+                                        <span className="text-yellow-300 text-sm ml-1">+</span>
+                                    </h4>
                                 </div>
                             </div>
                             
                             {/* Dynamic divider with GSAP animation */}
-                            <div className="h-px w-full mb-6 bg-gradient-to-r from-transparent via-white/20 to-transparent gradient-divider"></div>
+                            <div className="h-px w-full mb-6 bg-gradient-to-r from-transparent via-white/20 to-transparent gradient-divider relative z-10"></div>
+                            
+                            {/* Status updates */}
+                            <div className="flex items-center gap-2 relative z-10">
+                                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                <p className="text-white/60 text-sm">Metaverse connected • <span className="text-green-400">Live</span></p>
+                            </div>
                         </div>
                     </div>
                     
-                    {/* Right content card with button - Taking less space on desktop */}
+                    {/* Right content card with button - Taking less space on desktop - MODERNIZED */}
                     <div 
                         ref={rightCardRef}
                         className="md:col-span-5 lg:col-span-4 md:self-end"
@@ -352,30 +570,63 @@ const Story = () => {
                         <div className="bg-black/40 backdrop-blur-xl rounded-3xl p-6 md:p-8
                             shadow-[0_8px_30px_rgb(0,0,0,0.15)] relative overflow-hidden group
                             hover:shadow-[0_10px_40px_rgb(237,255,102,0.15)] transition-all duration-500
-                            border border-white/5">
+                            border border-white/5 transform perspective-1000">
                             
-                            {/* Yellow corner glow */}
+                            {/* Interactive background effect */}
+                            <div className="absolute inset-0">
+                                <div className="absolute inset-0 bg-gradient-to-br from-yellow-300/5 via-transparent to-purple-300/5 opacity-100
+                                            group-hover:opacity-80 transition-opacity duration-1000 ease-out"></div>
+                            </div>
+                            
+                            {/* Yellow corner glow with enhanced animation */}
                             <div className="absolute -top-20 -right-20 w-40 h-40 bg-yellow-300/10 blur-3xl rounded-full opacity-70
-                                group-hover:opacity-100 transition-opacity duration-700"></div>
+                                group-hover:opacity-100 group-hover:w-60 group-hover:h-60 transition-all duration-700"></div>
                             
-                            <h3 className="text-xl md:text-2xl font-zentry text-white mb-4">Begin Your Adventure</h3>
+                            {/* Animated heading with icon */}
+                            <div className="flex items-center mb-4">
+                                <div className="mr-3 w-8 h-8 rounded-full bg-yellow-300/20 flex items-center justify-center 
+                                              animate-pulse-slow">
+                                    <div className="w-4 h-4 bg-yellow-300/60 rounded-full transform scale-75"></div>
+                                </div>
+                                <h3 className="animated-heading text-xl md:text-2xl font-zentry text-white">Begin Your Adventure</h3>
+                            </div>
                             
-                            <p className="text-white/80 mb-6">
-                                Start your journey through the infinite worlds of Zentry. 
-                                Discover secrets and shape your fate among countless possibilities.
-                            </p>
+                            {/* Message with typing animation effect */}
+                            <div className="relative mb-8 bg-white/5 rounded-lg p-3 border-l-2 border-yellow-300/50">
+                                <p className="typewriter-text text-white/80 text-sm">
+                                    Start your journey through the infinite worlds of Zentry. 
+                                    Discover secrets and shape your fate among countless possibilities.
+                                </p>
+                                <div className="h-4 w-[1px] bg-yellow-300 absolute right-4 bottom-3 animate-blink"></div>
+                            </div>
+                            
+                            {/* Access level indicator */}
+                            <div className="flex items-center justify-between mb-6">
+                                <div className="flex items-center">
+                                    <div className="w-3 h-3 bg-yellow-300 rounded-full mr-2"></div>
+                                    <p className="text-white/70 text-xs">ACCESS LEVEL</p>
+                                </div>
+                                <div className="px-2 py-1 bg-yellow-300/20 rounded">
+                                    <p className="text-yellow-300 text-xs font-bold">EXPLORER</p>
+                                </div>
+                            </div>
                             
                             {/* Custom button wrapper to work with Button component but add custom GSAP animations */}
                             <div 
                                 ref={buttonWrapperRef} 
-                                className="relative rounded-full overflow-hidden shadow-md"
+                                className="relative rounded-full overflow-hidden shadow-md mb-4"
                                 style={{
                                     backgroundColor: "rgba(237, 255, 102, 0.95)",
                                     boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)"
                                 }}
                             >
+                                {/* Pulse ring animation */}
+                                <div className="absolute inset-0 rounded-full border-2 border-yellow-300/30 
+                                              scale-[1.15] opacity-0 group-hover:opacity-100 group-hover:scale-[1.25]
+                                              transition-all duration-1000 ease-out"></div>
+                                              
                                 {/* Background glow effect */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-yellow-300/80 via-yellow-300 to-yellow-300/80 
+                                <div className="absolute inset-0 bg-gradient-to-r from-yellow-300/80 via-yellow-200 to-yellow-300/80 
                                      opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
                                 
                                 {/* Using the Button component with custom styling for proper animation */}
@@ -385,6 +636,10 @@ const Story = () => {
                                     rightIcon={
                                         <span ref={buttonIconRef} className="relative flex items-center justify-center">
                                             <FaArrowRight size={18} style={{ position: 'relative', zIndex: 10 }} />
+                                            {/* Icon highlight effect */}
+                                            <span className="absolute w-6 h-6 bg-white/20 rounded-full -z-10 
+                                                           scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100
+                                                           transition-all duration-300 ease-out"></span>
                                         </span>
                                     }
                                     containerClass="w-full !bg-transparent text-black flex items-center 
@@ -392,23 +647,93 @@ const Story = () => {
                                     onClick={handleDiscoverClick}
                                 />
                                 
-                                {/* Pulsing dot indicator */}
+                                {/* Animated dot indicator */}
                                 <div className="absolute right-7 top-1/2 w-1.5 h-1.5 rounded-full bg-black/50 
-                                               transform -translate-y-1/2 animate-pulse"></div>
+                                               transform -translate-y-1/2 animate-ping-slow"></div>
                             </div>
                             
-                            {/* Subtle info text */}
-                            <p className="text-white/50 text-xs text-center mt-3">
-                                Experience the full story in the prologue chapter
-                            </p>
+                            {/* Subtle info text with fade animation */}
+                            <div className="relative overflow-hidden h-6">
+                                <p className="text-white/50 text-xs text-center mt-0 absolute inset-0 transform
+                                           transition-transform duration-500 translate-y-0 group-hover:-translate-y-6">
+                                    Experience the full story in the prologue chapter
+                                </p>
+                                <p className="text-white/70 text-xs text-center mt-0 absolute inset-0 transform
+                                           transition-transform duration-500 translate-y-6 group-hover:translate-y-0">
+                                    <span className="text-yellow-300">New:</span> Interactive journeys available
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
         </div>
+        
+        {/* CSS Animations */}
+        <style jsx="true">{`
+            @keyframes shine-slow {
+                0% { left: -75%; }
+                100% { left: 150%; }
+            }
+            
+            @keyframes gradient-x {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+            
+            @keyframes ping-slow {
+                0% { transform: scale(0.8); opacity: 0.8; }
+                50% { transform: scale(1.5); opacity: 0; }
+                100% { transform: scale(0.8); opacity: 0; }
+            }
+            
+            @keyframes pulse-slow {
+                0% { opacity: 0.6; }
+                50% { opacity: 1; }
+                100% { opacity: 0.6; }
+            }
+            
+            @keyframes blink {
+                0%, 100% { opacity: 0; }
+                50% { opacity: 1; }
+            }
+            
+            .animate-shine-slow {
+                animation: shine-slow 3s infinite;
+            }
+            
+            .animate-gradient-x {
+                background-size: 200% 100%;
+                animation: gradient-x 8s ease infinite;
+            }
+            
+            .animate-ping-slow {
+                animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+            }
+            
+            .animate-pulse-slow {
+                animation: pulse-slow 3s infinite;
+            }
+            
+            .perspective-1000 {
+                perspective: 1000px;
+            }
+            
+            .typewriter-text {
+                overflow: hidden;
+                border-right: 0px solid transparent;
+                width: 100%;
+                display: inline-block;
+            }
+            
+            .delay-1000 {
+                animation-delay: 1s;
+            }
+        `}</style>
     </section>
   )
 }
 
-export default Story
+export default Story;
