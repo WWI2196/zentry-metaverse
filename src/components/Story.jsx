@@ -5,7 +5,7 @@ import RoundedCorners from './RoundedConers';
 import BentoTilt from './BentoTilt'; 
 import Button from './Button';
 import { FaArrowRight, FaCompass } from "react-icons/fa";
-import { BsShieldCheck, BsStars, BsInfinity } from "react-icons/bs"; // Import new icons
+import { BsShieldCheck, BsStars, BsInfinity } from "react-icons/bs"; 
 
 const Story = () => {
     const [isLoaded, setIsLoaded] = useState(false);
