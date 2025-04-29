@@ -538,12 +538,12 @@ const Story = () => {
                     ref={contentRef}
                     className="w-full px-4 md:px-8 lg:px-12 xl:px-16 -mt-52 sm:-mt-40 md:-mt-36 lg:-mt-48"
                 >
-                    <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 lg:gap-10">
+                    <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 lg:gap-12">
                         
                         {/* Left content card - ZENTRY WORLD - iOS REDESIGN */}
                         <div 
                             ref={leftCardRef}
-                            className="md:col-span-7 lg:col-span-7 xl:col-span-8"
+                            className="md:col-span-6 lg:col-span-6 xl:col-span-7"
                         >
                             <div className="ios-card bg-black/30 backdrop-blur-xl rounded-3xl p-6 md:p-8 lg:p-10
                                 shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative overflow-hidden group
@@ -717,7 +717,7 @@ const Story = () => {
                         {/* Right content card - BEGIN YOUR ADVENTURE - iOS REDESIGN */}
                         <div 
                             ref={rightCardRef}
-                            className="md:col-span-5 lg:col-span-5 xl:col-span-4 md:self-start"
+                            className="md:col-span-6 lg:col-span-6 xl:col-span-5 md:self-start"
                         >
                             <div className="ios-card bg-black/40 backdrop-blur-xl rounded-3xl p-6 md:p-8 lg:p-10
                                 shadow-[0_8px_30px_rgb(0,0,0,0.15)] relative overflow-hidden group
@@ -752,8 +752,8 @@ const Story = () => {
                                                      shadow-sm transform transition-transform duration-500 group-hover:rotate-12">
                                             <FaCompass className="text-yellow-300 text-xl" />
                                         </div>
-                                        <div>
-                                            <h3 className="animated-heading text-2xl md:text-3xl font-semibold text-white tracking-tight">Begin Your Adventure</h3>
+                                        <div className="min-w-0 flex-shrink">
+                                            <h3 className="animated-heading text-xl md:text-2xl lg:text-3xl font-semibold text-white tracking-tight whitespace-nowrap">Begin Your Adventure</h3>
                                             <div className="h-1.5 w-16 bg-gradient-to-r from-yellow-300 to-yellow-200 rounded-full mt-2 transform origin-left transition-all duration-500 group-hover:scale-x-125"></div>
                                         </div>
                                     </div>
