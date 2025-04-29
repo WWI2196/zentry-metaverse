@@ -29,13 +29,14 @@ const Contact = () => {
 
   return (
     <div id="contact" className="relative my-20 min-h-96 w-screen px-10">
-      {/* Swordman Image - Now positioned lower */}
+      {/* Swordman Image */}
       <div 
         ref={swordmanRef}
-        className="absolute -top-20 left-1/2 z-30 w-64 -translate-x-1/2 transition-all duration-500 
-                 sm:left-auto sm:right-10 sm:top-[-8rem] sm:translate-x-0 
+        className="absolute -top-60 z-30 w-64 transition-all duration-500 
+                 sm:top-[-8rem] 
                  md:right-10 lg:-top-16 lg:right-20 lg:w-96
                  hover:drop-shadow-[0_0_30px_rgba(237,255,102,0.3)]"
+        style={{ right: '0.5rem' }} // Move further to the right
       >
         {/* Glow effect that appears on hover */}
         <div className="absolute inset-0 rounded-full bg-yellow-300/0 blur-xl transition-opacity duration-500
@@ -64,16 +65,16 @@ const Contact = () => {
           />
         </div>
 
-        {/* Content - Centering remains consistent */}
+        {/* Content */}
         <div className="flex flex-col items-center text-center">
           <p className="mb-10 font-general text-[10px] uppercase tracking-wider animate-fade-up">
             Join Zentry
           </p>
 
-          {/* Animated title with more dramatic animation */}
+          {/* Animated title - Further reduced base font size */}
           <AnimatedTitle
             title="let's b<b>u</b>ild the <br/> new era of <br/> g<b>a</b>ming t<b>o</b>gether."
-            className="special-font !md:text-[6.2rem] w-full font-zentry !text-5xl !font-black !leading-[.9]"
+            className="special-font !md:text-[6.2rem] w-full font-zentry !text-3xl !font-black !leading-[.9]"
           />
 
           {/* Button - Using the exact greenish-yellow color (#edff66) from Hero.jsx and Navbar.jsx */}
