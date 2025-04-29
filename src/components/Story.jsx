@@ -5,11 +5,10 @@ import RoundedCorners from './RoundedConers';
 import BentoTilt from './BentoTilt'; 
 import Button from './Button';
 import { FaArrowRight, FaCompass } from "react-icons/fa";
-import { BsShieldCheck, BsStars } from "react-icons/bs";
+import { BsShieldCheck } from "react-icons/bs";
 
 const Story = () => {
     const [isLoaded, setIsLoaded] = useState(false);
-    const [dynamicIslandActive, setDynamicIslandActive] = useState(false);
     const frameRef = useRef(null);
     const containerRef = useRef(null);
     const contentRef = useRef(null);
@@ -18,7 +17,6 @@ const Story = () => {
     const featuresRef = useRef([]);
     const buttonWrapperRef = useRef(null);
     const buttonIconRef = useRef(null);
-    const dynamicIslandRef = useRef(null);
 
     useEffect(() => {
         // Add a small delay for image load/animation timing
@@ -26,19 +24,8 @@ const Story = () => {
             setIsLoaded(true);
         }, 300);
         
-        // Trigger Dynamic Island notification after 2 seconds
-        const notificationTimer = setTimeout(() => {
-            setDynamicIslandActive(true);
-            
-            // Auto hide after 5 seconds
-            setTimeout(() => {
-                setDynamicIslandActive(false);
-            }, 5000);
-        }, 2000);
-        
         return () => {
             clearTimeout(timer);
-            clearTimeout(notificationTimer);
         };
     }, []);
 
@@ -197,30 +184,6 @@ const Story = () => {
             });
         }
     }, [isLoaded]);
-    
-    // Handle Dynamic Island animation
-    useEffect(() => {
-        if (!dynamicIslandRef.current) return;
-        
-        if (dynamicIslandActive) {
-            gsap.to(dynamicIslandRef.current, {
-                width: "230px",
-                height: "55px",
-                borderRadius: "25px",
-                duration: 0.4,
-                ease: "back.out(1.7)"
-            });
-        } else {
-            gsap.to(dynamicIslandRef.current, {
-                width: "90px",
-                height: "30px",
-                borderRadius: "15px",
-                duration: 0.3,
-                delay: 0.1,
-                ease: "back.out(1)"
-            });
-        }
-    }, [dynamicIslandActive]);
     
     // Initialize floating particles for the card background
     const initParticles = () => {
@@ -422,42 +385,9 @@ const Story = () => {
         console.log("Navigate to prologue page (from Story component)...");
         // Later: window.location.href = '/prologue'; or use react-router navigate
     };
-    
-    // iOS Dynamic Island tap handler
-    const handleDynamicIslandClick = () => {
-        setDynamicIslandActive(!dynamicIslandActive);
-    };
 
     return (
         <section id='story' className="min-h-dvh w-screen bg-black text-blue-50 overflow-hidden">
-            {/* iOS Dynamic Island style notification */}
-            <div 
-                ref={dynamicIslandRef}
-                onClick={handleDynamicIslandClick}
-                className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-black rounded-[15px] 
-                         shadow-lg border border-white/10 flex items-center justify-center
-                         w-[90px] h-[30px] cursor-pointer transition-colors hover:bg-black/90"
-            >
-                {!dynamicIslandActive ? (
-                    <div className="flex items-center justify-center gap-2">
-                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                        <div className="w-2 h-2 bg-yellow-300 rounded-full animate-pulse" 
-                             style={{animationDelay: '0.5s'}}></div>
-                    </div>
-                ) : (
-                    <div className="flex items-center justify-between w-full px-4">
-                        <div className="flex items-center gap-3">
-                            <BsStars className="text-yellow-300 text-lg" />
-                            <div>
-                                <p className="text-white text-xs font-semibold">Zentry World</p>
-                                <p className="text-white/60 text-[10px]">Explorer access granted</p>
-                            </div>
-                        </div>
-                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    </div>
-                )}
-            </div>
-
             <div className='flex size-full flex-col items-center py-16 pb-24'> 
                 <p className='font-general text-sm uppercase tracking-wider animate-fade-up' 
                    style={{ animationDelay: '0.2s' }}>
@@ -807,6 +737,7 @@ const Story = () => {
                                                   scale-[1.15] opacity-0 group-hover:opacity-100 group-hover:scale-[1.25]
                                                   transition-all duration-1000 ease-out"></div>
                                                   
+
                                     {/* iOS-style gradient overlay */}
                                     <div className="absolute inset-0 bg-gradient-to-r from-yellow-300/90 via-yellow-100 to-yellow-300/90 
                                          opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
