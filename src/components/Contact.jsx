@@ -44,11 +44,10 @@ const Contact = () => {
       {/* Swordman Image */}
       <div
         ref={swordmanRef}
-        className="absolute -top-60 z-30 w-64 transition-all duration-500
+        className="absolute -top-60 right-2 z-30 w-64 transition-all duration-500
                  sm:top-[-8rem]
-                 md:right-10 lg:-top-16 lg:right-20 lg:w-96
+                 lg:-top-16 lg:right-32 lg:w-96
                  hover:drop-shadow-[0_0_30px_rgba(237,255,102,0.3)]"
-        style={{ right: '0.5rem' }} // Keep the right positioning
       >
         {/* Glow effect that appears on hover */}
         <div className="absolute inset-0 rounded-full bg-yellow-300/0 blur-xl transition-opacity duration-500
