@@ -534,17 +534,16 @@ const Story = () => {
                     </div>
                 </div>
 
-                {/* LOWERED POSITION: Reduced negative margins to move content down */}
                 <div 
                     ref={contentRef}
-                    className="w-full px-4 md:px-8 lg:px-16 -mt-60 sm:-mt-52 md:-mt-48 lg:-mt-64"
+                    className="w-full px-4 md:px-8 lg:px-12 xl:px-16 -mt-52 sm:-mt-40 md:-mt-36 lg:-mt-48"
                 >
-                    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8">
+                    <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 lg:gap-10">
                         
                         {/* Left content card - ZENTRY WORLD - iOS REDESIGN */}
                         <div 
                             ref={leftCardRef}
-                            className="md:col-span-7 lg:col-span-8"
+                            className="md:col-span-7 lg:col-span-7 xl:col-span-8"
                         >
                             <div className="ios-card bg-black/30 backdrop-blur-xl rounded-3xl p-6 md:p-8 lg:p-10
                                 shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative overflow-hidden group
@@ -557,15 +556,15 @@ const Story = () => {
                                 {/* iOS-style top edge highlight */}
                                 <div className="absolute inset-x-4 top-0 h-[1px] bg-white/20"></div>
                                 
-                                {/* Corner ambient glows with animation */}
-                                <div className="glow-orb-1 absolute -top-20 -right-20 w-60 h-60 bg-blue-500/20 blur-3xl rounded-full opacity-70"></div>
-                                <div className="glow-orb-2 absolute -bottom-20 -left-20 w-60 h-60 bg-purple-500/20 blur-3xl rounded-full opacity-70"></div>
+                                {/* Corner ambient glows with animation - ENLARGED for more modern look */}
+                                <div className="glow-orb-1 absolute -top-40 -right-40 w-96 h-96 bg-blue-500/20 blur-3xl rounded-full opacity-60"></div>
+                                <div className="glow-orb-2 absolute -bottom-40 -left-40 w-96 h-96 bg-purple-500/20 blur-3xl rounded-full opacity-60"></div>
                                 
                                 {/* Animated background pattern */}
                                 <div className="background-pattern absolute inset-0 opacity-5 mix-blend-overlay pointer-events-none"
                                      style={{
                                         backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM36 4V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-                                        backgroundSize: '180px 180px'
+                                        backgroundSize: '200px 200px'
                                      }}></div>
                                 
                                 {/* Floating particles container */}
@@ -574,22 +573,22 @@ const Story = () => {
                                 {/* iOS-style subtle edge glow effect */}
                                 <div className="absolute inset-0 rounded-3xl opacity-50 pointer-events-none"
                                      style={{
-                                         boxShadow: 'inset 0 0 30px rgba(120, 80, 220, 0.3)'
+                                         boxShadow: 'inset 0 0 40px rgba(120, 80, 220, 0.3)'
                                      }}></div>
                                 
-                                {/* Section header with iOS-style SF Pro like design */}
-                                <div className="flex items-center justify-between mb-8 relative z-10">
+                                {/* Section header with iOS-style SF Pro like design - ENLARGED with more spacing */}
+                                <div className="flex items-center justify-between mb-12 relative z-10">
                                     <div className="relative">
-                                        <h2 className="animated-heading text-2xl md:text-3xl lg:text-4xl font-black font-zentry text-white
+                                        <h2 className="animated-heading text-3xl md:text-4xl lg:text-5xl font-black font-zentry text-white
                                                     tracking-tight">
                                             Zentry<span className="text-yellow-300">World</span>
                                         </h2>
-                                        <div className="h-1 w-16 bg-gradient-to-r from-yellow-300 to-yellow-100 rounded-full mt-2 
+                                        <div className="h-1.5 w-24 bg-gradient-to-r from-yellow-300 to-yellow-100 rounded-full mt-3
                                                     animate-width-expand"></div>
                                     </div>
                                     
                                     {/* ENHANCED: iOS SF Symbols style tag - MODERNIZED AUTO GLARE EFFECT */}
-                                    <div className="ios-tag exclusive-universe inline-flex px-3 py-1.5 bg-gradient-to-r from-indigo-600/90 to-purple-600/90
+                                    <div className="ios-tag exclusive-universe inline-flex px-4 py-2 bg-gradient-to-r from-indigo-600/90 to-purple-600/90
                                         rounded-full text-xs font-bold text-white uppercase tracking-wider
                                         shadow-[0_2px_10px_rgba(120,80,220,0.3)] backdrop-blur-sm
                                         relative overflow-hidden group/tag">
@@ -609,9 +608,9 @@ const Story = () => {
                                     </div>
                                 </div>
                                 
-                                {/* ENHANCED: iOS-style messaging - Restore original converge styling without character glare */}
-                                <div className="ios-message perspective-1000 my-6 relative z-10">
-                                    <p className="text-lg md:text-xl leading-relaxed text-white/90 transform transition-all duration-300
+                                {/* ENHANCED: iOS-style messaging - LARGER with more space */}
+                                <div className="ios-message perspective-1000 my-8 relative z-10">
+                                    <p className="text-xl md:text-2xl leading-relaxed text-white/90 transform transition-all duration-300
                                                 group-hover:scale-[1.02] group-hover:text-white">
                                         Where dimensions <span className="relative inline-block font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-purple-400 to-purple-300
                                                              animate-gradient-x">
@@ -620,8 +619,8 @@ const Story = () => {
                                     </p>
                                 </div>
                                 
-                                {/* iOS-style feature cards - OPTIMIZED RESPONSIVENESS */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 relative z-10">
+                                {/* iOS-style feature cards - OPTIMIZED RESPONSIVENESS with increased spacing */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 relative z-10">
                                     {/* Feature 1: Ancient Secrets */}
                                     <div
                                         ref={el => featuresRef.current[0] = el}
@@ -718,9 +717,9 @@ const Story = () => {
                         {/* Right content card - BEGIN YOUR ADVENTURE - iOS REDESIGN */}
                         <div 
                             ref={rightCardRef}
-                            className="md:col-span-5 lg:col-span-4 md:self-end"
+                            className="md:col-span-5 lg:col-span-5 xl:col-span-4 md:self-start"
                         >
-                            <div className="ios-card bg-black/40 backdrop-blur-xl rounded-3xl p-6 md:p-8
+                            <div className="ios-card bg-black/40 backdrop-blur-xl rounded-3xl p-6 md:p-8 lg:p-10
                                 shadow-[0_8px_30px_rgb(0,0,0,0.15)] relative overflow-hidden group
                                 hover:shadow-[0_10px_40px_rgb(237,255,102,0.15)] transition-all duration-500
                                 border border-white/5 transform perspective-1000">
@@ -731,65 +730,65 @@ const Story = () => {
                                 {/* iOS-style top edge highlight */}
                                 <div className="absolute inset-x-4 top-0 h-[1px] bg-white/20"></div>
                                 
-                                {/* iOS-style glass morphism background patterns */}
+                                {/* iOS-style glass morphism background patterns - ENLARGED for more modern look */}
                                 <div className="absolute inset-0 overflow-hidden">
                                     {/* Abstract decorative elements - SF Pro inspired */}
-                                    <div className="absolute top-[30%] right-[10%] w-32 h-32 rotate-45 bg-gradient-to-br from-indigo-500/5 to-transparent rounded-2xl"></div>
-                                    <div className="absolute bottom-[20%] left-[20%] w-40 h-40 rotate-12 border border-white/5 rounded-full"></div>
+                                    <div className="absolute top-[30%] right-[10%] w-48 h-48 rotate-45 bg-gradient-to-br from-indigo-500/5 to-transparent rounded-2xl"></div>
+                                    <div className="absolute bottom-[20%] left-[20%] w-60 h-60 rotate-12 border border-white/5 rounded-full"></div>
                                     
                                     {/* iOS-style gradient background */}
                                     <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 via-black/0 to-purple-900/10 opacity-100
                                                 group-hover:opacity-80 transition-opacity duration-1000 ease-out"></div>
                                 </div>
                                 
-                                {/* iOS-style ambient light */}
-                                <div className="absolute -top-20 -right-20 w-40 h-40 bg-yellow-300/10 blur-3xl rounded-full opacity-70
-                                    group-hover:opacity-100 group-hover:w-60 group-hover:h-60 transition-all duration-700"></div>
+                                {/* iOS-style ambient light - ENLARGED */}
+                                <div className="absolute -top-40 -right-40 w-80 h-80 bg-yellow-300/10 blur-3xl rounded-full opacity-60
+                                    group-hover:opacity-90 group-hover:w-96 group-hover:h-96 transition-all duration-700"></div>
                                 
-                                {/* iOS-style header with SF Pro like typography */}
-                                <div className="flex items-center justify-between mb-6">
+                                {/* iOS-style header with SF Pro like typography - IMPROVED SPACING */}
+                                <div className="flex items-center justify-between mb-10">
                                     <div className="flex items-center">
-                                        <div className="mr-3 w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-300/30 to-amber-500/20 flex items-center justify-center
+                                        <div className="mr-4 w-12 h-12 rounded-xl bg-gradient-to-tr from-yellow-300/30 to-amber-500/20 flex items-center justify-center
                                                      shadow-sm transform transition-transform duration-500 group-hover:rotate-12">
-                                            <FaCompass className="text-yellow-300 text-lg" />
+                                            <FaCompass className="text-yellow-300 text-xl" />
                                         </div>
                                         <div>
-                                            <h3 className="animated-heading text-xl md:text-2xl font-semibold text-white tracking-tight">Begin Your Adventure</h3>
-                                            <div className="h-1 w-12 bg-gradient-to-r from-yellow-300 to-yellow-200 rounded-full mt-1 transform origin-left transition-all duration-500 group-hover:scale-x-125"></div>
+                                            <h3 className="animated-heading text-2xl md:text-3xl font-semibold text-white tracking-tight">Begin Your Adventure</h3>
+                                            <div className="h-1.5 w-16 bg-gradient-to-r from-yellow-300 to-yellow-200 rounded-full mt-2 transform origin-left transition-all duration-500 group-hover:scale-x-125"></div>
                                         </div>
                                     </div>
                                     
                                     {/* iOS SF Symbols style badge */}
-                                    <div className="ios-badge px-2 py-1 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 backdrop-blur-sm
+                                    <div className="ios-badge px-3 py-1.5 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 backdrop-blur-sm
                                                   rounded-full border border-white/10 transform transition-transform duration-300 
                                                   hover:scale-105 hover:border-white/20">
-                                        <p className="text-white/90 text-[10px] uppercase tracking-wider font-medium">New</p>
+                                        <p className="text-white/90 text-xs uppercase tracking-wider font-medium">New</p>
                                     </div>
                                 </div>
                                 
-                                {/* iOS Message style glass panel */}
-                                <div className="ios-message-bubble relative mb-8 bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-4 md:p-5
+                                {/* iOS Message style glass panel - IMPROVED SPACING */}
+                                <div className="ios-message-bubble relative mb-10 bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-5 md:p-6
                                               border-l-2 border-yellow-300/50 backdrop-blur-sm">
                                     {/* iOS-style message corner */}
                                     <div className="absolute -top-1.5 -right-1.5 w-6 h-6">
                                         <div className="absolute top-0 right-0 w-3 h-6 border-t-2 border-r-2 border-yellow-300/30 rounded-tr-lg"></div>
                                     </div>
                                     
-                                    {/* iOS-style message content */}
+                                    {/* iOS-style message content - LARGER TEXT */}
                                     <div className="flex">
-                                        <div className="mt-1 mr-3 min-w-[0.25rem] h-16 bg-gradient-to-b from-yellow-300/70 via-yellow-200/40 to-yellow-300/10 rounded-full"></div>
+                                        <div className="mt-1 mr-4 min-w-[0.25rem] h-20 bg-gradient-to-b from-yellow-300/70 via-yellow-200/40 to-yellow-300/10 rounded-full"></div>
                                         <div>
-                                            <p className="typewriter-text text-white/90 text-base font-medium mb-2">
+                                            <p className="typewriter-text text-white/90 text-lg font-medium mb-3">
                                                 Start your journey through the infinite worlds of Zentry.
                                             </p>
-                                            <p className="typewriter-text text-white/70 text-sm">
+                                            <p className="typewriter-text text-white/70 text-base">
                                                 Discover secrets and shape your fate among countless possibilities.
                                             </p>
                                         </div>
                                     </div>
                                     
                                     {/* iOS-style cursor */}
-                                    <div className="h-4 w-[2px] bg-yellow-300 absolute right-5 bottom-4 animate-blink"></div>
+                                    <div className="h-5 w-[2px] bg-yellow-300 absolute right-6 bottom-5 animate-blink"></div>
                                     
                                     {/* iOS-style message corner */}
                                     <div className="absolute -bottom-1.5 -left-1.5 w-6 h-6">
@@ -797,29 +796,29 @@ const Story = () => {
                                     </div>
                                 </div>
                                 
-                                {/* iOS-style access level with SF Pro styling */}
-                                <div className="ios-access-level flex items-center justify-between mb-8">
+                                {/* iOS-style access level with SF Pro styling - IMPROVED SPACING */}
+                                <div className="ios-access-level flex items-center justify-between mb-10">
                                     <div className="flex items-center gap-3">
                                         <div className="flex items-center gap-1.5">
-                                            <div className="w-3 h-3 bg-gradient-to-r from-yellow-300 to-amber-400 rounded-full 
+                                            <div className="w-3.5 h-3.5 bg-gradient-to-r from-yellow-300 to-amber-400 rounded-full 
                                                          shadow-glow-sm animate-pulse-slow"></div>
-                                            <div className="w-1.5 h-1.5 bg-yellow-300/60 rounded-full"></div>
-                                            <div className="w-1.5 h-1.5 bg-yellow-300/40 rounded-full"></div>
+                                            <div className="w-2 h-2 bg-yellow-300/60 rounded-full"></div>
+                                            <div className="w-2 h-2 bg-yellow-300/40 rounded-full"></div>
                                         </div>
-                                        <p className="text-white/70 text-xs tracking-wider font-medium">ACCESS GRANTED</p>
+                                        <p className="text-white/70 text-sm tracking-wider font-medium">ACCESS GRANTED</p>
                                     </div>
                                     
-                                    <div className="ios-tag px-3 py-1.5 bg-gradient-to-r from-yellow-300/20 to-amber-500/20 backdrop-blur-sm
+                                    <div className="ios-tag px-3.5 py-2 bg-gradient-to-r from-yellow-300/20 to-amber-500/20 backdrop-blur-sm
                                                   rounded-md border border-yellow-300/20 transition-all duration-300 
                                                   group-hover:border-yellow-300/40 group-hover:shadow-glow-xs">
-                                        <p className="text-yellow-300 text-xs font-bold">EXPLORER</p>
+                                        <p className="text-yellow-300 text-sm font-bold">EXPLORER</p>
                                     </div>
                                 </div>
                                 
-                                {/* iOS-style button wrapper with enhanced haptic-feeling animations */}
+                                {/* iOS-style button wrapper with enhanced haptic-feeling animations - IMPROVED SIZE */}
                                 <div 
                                     ref={buttonWrapperRef} 
-                                    className="ios-button relative rounded-full overflow-hidden shadow-md mb-5"
+                                    className="ios-button relative rounded-full overflow-hidden shadow-md mb-6"
                                     style={{
                                         backgroundColor: "rgba(237, 255, 102, 0.95)",
                                         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)"
@@ -834,49 +833,48 @@ const Story = () => {
                                     <div className="absolute inset-0 rounded-full border-2 border-yellow-300/30 
                                                   scale-[1.15] opacity-0 group-hover:opacity-100 group-hover:scale-[1.25]
                                                   transition-all duration-1000 ease-out"></div>
-                                                  
 
-                                    {/* iOS-style gradient overlay - ADJUSTED */}
+                                    {/* iOS-style gradient overlay */}
                                     <div className="button-gradient-overlay absolute inset-0 bg-gradient-to-r from-yellow-300/80 via-yellow-100/90 to-yellow-300/80
-                                         opacity-0 transition-opacity duration-300 pointer-events-none"></div> {/* Added class, adjusted gradient/opacity, pointer-events */}
+                                         opacity-0 transition-opacity duration-300 pointer-events-none"></div>
 
                                     {/* iOS-style inner button highlight */}
                                     <div className="absolute inset-x-0 top-0 h-[1px] bg-white/30"></div>
                                     
-                                    {/* Button with improved contrast for visibility */}
+                                    {/* Button with improved contrast for visibility - LARGER PADDING */}
                                     <Button
                                         id="prologue-btn"
                                         title="discover prologue"
                                         rightIcon={
                                             <span ref={buttonIconRef} className="relative flex items-center justify-center">
-                                                <FaArrowRight size={18} className="text-black z-20" />
+                                                <FaArrowRight size={20} className="text-black z-20" />
                                                 {/* iOS-style icon highlight */}
-                                                <span className="absolute w-6 h-6 bg-white/20 rounded-full -z-10 
+                                                <span className="absolute w-8 h-8 bg-white/20 rounded-full -z-10 
                                                                scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100
                                                                transition-all duration-300 ease-out"></span>
                                             </span>
                                         }
                                         containerClass="w-full !bg-transparent font-bold text-black flex items-center 
-                                                     justify-center gap-3 px-8 py-4 font-medium text-sm md:text-base relative z-10" // Added relative z-10
+                                                     justify-center gap-3 px-8 py-5 font-medium text-base md:text-lg relative z-10"
                                         onClick={handleDiscoverClick}
                                     />
                                     
                                     {/* iOS-style indicator dot */}
-                                    <div className="absolute right-7 top-1/2 w-1.5 h-1.5 rounded-full bg-black/70 
+                                    <div className="absolute right-7 top-1/2 w-2 h-2 rounded-full bg-black/70 
                                                    transform -translate-y-1/2 animate-ping-slow"></div>
                                 </div>
                                 
-                                {/* iOS-style slide-up messaging container */}
-                                <div className="ios-slide-container relative overflow-hidden h-7 rounded-full bg-white/5 px-4 py-1.5 backdrop-blur-sm">
+                                {/* iOS-style slide-up messaging container - IMPROVED */}
+                                <div className="ios-slide-container relative overflow-hidden h-8 rounded-full bg-white/5 px-4 py-1.5 backdrop-blur-sm">
                                     {/* First message */}
-                                    <p className="text-white/60 text-xs text-center absolute inset-0 flex items-center justify-center transform
-                                               transition-transform duration-500 translate-y-0 group-hover:-translate-y-7">
+                                    <p className="text-white/60 text-sm text-center absolute inset-0 flex items-center justify-center transform
+                                               transition-transform duration-500 translate-y-0 group-hover:-translate-y-8">
                                         Experience the full story in the prologue chapter
                                     </p>
                                     
                                     {/* Second message that appears on hover */}
-                                    <p className="text-white/80 text-xs text-center absolute inset-0 flex items-center justify-center transform
-                                               transition-transform duration-500 translate-y-7 group-hover:translate-y-0">
+                                    <p className="text-white/80 text-sm text-center absolute inset-0 flex items-center justify-center transform
+                                               transition-transform duration-500 translate-y-8 group-hover:translate-y-0">
                                         <span className="text-yellow-300 font-medium mr-1">New:</span> Interactive journeys available
                                     </p>
                                 </div>
