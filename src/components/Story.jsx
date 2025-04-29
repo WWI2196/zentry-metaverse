@@ -80,11 +80,21 @@ const Story = () => {
             // Initialize floating particles
             initParticles();
             
-            // Create hover effect for feature cards - ENHANCED
+            // Create hover effect for feature cards - OPTIMIZED FOR FASTER RESPONSE
             featuresRef.current.forEach((card, i) => {
                 const iconWrapper = card.querySelector('.feature-icon-wrapper');
                 const icon = card.querySelector('.feature-icon');
                 const cardTitle = card.querySelector('.feature-title');
+
+                // Initial subtle animation to make cards feel alive
+                gsap.to(card, {
+                    y: -2,
+                    duration: 2,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: 'sine.inOut',
+                    delay: i * 0.3,
+                });
 
                 card.addEventListener('mouseenter', () => {
                     gsap.to(card, {
@@ -92,7 +102,7 @@ const Story = () => {
                         scale: 1.02, // Subtle scale
                         boxShadow: '0 18px 35px rgba(237, 255, 102, 0.25)', // Enhanced shadow
                         backgroundColor: 'rgba(255, 255, 255, 0.1)', // Brighter background
-                        duration: 0.4,
+                        duration: 0.2, // REDUCED for faster response
                         ease: 'back.out(2)' // More spring
                     });
                     if (iconWrapper) {
@@ -100,7 +110,7 @@ const Story = () => {
                             scale: 1.15, // Icon scales up
                             rotate: -5, // Slight rotation
                             boxShadow: '0 6px 15px rgba(237, 255, 102, 0.2)',
-                            duration: 0.4,
+                            duration: 0.15, // REDUCED for faster response
                             ease: 'back.out(2)'
                         });
                     }
@@ -108,7 +118,7 @@ const Story = () => {
                         gsap.to(icon, {
                             scale: 1.1,
                             rotate: 10,
-                            duration: 0.3,
+                            duration: 0.15, // REDUCED for faster response
                             ease: 'power2.out'
                         });
                     }
@@ -116,7 +126,7 @@ const Story = () => {
                         gsap.to(cardTitle, {
                             scale: 1.05,
                             color: '#f0ff8f', // Brighter yellow
-                            duration: 0.3,
+                            duration: 0.15, // REDUCED for faster response
                             ease: 'power2.out'
                         });
                     }
@@ -124,11 +134,11 @@ const Story = () => {
 
                 card.addEventListener('mouseleave', () => {
                     gsap.to(card, {
-                        y: 0,
+                        y: -2, // Match the baseline animation
                         scale: 1,
                         boxShadow: '0 8px 20px rgba(0, 0, 0, 0.12)', // Adjusted base shadow
                         backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                        duration: 0.4,
+                        duration: 0.2, // REDUCED for faster response
                         ease: 'back.out(1.5)'
                     });
                      if (iconWrapper) {
@@ -136,7 +146,7 @@ const Story = () => {
                             scale: 1,
                             rotate: 0,
                             boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-                            duration: 0.4,
+                            duration: 0.15, // REDUCED for faster response
                             ease: 'back.out(1.5)'
                         });
                     }
@@ -144,7 +154,7 @@ const Story = () => {
                         gsap.to(icon, {
                             scale: 1,
                             rotate: 0,
-                            duration: 0.3,
+                            duration: 0.15, // REDUCED for faster response
                             ease: 'power2.out'
                         });
                     }
@@ -152,7 +162,7 @@ const Story = () => {
                         gsap.to(cardTitle, {
                             scale: 1,
                             color: '#edff66', // Original yellow
-                            duration: 0.3,
+                            duration: 0.15, // REDUCED for faster response
                             ease: 'power2.out'
                         });
                     }
@@ -216,6 +226,49 @@ const Story = () => {
                     }
                 );
             });
+            
+            // Add automatic continuous glare animations to Exclusive Universe tag - IMPROVED
+            const exclusiveUniverseTag = document.querySelector('.ios-tag.exclusive-universe');
+            if (exclusiveUniverseTag) {
+                // Create a modern traversing shine effect that covers the entire tag
+                gsap.to(exclusiveUniverseTag.querySelector('.auto-shine'), {
+                    x: '300%', 
+                    duration: 3,
+                    repeat: -1,
+                    repeatDelay: 2.5,
+                    ease: 'power2.inOut',
+                    delay: 1
+                });
+                
+                // Add subtle pulsing effect for modern look
+                gsap.to(exclusiveUniverseTag, {
+                    boxShadow: '0 2px 15px rgba(120,80,220,0.4)',
+                    duration: 2,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: 'sine.inOut'
+                });
+            }
+            
+            // IMPROVED: Character-by-character glare effect for "converge" word
+            const convergeWordElement = document.querySelector('.converge-word');
+            if (convergeWordElement) {
+                // Set up the glare effect on each character
+                const chars = convergeWordElement.querySelectorAll('.converge-char');
+                
+                // Create a staggered character animation instead of a single background
+                gsap.to(chars, {
+                    backgroundPosition: '200% center',
+                    stagger: {
+                        each: 0.2, // Staggered timing for each character
+                        repeat: -1,
+                        repeatDelay: 3
+                    },
+                    duration: 1.5,
+                    ease: 'power1.out',
+                    delay: 2
+                });
+            }
         }
     }, [isLoaded]);
     
@@ -535,11 +588,11 @@ const Story = () => {
                                                     animate-width-expand"></div>
                                     </div>
                                     
-                                    {/* iOS SF Symbols style tag - ENHANCED SHINE */}
-                                    <div className="ios-tag inline-flex px-3 py-1.5 bg-gradient-to-r from-indigo-600/90 to-purple-600/90
+                                    {/* ENHANCED: iOS SF Symbols style tag - MODERNIZED AUTO GLARE EFFECT */}
+                                    <div className="ios-tag exclusive-universe inline-flex px-3 py-1.5 bg-gradient-to-r from-indigo-600/90 to-purple-600/90
                                         rounded-full text-xs font-bold text-white uppercase tracking-wider
                                         shadow-[0_2px_10px_rgba(120,80,220,0.3)] backdrop-blur-sm
-                                        relative overflow-hidden group/tag"> {/* Added group/tag */}
+                                        relative overflow-hidden group/tag">
                                         <div className="absolute inset-0 bg-gradient-to-r from-indigo-400/5 to-purple-400/5 opacity-0
                                                     group-hover/tag:opacity-100 transition-opacity duration-700"></div>
                                         <span className="mix-blend-plus-lighter relative z-10 flex items-center">
@@ -547,34 +600,33 @@ const Story = () => {
                                             <span>Exclusive Universe</span>
                                         </span>
 
-                                        {/* iOS-style shine effect - ENHANCED */}
-                                        <div className="absolute top-0 -left-full w-1/2 h-full bg-gradient-to-r from-transparent via-white/40 to-transparent
-                                                      animate-shine-fast group-hover/tag:animate-shine-fast-hover pointer-events-none"></div> {/* Adjusted animation */}
+                                        {/* ENHANCED: Modern shine effect that moves across the entire tag */}
+                                        <div className="auto-shine absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/50 to-transparent
+                                                    pointer-events-none"></div>
+                                        
+                                        {/* Enhanced ambient glow that pulses */}
+                                        <div className="absolute inset-0 rounded-full bg-indigo-400/10 opacity-0 animate-pulse-slow"></div>
                                     </div>
                                 </div>
                                 
-                                {/* iOS-style messaging - ADDED GLARE TO CONVERGE */}
+                                {/* ENHANCED: iOS-style messaging - Character-by-character glare for "converge" */}
                                 <div className="ios-message perspective-1000 my-6 relative z-10">
                                     <p className="text-lg md:text-xl leading-relaxed text-white/90 transform transition-all duration-300
                                                 group-hover:scale-[1.02] group-hover:text-white">
-                                        Where dimensions <span className="relative inline-block font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-purple-400 to-purple-300
+                                        Where dimensions <span className="converge-word relative inline-block font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-purple-400 to-purple-300
                                                              animate-gradient-x">
                                             converge
-                                            {/* Subtle Glare Effect for Converge */}
-                                            <span className="absolute -inset-1 block bg-gradient-to-r from-transparent via-white/20 to-transparent
-                                                         opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm
-                                                         animate-shine-subtle pointer-events-none"></span>
                                         </span>, explorers discover Zentry—a nexus of boundless realms and infinite possibility.
                                     </p>
                                 </div>
                                 
-                                {/* iOS-style feature cards - UPDATED ICONS & STRUCTURE */}
+                                {/* iOS-style feature cards - OPTIMIZED RESPONSIVENESS */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 relative z-10">
                                     {/* Feature 1: Ancient Secrets */}
                                     <div
                                         ref={el => featuresRef.current[0] = el}
-                                        className="ios-feature-card bg-white/5 rounded-2xl p-5 backdrop-blur-sm transform transition-all duration-300
-                                                 border border-white/5 hover:border-white/10 shadow-lg relative overflow-hidden" // Added relative overflow-hidden
+                                        className="ios-feature-card bg-white/5 rounded-2xl p-5 backdrop-blur-sm transform transition-all duration-200
+                                                 border border-white/5 hover:border-white/10 shadow-lg relative overflow-hidden"
                                     >
                                         <div className="flex items-start mb-3"> {/* Changed to items-start */}
                                             <div className="feature-icon-wrapper mr-4 flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-300/30 to-amber-500/20 flex items-center justify-center
@@ -595,8 +647,8 @@ const Story = () => {
                                     {/* Feature 2: Infinite Realms */}
                                     <div
                                         ref={el => featuresRef.current[1] = el}
-                                        className="ios-feature-card bg-white/5 rounded-2xl p-5 backdrop-blur-sm transform transition-all duration-300
-                                                 border border-white/5 hover:border-white/10 shadow-lg relative overflow-hidden" // Added relative overflow-hidden
+                                        className="ios-feature-card bg-white/5 rounded-2xl p-5 backdrop-blur-sm transform transition-all duration-200
+                                                 border border-white/5 hover:border-white/10 shadow-lg relative overflow-hidden"
                                     >
                                         <div className="flex items-start mb-3"> {/* Changed to items-start */}
                                              <div className="feature-icon-wrapper mr-4 flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-300/30 to-amber-500/20 flex items-center justify-center
@@ -834,6 +886,27 @@ const Story = () => {
                 </div>
 
             </div>
+
+            {/* Add global styles for the character-by-character glare effect */}
+            <style jsx global>{`
+                .converge-char {
+                    display: inline-block;
+                    background-size: 200% auto;
+                    background-clip: text;
+                    -webkit-background-clip: text;
+                    background-position: 0% center;
+                    color: transparent; 
+                }
+                
+                @keyframes shine-through {
+                    from {
+                        background-position: -100% center;
+                    }
+                    to {
+                        background-position: 200% center;
+                    }
+                }
+            `}</style>
         </section>
     );
 };
