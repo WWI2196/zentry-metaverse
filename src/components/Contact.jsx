@@ -5,6 +5,10 @@ import gsap from 'gsap'; // Import gsap
 import { ScrollTrigger } from 'gsap/ScrollTrigger'; // Import ScrollTrigger
 import { FaArrowRight } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import swordmanPartialSrc from '/img/swordman-partial.webp'; // Import image
+import swordmanSrc from '/img/swordman.webp'; // Import image
+import contact1Src from '/img/contact-1.webp'; // Import image
+import contact2Src from '/img/contact-2.webp'; // Import image
 
 const ImageClipBox = ({ src, clipClass }) => (
   <div className={clipClass}>
@@ -56,11 +60,11 @@ const Contact = () => {
                       opacity-0 lg:group-hover:opacity-30 pointer-events-none"></div>
 
         <ImageClipBox
-          src="/img/swordman-partial.webp"
+          src={swordmanPartialSrc} // Use imported variable
           clipClass="absolute md:scale-125" // Keep partial image absolute within this container
         />
         <ImageClipBox
-          src="/img/swordman.webp"
+          src={swordmanSrc} // Use imported variable
           clipClass="sword-man-clip-path md:scale-150 transition-transform duration-500 lg:hover:scale-[1.55]"
         />
       </div>
@@ -69,11 +73,11 @@ const Contact = () => {
         {/* Left side images - Hidden on small screens */}
         <div className="absolute -left-20 top-0 hidden h-full w-72 overflow-hidden sm:block lg:left-20 lg:w-96">
           <ImageClipBox
-            src="/img/contact-1.webp"
+            src={contact1Src} // Use imported variable
             clipClass="contact-clip-path-1"
           />
           <ImageClipBox
-            src="/img/contact-2.webp"
+            src={contact2Src} // Use imported variable
             clipClass="contact-clip-path-2 lg:translate-y-40 translate-y-60"
           />
         </div>

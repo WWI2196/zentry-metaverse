@@ -4,6 +4,8 @@ import { TiLocationArrow } from 'react-icons/ti';
 import { FaVolumeMute, FaBars, FaTimes } from 'react-icons/fa';
 import { useWindowScroll } from 'react-use';
 import gsap from 'gsap';
+import logoSrc from '/img/logo.png'; // Import the logo image
+import audioSrc from '/audio/loop.mp3'; // Import the audio file
 
 const navItems = [
   { label: 'Nexus', href: '#nexus' },
@@ -268,7 +270,7 @@ const Navbar = () => {
           <nav className='flex size-full items-center justify-between px-4 py-2'>
             <div className='flex items-center gap-4'>
               <img
-                src="/img/logo.png"
+                src={logoSrc} // Use the imported logoSrc
                 alt="logo"
                 className="w-10 transition-transform duration-300 hover:scale-110"
                 tabIndex={0}
@@ -321,7 +323,7 @@ const Navbar = () => {
                     <div className='flex h-4 items-center space-x-0.5 px-1'>
                       <audio
                         ref={audioElementRef}
-                        src="/audio/loop.mp3"
+                        src={audioSrc} // Use the imported audioSrc
                         preload="auto"
                         className='hidden'
                         loop

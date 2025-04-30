@@ -6,6 +6,7 @@ import BentoTilt from './BentoTilt';
 import Button from './Button';
 import { FaArrowRight, FaCompass } from "react-icons/fa";
 import { BsShieldCheck, BsStars, BsInfinity } from "react-icons/bs"; 
+import entranceImageSrc from '/img/entrance.webp'; // Import the image
 
 const Story = () => {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -514,7 +515,7 @@ const Story = () => {
                                 <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 via-transparent to-purple-900/10 mix-blend-plus-lighter opacity-70 z-[1]"></div>
                                 <img
                                     ref={frameRef}
-                                    src="/img/entrance.webp" 
+                                    src={entranceImageSrc} // Use the imported image source
                                     alt="entrance"
                                     className='object-cover h-full w-full transition-transform duration-500 ease-out group-hover:scale-105'
                                     onLoad={() => setIsLoaded(true)}
