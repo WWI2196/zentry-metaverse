@@ -1,6 +1,5 @@
 {
   "name": "award_web",
-  "homepage": "https://wwi2196.github.io/zentry-metaverse/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,9 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
