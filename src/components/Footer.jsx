@@ -150,8 +150,8 @@ const Footer = () => {
               </div>
               <Button
                 title="Subscribe"
-                rightIcon={<FaArrowRight className="ml-2 transition-transform duration-300 group-hover:translate-x-1" size={12} />}
-                containerClass="!bg-[#edff66] text-[#5542ff] hover:shadow-glow-sm self-start transform transition-all duration-300 flex items-center"
+                rightIcon={<FaArrowRight className="transition-transform duration-300 group-hover:translate-x-1" size={12} />}
+                containerClass="!bg-[#edff66] text-[#5542ff] hover:!bg-[#edff66]/90 hover:shadow-glow-sm self-start transform transition-all duration-300 flex items-center gap-2"
                 onClick={handleSubscribe}
               />
             </form>
