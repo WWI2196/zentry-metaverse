@@ -4,6 +4,8 @@ import { FaTimes, FaUser, FaEnvelope, FaComment, FaArrowRight, FaCheckCircle, Fa
 import { BsLightning, BsStars } from 'react-icons/bs';
 import gsap from 'gsap';
 import Button from './Button';
+import stonesImageSrc from '/img/stones.webp'; // Import stones image
+import contact1ImageSrc from '/img/contact-1.webp'; // Import contact image
 
 // Configuration for email service setup
 const EMAIL_CONFIG = {
@@ -271,7 +273,8 @@ const ContactPage = () => {
     return (
         <div
             ref={containerRef}
-            className="fixed inset-0 z-50 flex items-center justify-center p-5 bg-[url('/img/stones.webp')] bg-cover bg-center"
+            className="fixed inset-0 z-50 flex items-center justify-center p-5 bg-cover bg-center"
+            style={{ backgroundImage: `url(${stonesImageSrc})` }} // Use imported variable for background
         >
             <div className="absolute inset-0 backdrop-blur-md bg-black/70"></div>
             <div ref={particlesRef} className="absolute inset-0 overflow-hidden pointer-events-none"></div>
@@ -414,7 +417,7 @@ const ContactPage = () => {
                                     className="h-full relative contact-clip-path-1 overflow-hidden rounded-lg border border-white/10"
                                 >
                                     <img 
-                                        src="/img/contact-1.webp" 
+                                        src={contact1ImageSrc} // Use imported variable
                                         alt="Contact Illustration" 
                                         className="w-full h-full object-cover"
                                     />
