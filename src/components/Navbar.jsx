@@ -277,7 +277,7 @@ const Navbar = () => {
                 id='product-button'
                 title='Products'
                 rightIcon={<TiLocationArrow className="transition-transform duration-300 group-hover:translate-x-1" />}
-                containerClass='!bg-[#edff66] lg:flex hidden items-center justify-center gap-1 hover:!bg-[#edff66]/90 hover:text-black/90 transition-colors duration-300'
+                containerClass='bg-white/90 text-black lg:flex hidden items-center justify-center gap-1 hover:!bg-[#edff66] transition-colors duration-300'
               />
             </div>
 
@@ -288,16 +288,16 @@ const Navbar = () => {
                   href={item.href}
                   className={`relative font-general text-sm uppercase mx-3 transition-all duration-200 ease-in-out ${
                     activeSection === item.label
-                      ? 'text-yellow-300 font-medium'
+                      ? 'text-[#edff66]/80 font-medium'
                       : 'text-white'
-                  } hover:text-yellow-300/80`}
+                  } hover:text-[#edff66]/80`}
                   style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.3)' }}
                   aria-current={activeSection === item.label ? "page" : undefined}
                   onClick={e => handleNavClick(e, item.href)}
                 >
                   {item.label}
                   {activeSection === item.label && (
-                    <span className="absolute -bottom-1 left-0 h-0.5 w-full bg-yellow-300 
+                    <span className="absolute -bottom-1 left-0 h-0.5 w-full bg-[#edff66]
                                    animate-[pulse_2s_ease-in-out_infinite]"></span>
                   )}
                 </a>
@@ -307,10 +307,10 @@ const Navbar = () => {
             <div className="flex items-center gap-3 md:ml-6">
               <div className="relative group">
                 <button
-                  className={`flex items-center justify-center gap-2 rounded-full p-2 transition-all duration-300 
+                  className={`flex items-center justify-center gap-2 rounded-full p-2 transition-all duration-300
                     ${isAudioPlaying
-                      ? 'bg-yellow-300/30 ring-2 ring-yellow-300'
-                      : 'bg-blue-200/10 backdrop-blur-sm text-white hover:bg-yellow-300/20'}`}
+                      ? 'bg-[#edff66]/30 ring-2 ring-[#edff66]'
+                      : 'bg-blue-200/10 backdrop-blur-sm text-white hover:bg-[#edff66]/20'}`}
                   onClick={toggleAudioIndicator}
                   aria-label="Toggle music"
                   disabled={audioError}
@@ -349,9 +349,9 @@ const Navbar = () => {
 
               <button
                 className={`lg:hidden p-2 rounded-full transition-all duration-300 ${
-                  mobileOpen 
-                    ? 'bg-yellow-300/80 text-black' 
-                    : 'bg-blue-200/10 backdrop-blur-sm text-white hover:bg-yellow-300/50'
+                  mobileOpen
+                    ? 'bg-[#edff66]/80 text-black'
+                    : 'bg-blue-200/10 backdrop-blur-sm text-white hover:bg-[#edff66]/50'
                 }`}
                 onClick={() => setMobileOpen((v) => !v)}
                 aria-label={mobileOpen ? "Close menu" : "Open menu"}
@@ -364,11 +364,11 @@ const Navbar = () => {
         </header>
       </div>
 
-      <div 
+      <div
         ref={mobileMenuRef}
         className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md overflow-y-auto"
-        style={{ 
-          display: 'none', 
+        style={{
+          display: 'none',
           opacity: 0
         }}
         aria-modal="true"
@@ -376,13 +376,13 @@ const Navbar = () => {
       >
         <button
           onClick={() => setMobileOpen(false)}
-          className="absolute top-6 right-6 p-3 rounded-full bg-yellow-300/80 text-black hover:bg-yellow-300 shadow-lg transition-all duration-300 hover:scale-105 z-50"
+          className="absolute top-6 right-6 p-3 rounded-full bg-[#edff66]/80 text-black hover:bg-[#edff66] shadow-lg transition-all duration-300 hover:scale-105 z-50"
           aria-label="Close mobile menu"
         >
           <FaTimes size={24} />
         </button>
-        
-        <div 
+
+        <div
           ref={menuItemsRef}
           className="flex min-h-[100dvh] w-full flex-col items-center justify-center px-6 py-16"
         >
@@ -391,9 +391,9 @@ const Navbar = () => {
               key={item.label}
               href={item.href}
               className={`relative text-xl sm:text-2xl md:text-3xl font-zentry my-3 sm:my-4 py-2 px-4 transition-all duration-300
-                ${activeSection === item.label ? 'text-yellow-300' : 'text-white'}
-                hover:text-yellow-300 hover:scale-110`}
-              style={{ 
+                ${activeSection === item.label ? 'text-[#edff66]' : 'text-white'}
+                hover:text-[#edff66] hover:scale-110`}
+              style={{
                 animation: `fadeInUp 0.5s ease-out ${index * 0.1}s forwards`,
                 textShadow: '0 1px 2px rgba(0,0,0,0.3)'
               }}
@@ -402,7 +402,7 @@ const Navbar = () => {
             >
               {item.label}
               {activeSection === item.label && (
-                <span className="absolute -bottom-1 left-0 h-0.5 w-full bg-yellow-300 
+                <span className="absolute -bottom-1 left-0 h-0.5 w-full bg-[#edff66]
                               animate-[pulse_2s_ease-in-out_infinite]"></span>
               )}
             </a>
