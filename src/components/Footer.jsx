@@ -133,21 +133,25 @@ const Footer = () => {
             <h3 className="font-general text-md uppercase tracking-wider">Newsletter</h3>
             <p className="text-sm text-white/70">Stay updated with our latest developments</p>
             
-            <form onSubmit={handleSubscribe} className="mt-2 flex flex-col space-y-2">
-              <div className="relative">
-                <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50" />
+            <form onSubmit={handleSubscribe} className="mt-2 flex flex-col space-y-3">
+              <div className="relative group overflow-hidden">
+                <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 transition-colors duration-300 group-focus-within:text-[#edff66]" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Your email address"
                   required
-                  className="w-full rounded-lg border border-white/20 bg-white/5 py-2 pl-10 pr-4 text-sm placeholder-white/40 backdrop-blur-sm focus:border-[#edff66]/50 focus:outline-none focus:ring-1 focus:ring-[#edff66]/20"
+                  className="w-full rounded-lg border border-white/20 bg-white/5 py-3 pl-10 pr-4 text-sm placeholder-white/40 backdrop-blur-sm 
+                            transition-all duration-300 ease-in-out
+                            focus:border-[#edff66] focus:outline-none focus:ring-1 focus:ring-[#edff66]/30 focus:bg-black/40 focus:shadow-[0_0_15px_rgba(237,255,102,0.15)]"
                 />
+                <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#edff66]/70 to-[#edff66] transition-all duration-500 ease-out group-focus-within:w-full"></div>
               </div>
               <Button
-                title={<span className="inline-flex items-center">Subscribe <FaArrowRight className="ml-2" size={12} /></span>}
-                containerClass="!bg-[#edff66] text-[#5542ff] hover:shadow-glow-sm self-start"
+                title="Subscribe"
+                rightIcon={<FaArrowRight className="ml-2 transition-transform duration-300 group-hover:translate-x-1" size={12} />}
+                containerClass="!bg-[#edff66] text-[#5542ff] hover:shadow-glow-sm self-start transform transition-all duration-300 flex items-center"
                 onClick={handleSubscribe}
               />
             </form>
