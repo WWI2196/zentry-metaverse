@@ -42,7 +42,7 @@ const Contact = () => {
   }, []); // Empty dependency array ensures this runs once on mount
 
   return (
-    <div className="relative my-20 min-h-96 w-screen px-10">
+    <div id="contact" className="relative my-20 min-h-96 w-screen px-10"> {/* Added id="contact" */}
       {/* Swordman Image */}
       <div
         ref={swordmanRef}

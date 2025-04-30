@@ -24,22 +24,22 @@ const Navbar = () => {
   const [lastScrollY, setlastScrollY] = useState(0);
   const [isNavVisible, setIsNavVisible] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState(''); // No section active initially
+  const [activeSection, setActiveSection] = useState('');
   const [menuItemsVisible, setMenuItemsVisible] = useState(false);
-  const [audioPosition, setAudioPosition] = useState(0); // Store the last audio position - Initialized to 0
+  const [audioPosition, setAudioPosition] = useState(0);
 
   const navContainerRef = useRef(null);
   const audioElementRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const menuItemsRef = useRef(null);
+  const observerRef = useRef(null);
+  const observedElementsRef = useRef(new Map());
 
   const { y: currentScrollY } = useWindowScroll();
 
-  // Updated scroll logic to maintain semi-transparent navbar
   useEffect(() => {
     if (!navContainerRef.current) return;
 
-    // Improved glass-morphism styles with better opacity
     const glassStyles = "bg-black/25 backdrop-blur-md";
     
     if (currentScrollY === 0) {
@@ -68,15 +68,12 @@ const Navbar = () => {
     });
   }, [isNavVisible]);
 
-  // Animate mobile menu open/close
   useEffect(() => {
     if (!mobileMenuRef.current) return;
     
     if (mobileOpen) {
-      // Lock body scroll when menu is open
       document.body.style.overflow = 'hidden';
       
-      // First show the container
       gsap.to(mobileMenuRef.current, {
         opacity: 1,
         y: 0,
@@ -84,17 +81,14 @@ const Navbar = () => {
         ease: 'power2.out',
         display: 'flex',
         onComplete: () => {
-          // After container is visible, show the menu items
           setMenuItemsVisible(true);
         }
       });
     } else {
       document.body.style.overflow = '';
       
-      // Hide the menu items first
       setMenuItemsVisible(false);
       
-      // Then hide the container after a small delay
       setTimeout(() => {
         if (mobileMenuRef.current) {
           gsap.to(mobileMenuRef.current, {
@@ -118,24 +112,70 @@ const Navbar = () => {
   }, [mobileOpen]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      let found = '';
-      // Only set active section when user has scrolled to a section
-      navItems.forEach(item => {
-        const section = document.querySelector(item.href);
-        if (section && window.scrollY >= section.offsetTop - 80) {
-          found = item.label;
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    observedElementsRef.current.clear();
+
+    const options = {
+      root: null,
+      rootMargin: "-80px 0px -40% 0px",
+      threshold: 0.1,
+    };
+
+    const handleIntersect = (entries) => {
+      let currentActiveSection = '';
+      let highestVisibleEntry = null;
+
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (!highestVisibleEntry || entry.boundingClientRect.top < highestVisibleEntry.boundingClientRect.top) {
+            highestVisibleEntry = entry;
+          }
         }
       });
-      setActiveSection(found);
+
+      if (highestVisibleEntry) {
+        currentActiveSection = observedElementsRef.current.get(highestVisibleEntry.target) || '';
+      }
+      
+      const bottomThreshold = document.body.offsetHeight - window.innerHeight - 150;
+      if (window.scrollY >= bottomThreshold) {
+          const contactSection = document.querySelector('#contact');
+          if (contactSection && observedElementsRef.current.has(contactSection)) {
+              const contactEntry = entries.find(entry => entry.target === contactSection);
+              if (contactEntry && contactEntry.isIntersecting) {
+                  currentActiveSection = 'Contact';
+              }
+          }
+      }
+      
+      if (window.scrollY < 100) {
+          currentActiveSection = '';
+      }
+
+      setActiveSection(currentActiveSection);
     };
-    window.addEventListener('scroll', handleScroll);
-    // Initial check to set active section if page loaded at a specific position
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    observerRef.current = new IntersectionObserver(handleIntersect, options);
+    const { current: observer } = observerRef;
+
+    navItems.forEach(item => {
+      const section = document.querySelector(item.href);
+      if (section) {
+        observer.observe(section);
+        observedElementsRef.current.set(section, item.label);
+      }
+    });
+
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+    };
   }, []);
 
-  // Handle escape key to close mobile menu
   useEffect(() => {
     const handleEscKey = (e) => {
       if (e.key === 'Escape' && mobileOpen) {
@@ -180,17 +220,13 @@ const Navbar = () => {
     };
     audioEl.addEventListener("error", handleError);
 
-    // Set up timeupdate event to store current position
     const handleTimeUpdate = () => {
-      // Only update state, don't save to localStorage
       setAudioPosition(audioEl.currentTime);
     };
     audioEl.addEventListener("timeupdate", handleTimeUpdate);
 
     if (isAudioPlaying) {
       try {
-        // Set the current time to the stored position before playing
-        // If audioPosition is 0 (initial state or after refresh), it starts from beginning
         audioEl.currentTime = audioPosition;
         audioEl.play().catch(e => {
           console.error("Failed to play audio:", e);
@@ -206,7 +242,6 @@ const Navbar = () => {
       }
     } else if (audioEl) {
       try {
-        // Store the current position in state before pausing
         setAudioPosition(audioEl.currentTime);
         audioEl.pause();
       } catch (e) {
@@ -219,7 +254,7 @@ const Navbar = () => {
         audioEl.removeEventListener("timeupdate", handleTimeUpdate);
       }
     };
-  }, [isAudioPlaying]); // Removed audioPosition dependency as it's handled internally
+  }, [isAudioPlaying]);
 
   return (
     <>
@@ -231,7 +266,6 @@ const Navbar = () => {
       >
         <header className='absolute top-1/2 w-full -translate-y-1/2'>
           <nav className='flex size-full items-center justify-between px-4 py-2'>
-            {/* Logo and Products Button */}
             <div className='flex items-center gap-4'>
               <img
                 src="/img/logo.png"
@@ -247,7 +281,6 @@ const Navbar = () => {
               />
             </div>
 
-            {/* Navigation Items - Right aligned with proper spacing */}
             <div className='hidden h-full items-center lg:flex ml-auto'>
               {navItems.map((item) => (
                 <a
@@ -271,7 +304,6 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* Audio Controls and Mobile Menu Button */}
             <div className="flex items-center gap-3 md:ml-6">
               <div className="relative group">
                 <button
@@ -315,7 +347,6 @@ const Navbar = () => {
                 </div>
               </div>
 
-              {/* Hamburger Menu Button - Now visible on lg screens and below */}
               <button
                 className={`lg:hidden p-2 rounded-full transition-all duration-300 ${
                   mobileOpen 
@@ -333,7 +364,6 @@ const Navbar = () => {
         </header>
       </div>
 
-      {/* Mobile Menu with improved animations - separate from navbar for better z-indexing */}
       <div 
         ref={mobileMenuRef}
         className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md overflow-y-auto"
@@ -344,7 +374,6 @@ const Navbar = () => {
         aria-modal="true"
         role="dialog"
       >
-        {/* Corner-positioned close button */}
         <button
           onClick={() => setMobileOpen(false)}
           className="absolute top-6 right-6 p-3 rounded-full bg-yellow-300/80 text-black hover:bg-yellow-300 shadow-lg transition-all duration-300 hover:scale-105 z-50"
@@ -353,12 +382,10 @@ const Navbar = () => {
           <FaTimes size={24} />
         </button>
         
-        {/* Menu items container */}
         <div 
           ref={menuItemsRef}
           className="flex min-h-[100dvh] w-full flex-col items-center justify-center px-6 py-16"
         >
-          {/* Only render items when menu is open to prevent animation issues */}
           {menuItemsVisible && navItems.map((item, index) => (
             <a
               key={item.label}
@@ -383,7 +410,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Inline CSS for animations */}
       <style jsx>{`
         @keyframes fadeInUp {
           from {
