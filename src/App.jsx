@@ -10,6 +10,7 @@ import ComingSoon from './components/ComingSoon';
 import Story from './components/Story';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import ContactPage from './components/ContactPage'; // Import the new ContactPage component
 
 // Register ScrollTrigger at the app level
 gsap.registerPlugin(ScrollTrigger);
@@ -36,6 +37,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/coming-soon" element={<ComingSoon />} />
+          <Route path="/contact-us" element={<ContactPage />} /> {/* Add route for ContactPage */}
         </Routes>
       </main>
     </Router>

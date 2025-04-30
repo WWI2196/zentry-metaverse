@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap'; // Import gsap
 import { ScrollTrigger } from 'gsap/ScrollTrigger'; // Import ScrollTrigger
 import { FaArrowRight } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const ImageClipBox = ({ src, clipClass }) => (
   <div className={clipClass}>
@@ -13,6 +14,7 @@ const ImageClipBox = ({ src, clipClass }) => (
 
 const Contact = () => {
   const swordmanRef = useRef(null);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   // Add animations for the swordman image
   useEffect(() => {
@@ -40,7 +42,7 @@ const Contact = () => {
   }, []); // Empty dependency array ensures this runs once on mount
 
   return (
-    <div id="contact" className="relative my-20 min-h-96 w-screen px-10">
+    <div className="relative my-20 min-h-96 w-screen px-10">
       {/* Swordman Image */}
       <div
         ref={swordmanRef}
@@ -48,11 +50,11 @@ const Contact = () => {
                  sm:top-[-8rem]
                  lg:-top-16 lg:right-32 lg:w-96
                  hover:drop-shadow-[0_0_30px_rgba(237,255,102,0.3)]"
-      >
+      > {/* Moved '>' to correct position */}
         {/* Glow effect that appears on hover */}
         <div className="absolute inset-0 rounded-full bg-yellow-300/0 blur-xl transition-opacity duration-500
                       opacity-0 lg:group-hover:opacity-30 pointer-events-none"></div>
-        
+
         <ImageClipBox
           src="/img/swordman-partial.webp"
           clipClass="absolute md:scale-125" // Keep partial image absolute within this container
@@ -88,9 +90,10 @@ const Contact = () => {
             className="special-font !md:text-[6.2rem] w-full font-zentry !text-3xl !font-black !leading-[.9]"
           />
 
-          {/* Button */}
+          {/* Button - Updated to navigate */}
           <Button
             title="contact us"
+            onClick={() => navigate('/contact-us')} // Add onClick handler to navigate
             containerClass="mt-10 cursor-pointer !bg-[#edff66] flex items-center justify-center gap-2 hover:!bg-[#edff66]/90 hover:text-black/90 text-black transition-all duration-300 group shadow-lg hover:shadow-[0_8px_20px_rgba(237,255,102,0.3)]"
             rightIcon={<FaArrowRight className="transition-transform duration-300 group-hover:translate-x-1"/>}
           />
