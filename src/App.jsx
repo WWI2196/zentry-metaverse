@@ -32,7 +32,7 @@ const HomePage = () => {
 
 const App = () => {
   return (
-    <Router>
+    <Router basename="/zentry-metaverse">
       <main className="relative min-h-screen w-screen overflow-x-hidden">
         <Routes>
           <Route path="/" element={<HomePage />} />
