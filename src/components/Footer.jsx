@@ -146,9 +146,8 @@ const Footer = () => {
                 />
               </div>
               <Button
-                title="Subscribe"
-                rightIcon={<FaArrowRight className="ml-2 text-xs" />}
-                containerClass="!bg-[#edff66] text-[#5542ff] hover:shadow-glow-sm self-start text-xs"
+                title={<span className="inline-flex items-center">Subscribe <FaArrowRight className="ml-2" size={12} /></span>}
+                containerClass="!bg-[#edff66] text-[#5542ff] hover:shadow-glow-sm self-start"
                 onClick={handleSubscribe}
               />
             </form>
