@@ -1,6 +1,6 @@
 # Zentry Metaverse Website
 
-This project is a modern, animated website showcasing the Zentry Metaverse platform, built with React and Vite. It features various sections including a hero area with video transitions, about, features (using a bento grid layout), story, and contact sections, along with GSAP animations and React Router for navigation.
+This project is a modern, animated website showcasing the [Zentry Metaverse](https://wwi2196.github.io/zentry-metaverse/) platform, built with React and Vite. It features various sections including a hero area with video transitions, about, features (using a bento grid layout), story, and contact sections, along with GSAP animations and React Router for navigation.
 
 ## Project Structure
 
