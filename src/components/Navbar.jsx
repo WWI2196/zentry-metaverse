@@ -243,7 +243,7 @@ const Navbar = () => {
                 id='product-button'
                 title='Products'
                 rightIcon={<TiLocationArrow className="transition-transform duration-300 group-hover:translate-x-1" />}
-                containerClass='bg-blue-50/90 lg:flex hidden items-center justify-center gap-1 hover:bg-yellow-300/80 hover:text-black/80 transition-colors duration-300'
+                containerClass='!bg-[#edff66] lg:flex hidden items-center justify-center gap-1 hover:!bg-[#edff66]/90 hover:text-black/90 transition-colors duration-300'
               />
             </div>
 

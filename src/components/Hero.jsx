@@ -298,7 +298,7 @@ const Hero = () => {
                             id='watch-trailer'
                             title='Watch Trailer'
                             rightIcon={<GiClick className="transition-transform duration-300 group-hover:translate-x-1" />}
-                            containerClass='!bg-yellow-300 flex items-center justify-center gap-1 hover:!bg-yellow-300/90 hover:text-black/90 text-black transition-colors duration-300'
+                            containerClass='!bg-[#edff66] flex items-center justify-center gap-1 hover:!bg-[#edff66]/90 hover:text-black/90 text-black transition-colors duration-300'
                         />
                     </div>
                 </div>
