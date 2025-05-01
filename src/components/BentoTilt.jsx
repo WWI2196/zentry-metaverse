@@ -1,7 +1,6 @@
 import React from 'react';
 import Tilt from 'react-parallax-tilt';
 
-// Reduce default tilt angles and glare intensity
 const BentoTilt = ({ children, className = '', tiltMaxAngleX = 5, tiltMaxAngleY = 5, ...props }) => {
   return (
     <Tilt
@@ -10,14 +9,14 @@ const BentoTilt = ({ children, className = '', tiltMaxAngleX = 5, tiltMaxAngleY 
       tiltMaxAngleY={tiltMaxAngleY}
       perspective={800}
       transitionSpeed={1500}
-      scale={1.02} // Matches the hover scale effect
+      scale={1.02}
       gyroscope={true}
       glareEnable={true}
-      glareMaxOpacity={0.15} // Reduced glare intensity
-      glareColor="rgba(255, 255, 255, 0.5)" // Made glare slightly transparent white
+      glareMaxOpacity={0.15} 
+      glareColor="rgba(255, 255, 255, 0.5)" 
       glarePosition="all"
-      glareBorderRadius="1.8rem" // Match the inner image rounding
-      {...props} // Pass any other props down to Tilt
+      glareBorderRadius="1.8rem" // Match inner image rounding
+      {...props} 
     >
       {children}
     </Tilt>

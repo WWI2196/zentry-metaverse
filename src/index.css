@@ -252,7 +252,6 @@ body {
   to { width: 100%; }
 }
 
-/* Added styles from Story.jsx */
 @keyframes shine-slow {
     0% { left: -75%; }
     100% { left: 150%; }
@@ -283,7 +282,7 @@ body {
 
 @keyframes width-expand {
     0% { width: 0; opacity: 0; }
-    100% { width: 16rem; opacity: 1; } /* Adjusted width from 4rem to 16rem based on Story.jsx */
+    100% { width: 16rem; opacity: 1; } 
 }
 
 .animate-shine-slow {
@@ -303,7 +302,7 @@ body {
     animation: pulse-slow 3s infinite;
 }
 
-.animate-blink { /* Added blink animation class */
+.animate-blink { /* blink animation class */
     animation: blink 1.5s infinite;
 }
 
@@ -312,7 +311,6 @@ body {
     animation-delay: 1s;
 }
 
-/* iOS-style effects */
 .ios-card {
     transform: translateZ(0);
     -webkit-font-smoothing: subpixel-antialiased;
@@ -345,10 +343,9 @@ body {
 
 .typewriter-text {
     overflow: hidden;
-    border-right: 0px solid transparent; /* Ensure no border is applied */
+    border-right: 0px solid transparent; 
     width: 100%;
     display: inline-block;
-    /* Removed animation properties as they might conflict if applied globally */
 }
 
 .delay-1000 {

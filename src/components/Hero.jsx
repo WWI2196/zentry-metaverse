@@ -25,7 +25,6 @@ const Hero = () => {
     const upcomingVideoIndex = (currentIndex % totalVideos) + 1;
     const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
 
-    // --- ADJUSTED Initial Styles ---
     const nextVideoInitialStyles = {
         top: '6rem',
         right: '1.5rem',
@@ -53,13 +52,13 @@ const Hero = () => {
                 start: 'top top',
                 end: 'bottom center',
                 scrub: true,
-                markers: false, // Set to true during development to see trigger points
+                markers: false, 
                 toggleActions: 'play none none reverse',
             },
         });
     }, []);
 
-    // Click handler that only triggers animation when user clicks
+    // only triggers animation when clicks
     const handleMiniVdClick = () => {
         if (isAnimating) return;
         setIsAnimating(true);
@@ -71,7 +70,6 @@ const Hero = () => {
         }
     })
 
-    // Initial setup - run once on mount
     useEffect(() => {
         if (previewContainerRef.current) {
             gsap.to(previewContainerRef.current, { 
@@ -96,7 +94,6 @@ const Hero = () => {
         }
     }, []);
 
-    // Animation timeline - ONLY runs when isAnimating is true (user clicked)
     useGSAP(() => {
         if (!isAnimating) return;
 
@@ -198,7 +195,6 @@ const Hero = () => {
 
     }, { dependencies: [isAnimating] });
 
-    // Update preview video source when currentIndex changes AND animation is NOT running
     useEffect(() => {
         if (!previewVideoRef.current || isAnimating) return; 
         
@@ -225,7 +221,6 @@ const Hero = () => {
         <div className='relative h-dvh w-screen overflow-x-hidden'>
             {!isLoaded && (
                 <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-violet-50">
-                    {/* https://uiverse.io/G4b413l/tidy-walrus-92 */}
                     <div className="three-body">
                         <div className="three-body__dot"></div>
                         <div className="three-body__dot"></div>
@@ -233,8 +228,7 @@ const Hero = () => {
                     </div>
                 </div>
             )}
-            
-            {/* Black text that will be visible when outside the polygon clip-path */}
+
             <h1 className='special-font hero-heading absolute bottom-5 right-5 z-5 text-black'>
                 <b>Gaming</b>
             </h1>
@@ -248,7 +242,6 @@ const Hero = () => {
                     className='absolute left-0 top-0 z-0 size-full object-cover object-center'
                 />
 
-                {/* --- ADJUSTED Preview Video Container --- */}
                 <div
                     ref={previewContainerRef}
                     onClick={handleMiniVdClick}
@@ -259,20 +252,19 @@ const Hero = () => {
                                shadow-lg transition-all duration-300 ease-out hover:shadow-xl hover:bg-black/50
                                hover:ring-2 hover:ring-yellow-300 hover:ring-opacity-80'
                 >
-                    {/* Preview Video Element */}
+
                     <video
                         ref={previewVideoRef}
                         playsInline
                         className='absolute inset-0 size-full origin-center rounded-full object-cover object-center 
                                  transition-transform duration-300 ease-out group-hover:scale-105'
                     />
-                    {/* --- ADJUSTED Play Icon Overlay --- */}
+
                     <div className='absolute z-10 text-white/90 transition-opacity duration-300'>
                         <FaPlayCircle size={30} className='drop-shadow-md' /> 
                     </div>
                 </div>
 
-                {/* Hidden Video Element for Transition Animation */}
                 <video 
                     ref={nextVideoRef}
                     loop muted playsInline
@@ -280,7 +272,7 @@ const Hero = () => {
                     style={nextVideoInitialStyles}
                 />
 
-                {/* Text & Button Overlays */}
+
                 <h1 className='special-font hero-heading absolute bottom-5 right-5 z-40 text-white'>
                     <b>Gaming</b>
                 </h1>
@@ -304,7 +296,6 @@ const Hero = () => {
                 </div>
             </div>
             
-            {/* Black "redefine" text that will be visible when outside the polygon clip-path */}
             <div className='absolute left-0 top-0 z-5 size-full pointer-events-none'>
                 <div className='mt-24 px-5 sm:px-10'>
                     <h1 className='special-font hero-heading text-black'>

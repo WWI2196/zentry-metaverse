@@ -1,13 +1,12 @@
 import React from 'react';
-import BentoCard from './BentoCard'; // Import BentoCard
-import BentoTilt from './BentoTilt'; // Import BentoTilt
+import BentoCard from './BentoCard'; 
+import BentoTilt from './BentoTilt'; 
 import { TiLocationArrow } from "react-icons/ti";
 import { useNavigate } from 'react-router-dom';
 
 const Features = () => {
   const navigate = useNavigate();
   
-  // Navigation function to Coming Soon page with state to prevent double loading
   const handleNavigateToComingSoon = () => {
     navigate('/coming-soon', { state: { from: 'features' } });
   };
@@ -24,13 +23,12 @@ const Features = () => {
                     Immerse yourself in a world of endless possibilities with our cutting-edge metaverse platform. Experience the future of virtual reality, where you can connect, create, and explore like never before. Join us on this exciting journey and unlock the full potential of the metaverse.
                 </p>
             </div>
-        
-            {/* Add margin bottom mb-10 */}
+
             <BentoTilt 
                 className='border-modern relative mb-10 mx-3 md:mx-6 h-96 w-auto overflow-hidden rounded-2xl md:h-[65vh] backdrop-blur-sm shadow-glow bento-card-container transition-transform duration-300'
-                glareEnable={true} // Disable glare for this card
-                tiltMaxAngleX={2}   // Reduce tilt angle further
-                tiltMaxAngleY={2}   // Reduce tilt angle further
+                glareEnable={true} //  glare 
+                tiltMaxAngleX={2}   // tilt angle X
+                tiltMaxAngleY={2}   // tilt angle Y
             >
                 <BentoCard
                 src='videos/feature-1.mp4'
@@ -39,10 +37,8 @@ const Features = () => {
                 isComingSoon={true}/>
             </BentoTilt>
 
-            {/* Increase gap to gap-10 */}
             <div className='grid grid-cols-1 md:grid-cols-2 gap-10 px-3 md:px-6'>
-                {/* First row */}
-                {/* Zigma card - left side, full height */}
+                {/* Zigma card  */}
                 <BentoTilt className='border-modern relative overflow-hidden rounded-2xl backdrop-blur-sm shadow-glow bento-card-container h-120 md:h-[52rem] transition-transform duration-300'>
                     <BentoCard
                     src='videos/feature-2.mp4'
@@ -50,8 +46,6 @@ const Features = () => {
                     description='An anime and gaming-inspired NFT collection - the IP primed for expansion.'/>
                 </BentoTilt>
 
-                {/* Right column with Nexus and Azul stacked */}
-                {/* Increase gap to gap-10 */}
                 <div className='flex flex-col gap-10'>
                     {/* Nexus card */}
                     <BentoTilt className='border-modern relative overflow-hidden rounded-2xl backdrop-blur-sm shadow-glow bento-card-container h-100 transition-transform duration-300'>
@@ -71,10 +65,8 @@ const Features = () => {
                 </div>
             </div>
 
-            {/* Second row in a separate grid */}
-            {/* Increase gap to gap-10 and margin top mt-10 */}
             <div className='grid grid-cols-1 md:grid-cols-2 gap-10 px-3 md:px-6 mt-10'>
-                {/* More coming soon - on right */}
+                {/* More coming soon card */}
                 <BentoTilt className='transition-transform duration-300 h-64 md:h-80 rounded-2xl overflow-hidden'>
                     <div className='flex size-full flex-col justify-between bg-violet-300 p-5'>
                         <h1 className="bento-title special-font max-w-64 text-black">
@@ -94,7 +86,7 @@ const Features = () => {
                         </div>
                     </div>
                 </BentoTilt>
-                {/* Video card - on left */}
+                {/* Video card */}
                 <BentoTilt className='transition-transform duration-300 h-64 md:h-80 rounded-2xl overflow-hidden'>
                     <video
                         src="videos/feature-5.mp4"

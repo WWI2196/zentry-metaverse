@@ -25,8 +25,8 @@ const About = () => {
             scrollTrigger: {
                 trigger: '#clip',
                 start: 'top center', // Start animation when top of section reaches bottom of viewport
-                end: '+=800 center', // Changed: animation completes later in the scroll
-                scrub: 0.5, // Increased: creates smoother, more gradual animation
+                end: '+=800 center', 
+                scrub: 0.5, 
                 pin: false, // Don't pin during initial animation
                 pinSpacing: true,
             },
@@ -37,7 +37,7 @@ const About = () => {
             width: '100vw',
             height: '100vh',
             borderRadius: 0,
-            ease: 'power2.inout' // Changed: less aggressive easing function
+            ease: 'power2.inout' 
         });
         
         // Add pinning after the image is expanded
@@ -85,7 +85,7 @@ const About = () => {
             <div className='relative h-dvh w-screen' id='clip'>
                 <div className='mask-clip-path about-image'>
                     <img 
-                        src={aboutImageSrc} // Use the imported image source
+                        src={aboutImageSrc} 
                         alt="Background"
                         className='absolute left-0 top-0 size-full object-cover' 
                     />

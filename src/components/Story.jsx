@@ -6,7 +6,7 @@ import BentoTilt from './BentoTilt';
 import Button from './Button';
 import { FaArrowRight, FaCompass } from "react-icons/fa";
 import { BsShieldCheck, BsStars, BsInfinity } from "react-icons/bs"; 
-import entranceImageSrc from '/img/entrance.webp'; // Import the image
+import entranceImageSrc from '/img/entrance.webp'; 
 
 const Story = () => {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -20,7 +20,7 @@ const Story = () => {
     const buttonIconRef = useRef(null);
 
     useEffect(() => {
-        // Add a small delay for image load/animation timing
+        //delay for image load
         const timer = setTimeout(() => {
             setIsLoaded(true);
         }, 300);
@@ -30,10 +30,8 @@ const Story = () => {
         };
     }, []);
 
-    // Initialize GSAP animations for content elements when loaded
     useEffect(() => {
         if (isLoaded && contentRef.current) {
-            // Create staggered entrance animation for cards
             gsap.fromTo(
                 [leftCardRef.current, rightCardRef.current],
                 { 
@@ -50,13 +48,11 @@ const Story = () => {
                 }
             );
             
-            // Animate heading elements with split text effect
             const headingElements = document.querySelectorAll('.animated-heading');
             headingElements.forEach(heading => {
                 const text = heading.textContent;
                 heading.textContent = '';
                 
-                // Create spans for each character
                 [...text].forEach((char, i) => {
                     const span = document.createElement('span');
                     span.textContent = char;
@@ -65,29 +61,26 @@ const Story = () => {
                     span.style.transform = 'translateY(20px) rotateX(45deg)';
                     span.style.transformOrigin = 'center bottom';
                     heading.appendChild(span);
-                    
-                    // Animate each character
+
                     gsap.to(span, {
                         y: 0,
                         opacity: 1,
                         rotateX: 0,
                         duration: 0.5,
                         delay: 0.8 + (i * 0.03),
-                        ease: "back.out(1.7)" // iOS-like springy animation
+                        ease: "back.out(1.7)"
                     });
                 });
             });
-            
-            // Initialize floating particles
+
             initParticles();
             
-            // Create hover effect for feature cards - OPTIMIZED FOR FASTER RESPONSE
+            // hover effect 
             featuresRef.current.forEach((card, i) => {
                 const iconWrapper = card.querySelector('.feature-icon-wrapper');
                 const icon = card.querySelector('.feature-icon');
                 const cardTitle = card.querySelector('.feature-title');
 
-                // Initial subtle animation to make cards feel alive
                 gsap.to(card, {
                     y: -2,
                     duration: 2,
@@ -99,35 +92,35 @@ const Story = () => {
 
                 card.addEventListener('mouseenter', () => {
                     gsap.to(card, {
-                        y: -6, // Slightly more lift
-                        scale: 1.02, // Subtle scale
-                        boxShadow: '0 18px 35px rgba(237, 255, 102, 0.25)', // Enhanced shadow
-                        backgroundColor: 'rgba(255, 255, 255, 0.1)', // Brighter background
-                        duration: 0.2, // REDUCED for faster response
-                        ease: 'back.out(2)' // More spring
+                        y: -6, 
+                        scale: 1.02, 
+                        boxShadow: '0 18px 35px rgba(237, 255, 102, 0.25)', 
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)', 
+                        duration: 0.2, 
+                        ease: 'back.out(2)' 
                     });
                     if (iconWrapper) {
                         gsap.to(iconWrapper, {
-                            scale: 1.15, // Icon scales up
-                            rotate: -5, // Slight rotation
+                            scale: 1.15,
+                            rotate: -5, 
                             boxShadow: '0 6px 15px rgba(237, 255, 102, 0.2)',
-                            duration: 0.15, // REDUCED for faster response
+                            duration: 0.15, 
                             ease: 'back.out(2)'
                         });
                     }
-                     if (icon) { // Animate the icon itself
+                     if (icon) { 
                         gsap.to(icon, {
                             scale: 1.1,
                             rotate: 10,
-                            duration: 0.15, // REDUCED for faster response
+                            duration: 0.15, 
                             ease: 'power2.out'
                         });
                     }
                     if (cardTitle) {
                         gsap.to(cardTitle, {
                             scale: 1.05,
-                            color: '#f0ff8f', // Brighter yellow
-                            duration: 0.15, // REDUCED for faster response
+                            color: '#f0ff8f', 
+                            duration: 0.15, 
                             ease: 'power2.out'
                         });
                     }
@@ -135,11 +128,11 @@ const Story = () => {
 
                 card.addEventListener('mouseleave', () => {
                     gsap.to(card, {
-                        y: -2, // Match the baseline animation
+                        y: -2,
                         scale: 1,
-                        boxShadow: '0 8px 20px rgba(0, 0, 0, 0.12)', // Adjusted base shadow
+                        boxShadow: '0 8px 20px rgba(0, 0, 0, 0.12)', 
                         backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                        duration: 0.2, // REDUCED for faster response
+                        duration: 0.2, 
                         ease: 'back.out(1.5)'
                     });
                      if (iconWrapper) {
@@ -147,7 +140,7 @@ const Story = () => {
                             scale: 1,
                             rotate: 0,
                             boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-                            duration: 0.15, // REDUCED for faster response
+                            duration: 0.15,
                             ease: 'back.out(1.5)'
                         });
                     }
@@ -155,22 +148,21 @@ const Story = () => {
                         gsap.to(icon, {
                             scale: 1,
                             rotate: 0,
-                            duration: 0.15, // REDUCED for faster response
+                            duration: 0.15, 
                             ease: 'power2.out'
                         });
                     }
                     if (cardTitle) {
                         gsap.to(cardTitle, {
                             scale: 1,
-                            color: '#edff66', // Original yellow
-                            duration: 0.15, // REDUCED for faster response
+                            color: '#edff66', 
+                            duration: 0.15, 
                             ease: 'power2.out'
                         });
                     }
                 });
             });
             
-            // Animate the gradient divider
             gsap.fromTo(
                 ".gradient-divider",
                 { 
@@ -185,8 +177,7 @@ const Story = () => {
                     ease: "power2.inOut"
                 }
             );
-            
-            // Animate the glow orbs with continuous motion
+
             gsap.to('.glow-orb-1', {
                 x: '10%',
                 y: '15%',
@@ -206,10 +197,8 @@ const Story = () => {
                 delay: 0.5
             });
             
-            // Start the background animation
             animateCardBackground();
             
-            // Animate counter numbers (iOS style)
             document.querySelectorAll('.counter').forEach(counter => {
                 const target = parseInt(counter.getAttribute('data-count'));
                 gsap.fromTo(
@@ -228,10 +217,9 @@ const Story = () => {
                 );
             });
             
-            // Add automatic continuous glare animations to Exclusive Universe tag - IMPROVED
             const exclusiveUniverseTag = document.querySelector('.ios-tag.exclusive-universe');
             if (exclusiveUniverseTag) {
-                // Create a modern traversing shine effect that covers the entire tag
+
                 gsap.to(exclusiveUniverseTag.querySelector('.auto-shine'), {
                     x: '300%', 
                     duration: 3,
@@ -241,7 +229,6 @@ const Story = () => {
                     delay: 1
                 });
                 
-                // Add subtle pulsing effect for modern look
                 gsap.to(exclusiveUniverseTag, {
                     boxShadow: '0 2px 15px rgba(120,80,220,0.4)',
                     duration: 2,
@@ -251,17 +238,14 @@ const Story = () => {
                 });
             }
             
-            // IMPROVED: Character-by-character glare effect for "converge" word
             const convergeWordElement = document.querySelector('.converge-word');
             if (convergeWordElement) {
-                // Set up the glare effect on each character
                 const chars = convergeWordElement.querySelectorAll('.converge-char');
                 
-                // Create a staggered character animation instead of a single background
                 gsap.to(chars, {
                     backgroundPosition: '200% center',
                     stagger: {
-                        each: 0.2, // Staggered timing for each character
+                        each: 0.2,
                         repeat: -1,
                         repeatDelay: 3
                     },
@@ -273,36 +257,29 @@ const Story = () => {
         }
     }, [isLoaded]);
     
-    // Initialize floating particles for the card background
     const initParticles = () => {
         if (!leftCardRef.current) return;
         
         const particlesContainer = document.querySelector('.particles-container');
         if (!particlesContainer) return;
-        
-        // Clear any existing particles
+
         particlesContainer.innerHTML = '';
         
-        // Create particles
         for (let i = 0; i < 20; i++) {
             const particle = document.createElement('div');
             particle.className = 'absolute rounded-full bg-white/20 pointer-events-none';
             
-            // Random size
             const size = Math.random() * 4 + 2;
             particle.style.width = `${size}px`;
             particle.style.height = `${size}px`;
-            
-            // Random initial position
+
             const x = Math.random() * 100;
             const y = Math.random() * 100;
             particle.style.left = `${x}%`;
             particle.style.top = `${y}%`;
             
-            // Append to container
             particlesContainer.appendChild(particle);
             
-            // Animate each particle
             gsap.to(particle, {
                 x: (Math.random() - 0.5) * 50,
                 y: (Math.random() - 0.5) * 50,
@@ -316,7 +293,6 @@ const Story = () => {
         }
     };
     
-    // Animate the background pattern
     const animateCardBackground = () => {
         if (!leftCardRef.current) return;
         
@@ -331,7 +307,6 @@ const Story = () => {
         });
     };
 
-    // Set up button animation hooks - ADJUSTED HOVER EFFECT
     useEffect(() => {
         if (!buttonWrapperRef.current) return;
 
@@ -431,22 +406,20 @@ const Story = () => {
         });
     };
 
-    // iOS-style click effect with haptic-like timing
     const handleDiscoverClick = () => {
-        // Click animation effect with iOS-like spring timing
         if (buttonIconRef.current) {
             gsap.timeline()
                 .to(buttonIconRef.current, {
                     x: 5, 
                     scale: 0.8,
-                    duration: 0.08, // Faster for haptic feel
+                    duration: 0.08, 
                     ease: "power2.in"
                 })
                 .to(buttonIconRef.current, {
                     x: 15,
                     scale: 1.2, 
                     duration: 0.3,
-                    ease: "elastic.out(1.2, 0.5)" // iOS elastic spring
+                    ease: "elastic.out(1.2, 0.5)" 
                 })
                 .to(buttonIconRef.current, {
                     x: 5,
@@ -461,13 +434,13 @@ const Story = () => {
             gsap.timeline()
                 .to(buttonWrapperRef.current, {
                     scale: 0.97,
-                    duration: 0.08, // Very quick for haptic feel
+                    duration: 0.08, 
                     ease: "power2.in"
                 })
                 .to(buttonWrapperRef.current, {
                     scale: 1.03,
                     duration: 0.2,
-                    ease: "elastic.out(1, 0.3)" // iOS elastic spring
+                    ease: "elastic.out(1, 0.3)" 
                 })
                 .to(buttonWrapperRef.current, {
                     scale: 1,
@@ -477,7 +450,6 @@ const Story = () => {
         }
         
         console.log("Navigate to prologue page (from Story component)...");
-        // Later: window.location.href = '/prologue'; or use react-router navigate
     };
 
     return (
@@ -496,7 +468,6 @@ const Story = () => {
                         style={{ animationDelay: '0.4s' }}
                     />
 
-                    {/* Main image container with new positioning */}
                     <div 
                         ref={containerRef}
                         className={`story-img-container transition-opacity duration-1000 ease-out ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
@@ -541,7 +512,7 @@ const Story = () => {
                 >
                     <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 lg:gap-12">
                         
-                        {/* Left content card - ZENTRY WORLD - iOS REDESIGN */}
+                        {/* Left content card - ZENTRY WORLD*/}
                         <div 
                             ref={leftCardRef}
                             className="md:col-span-6 lg:col-span-6 xl:col-span-7"
@@ -551,33 +522,27 @@ const Story = () => {
                                 hover:shadow-[0_10px_40px_rgb(76,29,149,0.15)] transition-all duration-500
                                 border border-white/5 perspective-1000">
                                 
-                                {/* iOS-style corner radius highlight */}
                                 <div className="absolute inset-0 border border-white/10 rounded-3xl opacity-30 pointer-events-none"></div>
                                 
-                                {/* iOS-style top edge highlight */}
                                 <div className="absolute inset-x-4 top-0 h-[1px] bg-white/20"></div>
-                                
-                                {/* Corner ambient glows with animation - ENLARGED for more modern look */}
+
                                 <div className="glow-orb-1 absolute -top-40 -right-40 w-96 h-96 bg-blue-500/20 blur-3xl rounded-full opacity-60"></div>
                                 <div className="glow-orb-2 absolute -bottom-40 -left-40 w-96 h-96 bg-purple-500/20 blur-3xl rounded-full opacity-60"></div>
-                                
-                                {/* Animated background pattern */}
+
                                 <div className="background-pattern absolute inset-0 opacity-5 mix-blend-overlay pointer-events-none"
                                      style={{
                                         backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM36 4V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
                                         backgroundSize: '200px 200px'
                                      }}></div>
-                                
-                                {/* Floating particles container */}
+
                                 <div className="particles-container absolute inset-0 overflow-hidden pointer-events-none"></div>
-                                
-                                {/* iOS-style subtle edge glow effect */}
+
                                 <div className="absolute inset-0 rounded-3xl opacity-50 pointer-events-none"
                                      style={{
                                          boxShadow: 'inset 0 0 40px rgba(120, 80, 220, 0.3)'
                                      }}></div>
                                 
-                                {/* Section header with iOS-style SF Pro like design - ENLARGED with more spacing */}
+                               
                                 <div className="flex items-center justify-between mb-12 relative z-10">
                                     <div className="relative">
                                         <h2 className="animated-heading text-3xl md:text-4xl lg:text-5xl font-black font-zentry text-white
@@ -588,7 +553,6 @@ const Story = () => {
                                                     animate-width-expand"></div>
                                     </div>
                                     
-                                    {/* ENHANCED: iOS SF Symbols style tag - MODERNIZED AUTO GLARE EFFECT */}
                                     <div className="ios-tag exclusive-universe inline-flex px-4 py-2 bg-gradient-to-r from-indigo-600/90 to-purple-600/90
                                         rounded-full text-xs font-bold text-white uppercase tracking-wider
                                         shadow-[0_2px_10px_rgba(120,80,220,0.3)] backdrop-blur-sm
@@ -600,16 +564,13 @@ const Story = () => {
                                             <span>Exclusive Universe</span>
                                         </span>
 
-                                        {/* ENHANCED: Modern shine effect that moves across the entire tag */}
                                         <div className="auto-shine absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/50 to-transparent
                                                     pointer-events-none"></div>
                                         
-                                        {/* Enhanced ambient glow that pulses */}
                                         <div className="absolute inset-0 rounded-full bg-indigo-400/10 opacity-0 animate-pulse-slow"></div>
                                     </div>
                                 </div>
                                 
-                                {/* ENHANCED: iOS-style messaging - LARGER with more space */}
                                 <div className="ios-message perspective-1000 my-8 relative z-10">
                                     <p className="text-xl md:text-2xl leading-relaxed text-white/90 transform transition-all duration-300
                                                 group-hover:scale-[1.02] group-hover:text-white">
@@ -620,54 +581,52 @@ const Story = () => {
                                     </p>
                                 </div>
                                 
-                                {/* iOS-style feature cards - OPTIMIZED RESPONSIVENESS with increased spacing */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 relative z-10">
-                                    {/* Feature 1: Ancient Secrets */}
                                     <div
                                         ref={el => featuresRef.current[0] = el}
                                         className="ios-feature-card bg-white/5 rounded-2xl p-5 backdrop-blur-sm transform transition-all duration-200
                                                  border border-white/5 hover:border-white/10 shadow-lg relative overflow-hidden"
                                     >
-                                        <div className="flex items-start mb-3"> {/* Changed to items-start */}
+                                        <div className="flex items-start mb-3"> 
                                             <div className="feature-icon-wrapper mr-4 flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-300/30 to-amber-500/20 flex items-center justify-center
                                                         shadow-md transition-all duration-500 group-hover:scale-110 group-hover:shadow-yellow-300/20"> {/* Adjusted shadow */}
                                                 <BsStars className="feature-icon text-yellow-300 text-xl transition-transform duration-300" /> {/* Modern Icon */}
                                             </div>
-                                            <div> {/* Added div wrapper for text */}
+                                            <div> 
                                                 <h3 className="feature-title text-lg font-medium text-yellow-300 mb-1">Ancient Secrets</h3> {/* Added mb-1 */}
                                                 <p className="text-white/80 text-sm">Uncover hidden knowledge and forgotten technologies across the boundless pillar.</p> {/* Adjusted text size */}
                                             </div>
                                         </div>
-                                        {/* iOS-style corner decoration */}
+                                        
                                         <div className="absolute -bottom-1 -right-1 w-10 h-10 opacity-20 group-hover:opacity-40 transition-opacity">
                                             <div className="absolute bottom-0 right-0 w-4 h-4 border-r border-b border-yellow-300/50 rounded-br group-hover:border-yellow-300/80 transition-colors"></div>
                                         </div>
                                     </div>
 
-                                    {/* Feature 2: Infinite Realms */}
+                                    
                                     <div
                                         ref={el => featuresRef.current[1] = el}
                                         className="ios-feature-card bg-white/5 rounded-2xl p-5 backdrop-blur-sm transform transition-all duration-200
                                                  border border-white/5 hover:border-white/10 shadow-lg relative overflow-hidden"
                                     >
-                                        <div className="flex items-start mb-3"> {/* Changed to items-start */}
+                                        <div className="flex items-start mb-3"> 
                                              <div className="feature-icon-wrapper mr-4 flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-300/30 to-amber-500/20 flex items-center justify-center
                                                         shadow-md transition-all duration-500 group-hover:scale-110 group-hover:shadow-yellow-300/20"> {/* Adjusted shadow */}
                                                 <BsInfinity className="feature-icon text-yellow-300 text-xl transition-transform duration-300" /> {/* Modern Icon */}
                                             </div>
-                                             <div> {/* Added div wrapper for text */}
+                                             <div> 
                                                 <h3 className="feature-title text-lg font-medium text-yellow-300 mb-1">Infinite Realms</h3> {/* Added mb-1 */}
                                                 <p className="text-white/80 text-sm">Shape your destiny across countless dimensions, each with unique rules and opportunities.</p> {/* Adjusted text size */}
                                             </div>
                                         </div>
-                                        {/* iOS-style corner decoration */}
+                                        
                                         <div className="absolute -bottom-1 -right-1 w-10 h-10 opacity-20 group-hover:opacity-40 transition-opacity">
                                             <div className="absolute bottom-0 right-0 w-4 h-4 border-r border-b border-yellow-300/50 rounded-br group-hover:border-yellow-300/80 transition-colors"></div>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                {/* iOS-style stats counter section - ADDED HOVER CLASSES */}
+                            
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6 relative z-10">
                                     <div className="ios-stat-card p-3 bg-white/5 rounded-xl backdrop-blur-sm transition-all duration-300 group/stat"> {/* Added group/stat */}
                                         <p className="text-white/60 text-xs uppercase tracking-wider font-medium mb-1">Worlds</p> {/* Added mb-1 */}
@@ -700,10 +659,10 @@ const Story = () => {
                                     </div>
                                 </div>
                                 
-                                {/* iOS SF Pro style divider with GSAP animation */}
+                            
                                 <div className="h-px w-full mb-6 bg-gradient-to-r from-transparent via-white/20 to-transparent gradient-divider relative z-10"></div>
                                 
-                                {/* iOS SF Pro style status indicator */}
+                             
                                 <div className="ios-status flex items-center gap-3 relative z-10">
                                     <div className="flex items-center gap-2">
                                         <div className="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></div>
@@ -715,7 +674,7 @@ const Story = () => {
                             </div>
                         </div>
                         
-                        {/* Right content card - BEGIN YOUR ADVENTURE - iOS REDESIGN */}
+                        
                         <div 
                             ref={rightCardRef}
                             className="md:col-span-6 lg:col-span-6 xl:col-span-5 md:self-start"
@@ -725,28 +684,28 @@ const Story = () => {
                                 hover:shadow-[0_10px_40px_rgb(237,255,102,0.15)] transition-all duration-500
                                 border border-white/5 transform perspective-1000">
                                 
-                                {/* iOS-style corner radius highlight */}
+                              
                                 <div className="absolute inset-0 border border-white/10 rounded-3xl opacity-30 pointer-events-none"></div>
                                 
-                                {/* iOS-style top edge highlight */}
+                               
                                 <div className="absolute inset-x-4 top-0 h-[1px] bg-white/20"></div>
                                 
-                                {/* iOS-style glass morphism background patterns - ENLARGED for more modern look */}
+                                
                                 <div className="absolute inset-0 overflow-hidden">
-                                    {/* Abstract decorative elements - SF Pro inspired */}
+                                    
                                     <div className="absolute top-[30%] right-[10%] w-48 h-48 rotate-45 bg-gradient-to-br from-indigo-500/5 to-transparent rounded-2xl"></div>
                                     <div className="absolute bottom-[20%] left-[20%] w-60 h-60 rotate-12 border border-white/5 rounded-full"></div>
                                     
-                                    {/* iOS-style gradient background */}
+                                    
                                     <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 via-black/0 to-purple-900/10 opacity-100
                                                 group-hover:opacity-80 transition-opacity duration-1000 ease-out"></div>
                                 </div>
                                 
-                                {/* iOS-style ambient light - ENLARGED */}
+                                
                                 <div className="absolute -top-40 -right-40 w-80 h-80 bg-yellow-300/10 blur-3xl rounded-full opacity-60
                                     group-hover:opacity-90 group-hover:w-96 group-hover:h-96 transition-all duration-700"></div>
                                 
-                                {/* iOS-style header with SF Pro like typography - IMPROVED SPACING */}
+                                
                                 <div className="flex items-center justify-between mb-10">
                                     <div className="flex items-center">
                                         <div className="mr-4 w-12 h-12 rounded-xl bg-gradient-to-tr from-yellow-300/30 to-amber-500/20 flex items-center justify-center
@@ -759,7 +718,7 @@ const Story = () => {
                                         </div>
                                     </div>
                                     
-                                    {/* iOS SF Symbols style badge */}
+                                    
                                     <div className="ios-badge px-3 py-1.5 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 backdrop-blur-sm
                                                   rounded-full border border-white/10 transform transition-transform duration-300 
                                                   hover:scale-105 hover:border-white/20">
@@ -767,15 +726,15 @@ const Story = () => {
                                     </div>
                                 </div>
                                 
-                                {/* iOS Message style glass panel - IMPROVED SPACING */}
+                              
                                 <div className="ios-message-bubble relative mb-10 bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-5 md:p-6
                                               border-l-2 border-yellow-300/50 backdrop-blur-sm">
-                                    {/* iOS-style message corner */}
+                                    
                                     <div className="absolute -top-1.5 -right-1.5 w-6 h-6">
                                         <div className="absolute top-0 right-0 w-3 h-6 border-t-2 border-r-2 border-yellow-300/30 rounded-tr-lg"></div>
                                     </div>
                                     
-                                    {/* iOS-style message content - LARGER TEXT */}
+                                    
                                     <div className="flex">
                                         <div className="mt-1 mr-4 min-w-[0.25rem] h-20 bg-gradient-to-b from-yellow-300/70 via-yellow-200/40 to-yellow-300/10 rounded-full"></div>
                                         <div>
@@ -788,16 +747,16 @@ const Story = () => {
                                         </div>
                                     </div>
                                     
-                                    {/* iOS-style cursor */}
+                                    
                                     <div className="h-5 w-[2px] bg-yellow-300 absolute right-6 bottom-5 animate-blink"></div>
                                     
-                                    {/* iOS-style message corner */}
+                                   
                                     <div className="absolute -bottom-1.5 -left-1.5 w-6 h-6">
                                         <div className="absolute bottom-0 left-0 w-6 h-3 border-l-2 border-b-2 border-yellow-300/30 rounded-bl-lg"></div>
                                     </div>
                                 </div>
                                 
-                                {/* iOS-style access level with SF Pro styling - IMPROVED SPACING */}
+                                
                                 <div className="ios-access-level flex items-center justify-between mb-10">
                                     <div className="flex items-center gap-3">
                                         <div className="flex items-center gap-1.5">
@@ -816,7 +775,7 @@ const Story = () => {
                                     </div>
                                 </div>
                                 
-                                {/* iOS-style button wrapper with enhanced haptic-feeling animations - IMPROVED SIZE */}
+                                
                                 <div 
                                     ref={buttonWrapperRef} 
                                     className="ios-button relative rounded-full overflow-hidden shadow-md mb-6"
@@ -825,31 +784,31 @@ const Story = () => {
                                         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)"
                                     }}
                                 >
-                                    {/* iOS-style button highlight */}
+                                   
                                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500
                                                  bg-gradient-to-r from-yellow-200/30 via-transparent to-yellow-100/30 
                                                  blur-md"></div>
                                                  
-                                    {/* iOS SF Symbols animation - pulse ring */}
+                                    
                                     <div className="absolute inset-0 rounded-full border-2 border-yellow-300/30 
                                                   scale-[1.15] opacity-0 group-hover:opacity-100 group-hover:scale-[1.25]
                                                   transition-all duration-1000 ease-out"></div>
 
-                                    {/* iOS-style gradient overlay */}
+                                    
                                     <div className="button-gradient-overlay absolute inset-0 bg-gradient-to-r from-yellow-300/80 via-yellow-100/90 to-yellow-300/80
                                          opacity-0 transition-opacity duration-300 pointer-events-none"></div>
 
-                                    {/* iOS-style inner button highlight */}
+                                    
                                     <div className="absolute inset-x-0 top-0 h-[1px] bg-white/30"></div>
                                     
-                                    {/* Button with improved contrast for visibility - LARGER PADDING */}
+                                   
                                     <Button
                                         id="prologue-btn"
                                         title="discover prologue"
                                         rightIcon={
                                             <span ref={buttonIconRef} className="relative flex items-center justify-center">
                                                 <FaArrowRight size={20} className="text-black z-20" />
-                                                {/* iOS-style icon highlight */}
+                                               
                                                 <span className="absolute w-8 h-8 bg-white/20 rounded-full -z-10 
                                                                scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100
                                                                transition-all duration-300 ease-out"></span>
@@ -860,20 +819,20 @@ const Story = () => {
                                         onClick={handleDiscoverClick}
                                     />
                                     
-                                    {/* iOS-style indicator dot */}
+                                   
                                     <div className="absolute right-7 top-1/2 w-2 h-2 rounded-full bg-black/70 
                                                    transform -translate-y-1/2 animate-ping-slow"></div>
                                 </div>
                                 
-                                {/* iOS-style slide-up messaging container - IMPROVED */}
+                                
                                 <div className="ios-slide-container relative overflow-hidden h-8 rounded-full bg-white/5 px-4 py-1.5 backdrop-blur-sm">
-                                    {/* First message */}
+                                   
                                     <p className="text-white/60 text-sm text-center absolute inset-0 flex items-center justify-center transform
                                                transition-transform duration-500 translate-y-0 group-hover:-translate-y-8">
                                         Experience the full story in the prologue chapter
                                     </p>
                                     
-                                    {/* Second message that appears on hover */}
+                                 
                                     <p className="text-white/80 text-sm text-center absolute inset-0 flex items-center justify-center transform
                                                transition-transform duration-500 translate-y-8 group-hover:translate-y-0">
                                         <span className="text-yellow-300 font-medium mr-1">New:</span> Interactive journeys available

@@ -8,17 +8,17 @@ const RoundedCorners = () => {
       version="1.1"
     >
       <defs>
-        {/* Modern blur effect with softer edges */}
+        {/* blur effect and softer edges */}
         <filter id="FLT_TAG" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur
             in="SourceGraphic"
-            stdDeviation="12"  // Increased blur
+            stdDeviation="12"  // blur adjustment
             result="blur"
           />
           <feColorMatrix
             in="blur"
             mode="matrix"
-            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -8" // Adjusted alpha contrast
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -8" // alpha contrast
             result="flt_tag"
           />
           <feComposite
@@ -28,7 +28,7 @@ const RoundedCorners = () => {
           />
         </filter>
         
-        {/* Additional modern glow effect */}
+        {/* glow effect */}
         <filter id="modern-glow" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="15" result="blur" />
           <feFlood floodColor="rgba(70, 100, 255, 0.3)" result="color"/>
@@ -36,7 +36,7 @@ const RoundedCorners = () => {
           <feComposite in="SourceGraphic" in2="glow" operator="over"/>
         </filter>
         
-        {/* Soft shadow effect */}
+        {/* shadow effect */}
         <filter id="soft-shadow" x="-50%" y="-50%" width="200%" height="200%">
           <feDropShadow dx="0" dy="10" stdDeviation="15" floodColor="rgba(0,0,0,0.35)"/>
         </filter>

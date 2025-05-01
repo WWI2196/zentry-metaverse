@@ -4,8 +4,8 @@ import { FaTimes, FaUser, FaEnvelope, FaComment, FaArrowRight, FaCheckCircle, Fa
 import { BsLightning, BsStars } from 'react-icons/bs';
 import gsap from 'gsap';
 import Button from './Button';
-import stonesImageSrc from '/img/stones.webp'; // Import stones image
-import contact1ImageSrc from '/img/contact-1.webp'; // Import contact image
+import stonesImageSrc from '/img/stones.webp'; 
+import contact1ImageSrc from '/img/contact-1.webp';
 
 // Configuration for email service setup
 const EMAIL_CONFIG = {

@@ -18,10 +18,9 @@ const Button = ({ title, id, rightIcon, leftIcon, containerClass, onClick }) => 
             className={`group relative z-10 w-fit cursor-pointer overflow-hidden rounded-full bg-violet-50 px-7 py-2 text-black ${containerClass}`}
             onClick={onClick}
         >
-            {/* Render the left icon if provided */}
+            {/* Render the left icon */}
             {leftIcon}
 
-            {/* Container for the button text - REMOVED text-xs */}
             <span className='relative inline-flex overflow-hidden font-general uppercase'>
                 <div>
                     {/* Display the button title */}
@@ -29,7 +28,7 @@ const Button = ({ title, id, rightIcon, leftIcon, containerClass, onClick }) => 
                 </div>
             </span>
 
-            {/* Render the right icon if provided */}
+            {/* Render the right icon */}
             {rightIcon}
         </button>
     );

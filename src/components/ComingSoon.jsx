@@ -49,7 +49,7 @@ const ComingSoon = () => {
     // Detect mobile devices on component mount
     useEffect(() => {
         const checkMobileDevice = () => {
-            // Check if viewport width is less than 768px (typical mobile breakpoint)
+            // Check if viewport width is less than 768px
             setIsMobileDevice(window.innerWidth < 768);
         };
         
@@ -79,7 +79,7 @@ const ComingSoon = () => {
         ArrowDown: false,
         ArrowLeft: false,
         ArrowRight: false,
-        ' ': false, // Spacebar
+        ' ': false, 
     });
     
     // Safety mechanism to ensure loading screen doesn't get stuck
@@ -106,9 +106,9 @@ const ComingSoon = () => {
             return;
         }
         
-        // Pre-load game assets here
+        // Pre-load game assets
         const starshipImage = new Image();
-        starshipImage.src = '/img/logo.png'; // Using logo as stand-in for ship
+        starshipImage.src = '/img/logo.png'; 
         
         const loadingTl = gsap.timeline({
             onComplete: () => handleLoadingComplete()
@@ -125,11 +125,10 @@ const ComingSoon = () => {
             });
         }, 100);
         
-        // When loading reaches 100%
+        
         const checkProgress = () => {
             if (loadingProgress >= 99) {
                 clearInterval(interval);
-                // Ensure we end at exactly 100%
                 setLoadingProgress(100);
                 loadingTl.play();
             }
@@ -145,7 +144,6 @@ const ComingSoon = () => {
                         setIsLoading(false);
                         setLoadingComplete(true);
                         
-                        // Animate in content
                         if (containerRef.current) {
                             const ctx = gsap.context(() => {
                                 gsap.from('.reveal-item', {
@@ -185,7 +183,6 @@ const ComingSoon = () => {
         };
     }, [location.state, loadingProgress]);
     
-    // Load high score from localStorage
     useEffect(() => {
         try {
             const savedHighScore = localStorage.getItem('metaverseVoyagerScore');
@@ -197,34 +194,27 @@ const ComingSoon = () => {
         }
     }, []);
     
-    // Initialize the game canvas with proper context handling
     useEffect(() => {
         if (!gameCanvasRef.current || !gameContainerRef.current) return;
         
         const canvas = gameCanvasRef.current;
         const ctx = canvas.getContext('2d');
         
-        // Make sure canvas dimensions match the container size
         const resizeCanvas = () => {
             if (gameContainerRef.current && canvas) {
                 const rect = gameContainerRef.current.getBoundingClientRect();
                 
-                // Set actual size in memory (scaled to account for extra pixel density)
                 const scale = window.devicePixelRatio || 1;
                 canvas.width = rect.width * scale;
                 canvas.height = rect.height * scale;
                 
-                // CSS size remains the same (this is important for positioning)
                 canvas.style.width = `${rect.width}px`;
                 canvas.style.height = `${rect.height}px`;
                 
-                // Normalize coordinate system to use CSS pixels
                 ctx.scale(scale, scale);
                 
-                // Initialize stars on resize
                 createStars();
                 
-                // Re-initialize ship position after resize
                 if (shipRef.current) {
                     shipRef.current.x = rect.width / 2;
                     shipRef.current.y = rect.height - 100;
@@ -258,10 +248,9 @@ const ComingSoon = () => {
             const width = canvas.width / (window.devicePixelRatio || 1);
             const height = canvas.height / (window.devicePixelRatio || 1);
             
-            // Create ship at the bottom of the screen but with enough visible margin
             shipRef.current = {
                 x: width / 2,
-                y: height - 100, // Position at bottom with 60px margin so it's clearly visible
+                y: height - 100, // Position spaceship
                 width: 40,
                 height: 40,
                 speed: 5,
@@ -339,7 +328,7 @@ const ComingSoon = () => {
         };
     }, [gameState]);
     
-    // Create the game loop
+    // Create game loop
     useEffect(() => {
         if (gameState !== GAME_STATE.PLAYING) return;
         
@@ -350,20 +339,15 @@ const ComingSoon = () => {
         
         // Main game animation loop
         const gameLoop = () => {
-            // Clear canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Update and draw stars (background)
+
             updateStars(ctx);
-            
-            // Move ship based on key presses
+
             updateShip(ctx);
-            
-            // Update and draw asteroids
+
             updateAsteroids(ctx);
-            
-            // Spawn new asteroids randomly
-            if (Math.random() < 0.02) { // 2% chance per frame
+
+            if (Math.random() < 0.02) { 
                 spawnAsteroid();
             }
             
@@ -381,8 +365,7 @@ const ComingSoon = () => {
             }
         };
     }, [gameState]);
-    
-    // Update the starfield with optimized rendering
+
     const updateStars = (ctx) => {
         if (!ctx || !ctx.canvas) return;
         
@@ -390,34 +373,29 @@ const ComingSoon = () => {
         const canvasHeight = ctx.canvas.height / (window.devicePixelRatio || 1);
         
         starsRef.current.forEach((star, index) => {
-            // Move stars down to create scrolling effect
             star.y += star.speed;
-            
-            // Reset stars that move off screen
+  
             if (star.y > canvasHeight) {
                 star.y = 0;
                 star.x = Math.random() * canvasWidth;
             }
-            
-            // Draw star with a more visible appearance
+
             ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
             ctx.beginPath();
             ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
             ctx.fill();
-            
-            // Add glow effect to some stars
+
             if (star.size > 1.5) {
                 ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
                 ctx.shadowBlur = 4;
                 ctx.beginPath();
                 ctx.arc(star.x, star.y, star.size * 0.5, 0, Math.PI * 2);
                 ctx.fill();
-                ctx.shadowBlur = 0; // Reset shadow
+                ctx.shadowBlur = 0; 
             }
         });
     };
-    
-    // Update ship position based on key presses with improved visuals
+
     const updateShip = (ctx) => {
         const ship = shipRef.current;
         if (!ship || !ctx || !ctx.canvas) return;
@@ -435,11 +413,9 @@ const ComingSoon = () => {
         ship.x = Math.max(ship.width / 2, Math.min(canvasWidth - ship.width / 2, ship.x));
         ship.y = Math.max(ship.height / 2, Math.min(canvasHeight - ship.height / 2, ship.y));
         
-        // Draw ship
         ctx.save();
         ctx.translate(ship.x, ship.y);
-        
-        // Ship body - improved design
+
         ctx.fillStyle = ship.color;
         ctx.beginPath();
         ctx.moveTo(0, -ship.height / 2); // Nose of the ship
@@ -449,8 +425,7 @@ const ComingSoon = () => {
         ctx.lineTo(-ship.width / 2, ship.height / 2); // Bottom left
         ctx.closePath();
         ctx.fill();
-        
-        // Add some detail
+
         ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
         ctx.beginPath();
         ctx.moveTo(-ship.width / 4, ship.height / 4);
@@ -459,7 +434,6 @@ const ComingSoon = () => {
         ctx.closePath();
         ctx.fill();
         
-        // Shield effect around ship with pulsing
         const pulse = 0.05 * Math.sin(Date.now() / 200);
         const shieldOpacity = (ship.shield / 100 * 0.5) + pulse; // Fade based on shield health with pulse
         ctx.strokeStyle = `rgba(120, 220, 255, ${shieldOpacity})`;
@@ -467,8 +441,7 @@ const ComingSoon = () => {
         ctx.beginPath();
         ctx.arc(0, 0, ship.width / 1.5, 0, Math.PI * 2);
         ctx.stroke();
-        
-        // Engine glow with animated effect
+
         const flicker = 0.2 * Math.random();
         const engineGlowGradient = ctx.createRadialGradient(
             0, ship.height / 2,
@@ -491,7 +464,6 @@ const ComingSoon = () => {
         ctx.restore();
     };
     
-    // Render ship in READY state
     useEffect(() => {
         if (gameState === GAME_STATE.READY) {
             const canvas = gameCanvasRef.current;
@@ -508,7 +480,6 @@ const ComingSoon = () => {
         }
     }, [gameState]);
     
-    // Spawn a new asteroid with improved randomization
     const spawnAsteroid = () => {
         const canvas = gameCanvasRef.current;
         if (!canvas) return;
@@ -518,13 +489,11 @@ const ComingSoon = () => {
         const colorIndex = Math.floor(Math.random() * ASTEROID_COLORS.length);
         const verticesCount = Math.floor(Math.random() * 3) + 6; // 6-8 vertices for variety
         
-        // Create vertices variation pattern once
         const verticesVariation = [];
         for (let i = 0; i < verticesCount; i++) {
             verticesVariation.push(0.8 + Math.random() * 0.4);
         }
         
-        // Spawn from top of screen at random x position
         asteroidsRef.current.push({
             x: Math.random() * canvasWidth,
             y: -size,
@@ -539,7 +508,7 @@ const ComingSoon = () => {
         });
     };
     
-    // Update and render asteroids with improved visual effects
+    // Update and render asteroids 
     const updateAsteroids = (ctx) => {
         const canvas = gameCanvasRef.current;
         if (!canvas || !ctx) return;
@@ -561,20 +530,17 @@ const ComingSoon = () => {
             ctx.save();
             ctx.translate(asteroid.x, asteroid.y);
             ctx.rotate(asteroid.rotation);
-            
-            // Create gradient for 3D effect
+
             const gradient = ctx.createRadialGradient(
                 -asteroid.size * 0.2, -asteroid.size * 0.2, 0,
                 0, 0, asteroid.size
             );
             gradient.addColorStop(0, asteroid.color);
             gradient.addColorStop(1, shadeColor(asteroid.color, -30));
-            
-            // Asteroid body
+
             ctx.fillStyle = gradient;
             ctx.beginPath();
-            
-            // Create irregular polygon for asteroid
+
             for (let i = 0; i < asteroid.vertices; i++) {
                 const angle = (Math.PI * 2 * i) / asteroid.vertices;
                 const radius = asteroid.size * asteroid.verticesVariation[i];
@@ -590,8 +556,7 @@ const ComingSoon = () => {
             
             ctx.closePath();
             ctx.fill();
-            
-            // Asteroid crater details
+
             for (let i = 0; i < asteroid.vertices / 2; i++) {
                 const craterX = (Math.random() - 0.5) * asteroid.size;
                 const craterY = (Math.random() - 0.5) * asteroid.size;
@@ -608,8 +573,7 @@ const ComingSoon = () => {
             return true;
         });
     };
-    
-    // Helper function to darken or lighten a color
+
     const shadeColor = (color, percent) => {
         let R = parseInt(color.substring(1, 3), 16);
         let G = parseInt(color.substring(3, 5), 16);
@@ -632,51 +596,41 @@ const ComingSoon = () => {
         if (!ship) return;
         
         asteroidsRef.current = asteroidsRef.current.filter(asteroid => {
-            // Simple circular collision detection
             const dx = ship.x - asteroid.x;
             const dy = ship.y - asteroid.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
             
             if (distance < ship.width / 2 + asteroid.size * 0.7) {
-                // Collision detected!
                 
-                // Reduce shield health
                 ship.shield -= 20;
-                
-                // Visual feedback for hit
+
                 gsap.to(gameCanvasRef.current, {
                     duration: 0.1,
                     opacity: 0.7,
                     yoyo: true,
                     repeat: 1,
                 });
-                
-                // End game if shield depleted
+
                 if (ship.shield <= 0) {
                     endGame();
                 }
-                
-                // Add points for destroying asteroid
+
                 setScore(prev => prev + asteroid.points);
-                
-                // Create explosion effect
+
                 createExplosion(asteroid.x, asteroid.y, asteroid.color);
-                
-                // Remove the asteroid
+
                 return false;
             }
             return true;
         });
     };
-    
-    // Create an explosion effect
+
     const createExplosion = (x, y, color) => {
         const canvas = gameCanvasRef.current;
         if (!canvas) return;
         
         const ctx = canvas.getContext('2d');
-        
-        // Draw explosion particles
+
         for (let i = 0; i < 20; i++) {
             const angle = Math.random() * Math.PI * 2;
             const speed = Math.random() * 2 + 1;
@@ -710,7 +664,7 @@ const ComingSoon = () => {
         }
     };
     
-    // Fire laser from the ship with improved visuals and hit detection
+    // Fire laser from the ship 
     const fireLaser = () => {
         const ship = shipRef.current;
         const canvas = gameCanvasRef.current;
@@ -745,11 +699,9 @@ const ComingSoon = () => {
             height: 20
         };
         
-        // Always play the laser sound (no random chance)
         const laserSound = new Audio('/audio/laser.mp3');
         laserSound.volume = 0.2;
-        
-        // Preload and play immediately
+
         try {
             laserSound.load();
             const playPromise = laserSound.play();
@@ -782,7 +734,6 @@ const ComingSoon = () => {
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     
                     if (distance < asteroid.size) {
-                        // Hit asteroid! Remove laser and asteroid
                         if (laserBeam.parentNode) {
                             laserBeam.parentNode.removeChild(laserBeam);
                         }
@@ -856,12 +807,9 @@ const ComingSoon = () => {
             cancelAnimationFrame(gameLoopRef.current);
         }
         
-        // Update high score with improved comparison and storage
         if (score > highScore) {
-            // Update state immediately
             setHighScore(score);
-            
-            // Store in localStorage with robust error handling
+
             try {
                 localStorage.setItem('metaverseVoyagerScore', score.toString());
                 console.log("New high score saved:", score);
@@ -871,7 +819,7 @@ const ComingSoon = () => {
         }
     }, [score, highScore]);
     
-    // Complete cleanup when component unmounts
+
     useEffect(() => {
         return () => {
             if (timerRef.current) clearInterval(timerRef.current);
@@ -879,7 +827,7 @@ const ComingSoon = () => {
         };
     }, []);
     
-    // Handle back navigation with proper route handling
+    // Handle back navigation 
     const handleBack = () => {
         // Ask for confirmation only if game is in progress
         if (gameState === GAME_STATE.PLAYING && 
@@ -899,13 +847,12 @@ const ComingSoon = () => {
             y: 50,
             duration: 0.4,
             onComplete: () => {
-                // Ensure we're navigating to home route
                 navigate('/', { replace: true });
             }
         });
     };
     
-    // Change ship color (customization)
+    // Change ship color 
     const changeShipColor = () => {
         const currentIndex = SHIP_COLORS.indexOf(shipColor);
         const nextIndex = (currentIndex + 1) % SHIP_COLORS.length;
@@ -1047,7 +994,6 @@ const ComingSoon = () => {
                                     <h3 className="font-zentry text-xl text-yellow-300">METAVERSE VOYAGER</h3>
                                 </div>
                                 
-                                {/* High Score - Updated with proper display */}
                                 <div className="flex items-center gap-2 px-3 py-1 bg-black/30 rounded-lg">
                                     <FaTrophy className="text-yellow-300" />
                                     <span className="font-robert-medium text-sm text-white/90" data-testid="high-score-value">{highScore}</span>
@@ -1061,7 +1007,7 @@ const ComingSoon = () => {
                                 </p>
                             )}
                             
-                            {/* Game controls and stats - Only show during active gameplay */}
+                            {/* Game controls and stats */}
                             {(gameState === GAME_STATE.PLAYING || gameState === GAME_STATE.PAUSED) && (
                                 <div className="flex justify-between items-center mb-3">
                                     {/* Score */}
@@ -1183,7 +1129,7 @@ const ComingSoon = () => {
                                 )}
                             </div>
                             
-                            {/* Game instructions (only show during ready state) */}
+                            {/* Game instructions */}
                             {gameState === GAME_STATE.READY && (
                                 <div className="mt-4 flex justify-center">
                                     <p className="font-robert-regular text-xs text-blue-50/60 text-center max-w-lg">

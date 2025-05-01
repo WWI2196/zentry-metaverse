@@ -59,7 +59,6 @@ const Footer = () => {
     // Implementation for newsletter subscription
     console.log("Subscribed with:", email);
     setEmail("");
-    // You could add a toast notification here
   };
 
   const scrollToTop = () => {
@@ -71,7 +70,6 @@ const Footer = () => {
 
   return (
     <footer className="relative w-screen bg-gradient-to-b from-[#5542ff] to-[#4335dc] pt-16 text-white">
-      {/* Back to top button */}
       <button 
         onClick={scrollToTop} 
         className="absolute -top-6 left-1/2 -translate-x-1/2 size-12 rounded-full bg-[#edff66] flex-center transform transition-transform hover:scale-110 shadow-glow-sm"
