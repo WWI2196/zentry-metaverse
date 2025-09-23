@@ -30,7 +30,7 @@ README.md        # This file
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/WWI2196/zentry-metaverse.git
+    git clone https://github.com/MelKorSA/zentry-metaverse.git
     cd zentry-metaverse
     ```
 2.  **Install dependencies:**
